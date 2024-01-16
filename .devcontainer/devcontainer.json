@@ -4,6 +4,14 @@
     "build": {
       "dockerfile": "../docker/Dockerfile",
       "context": ".." // Set this to the parent directory
+    },
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "ms-python.python",
+          "ms-python.vscode-pylance"
+        ]
+      }
     }
     //, "postCreateCommand": "apt-get update && apt-get install -y --no-install-recommends && apt install -y openssh-client"
   }

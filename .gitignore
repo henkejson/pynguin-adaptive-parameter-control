@@ -113,3 +113,4 @@ cov_html/
 pynguin-report/
 docs/_build
 .run/
+.output/
