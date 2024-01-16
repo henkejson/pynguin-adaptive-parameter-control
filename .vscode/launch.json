@@ -1,0 +1,23 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/pynguin/cli.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--project-path", "input/",
+                "--output-path", "output/",
+                "--module-name", "bmi_calculator",
+                "--maximum_search_time", "60",
+                "--algorithm", "DYNAMOSA",
+                "-v"
+            ]
+        }
+    ]
+}
