@@ -1,0 +1,10 @@
+// .devcontainer/devcontainer.json
+{
+    "name": "Pynguin",
+    "build": {
+      "dockerfile": "../docker/Dockerfile",
+      "context": ".." // Set this to the parent directory
+    }
+    //, "postCreateCommand": "apt-get update && apt-get install -y --no-install-recommends && apt install -y openssh-client"
+  }
+  
