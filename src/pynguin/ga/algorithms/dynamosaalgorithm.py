@@ -70,10 +70,51 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
         self.before_first_search_iteration(
             self.create_test_suite(self._archive.solutions)
         )
+
+        conn_1, conn_2 = multiprocessing.Pipe()
+
+        # Create a new process, passing the child connection
+        p = multiprocessing.Process(target=training, args=(conn_2,))
+        p.start()
+
+        # Fetch initial action
+        action = 0
+        if conn_1.poll(timeout=30):
+            action = conn_1.recv()
+            print(f"Action received: {action}")
+
+        # Perform action on config
+        print(f"Population before: {config.configuration.search_algorithm.population}")
+        config.configuration.search_algorithm.population += action
+        print(f"Population after: {config.configuration.search_algorithm.population}")
+
+        iteration = 0
         while self.resources_left() and len(self._archive.uncovered_goals) > 0:
+            # Update config every 5 iterations
+            if iteration >= 5:
+                print(f"Population before: {config.configuration.search_algorithm.population}")
+
+                # Get new configuration from RL
+                best_coverage = 0
+                if len(self._archive.solutions) > 0:
+                    best_coverage = self.create_test_suite(self._archive.solutions).get_coverage()
+
+                # Send observations, rewards and if we are done
+                conn_1.send((np.array([config.configuration.search_algorithm.population]), best_coverage*100, False))
+                
+                # Wait for new action and apply it
+                if conn_1.poll(timeout=30):
+                    action = conn_1.recv()
+                    print(f"New Action received: {action}")
+                    config.configuration.search_algorithm.population += action
+                    print(f"Population after: {config.configuration.search_algorithm.population}")
+
+                iteration = 0
+                
             self.evolve()
             self.after_search_iteration(self.create_test_suite(self._archive.solutions))
-
+            iteration += 1
+            
         self.after_search_finish()
         return self.create_test_suite(
             self._archive.solutions

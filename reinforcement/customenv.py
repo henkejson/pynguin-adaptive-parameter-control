@@ -24,20 +24,20 @@ def close_and_clean_up(conn: connection.Connection):
 class MyCustomEnv(gym.Env):
 
     def __init__(self, conn: connection.Connection):
-        self.action_space = spaces.Discrete(3)
+        self.action_space = spaces.Discrete(3) # currently population
         self.observation_space = spaces.Box(1, 100, dtype=np.int32)
         self.conn = conn
 
     def step(self, action):
         self.conn.send(action - 1)
         obs = np.array([])
-        reward = -100
+        reward = -100.0
         done = True
 
         # 1) We exceed timeout = shutdown
         # 2) We receive a faulty combination of values = shutdown
         try:
-            if self.conn.poll(timeout=10):
+            if self.conn.poll(timeout=200):
                 obs, reward, done = self.conn.recv()
             else:
                 raise ValueError("No value received, shutting down...")
@@ -47,7 +47,7 @@ class MyCustomEnv(gym.Env):
             elif obs.shape != self.observation_space.shape:
                 raise ValueError(f"Expected shape {self.observation_space.shape} for Observations, "
                                  f"instead got shape {obs.shape}")
-            elif not isinstance(reward, int):
+            elif not isinstance(reward, float):
                 raise TypeError(f"Expected type int for Reward, got type: {type(reward)}")
             elif not isinstance(done, bool):
                 raise TypeError(f"Expected type bool for Done, got type {type(done)}")
