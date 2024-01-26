@@ -1,5 +1,4 @@
-import numpy as np
-
+import sys
 from multiprocessing import connection, Pipe
 
 import gymnasium as gym
@@ -16,6 +15,12 @@ def training(conn: connection.Connection):
     model.learn(total_timesteps=10_000)
 
 
+def close_and_clean_up(conn: connection.Connection):
+    conn.send(None)
+    conn.close()
+    sys.exit()
+
+
 class MyCustomEnv(gym.Env):
 
     def __init__(self, conn: connection.Connection):
@@ -24,15 +29,34 @@ class MyCustomEnv(gym.Env):
         self.conn = conn
 
     def step(self, action):
-        self.conn.send(action-1)
+        self.conn.send(action - 1)
+        obs = np.array([])
+        reward = -100
         done = True
-        if self.conn.poll(timeout=10):
-            obs, reward, done = self.conn.recv()
 
-        # More reward calcs?
+        # 1) We exceed timeout = shutdown
+        # 2) We receive a faulty combination of values = shutdown
+        try:
+            if self.conn.poll(timeout=10):
+                obs, reward, done = self.conn.recv()
+            else:
+                raise ValueError("No value received, shutting down...")
 
-        if done:
-            return None, None, True, True, None
+            if not isinstance(obs, np.ndarray):
+                raise TypeError(f"Expected type np.ndarray for Observations, got type: {type(obs)})")
+            elif obs.shape != self.observation_space.shape:
+                raise ValueError(f"Expected shape {self.observation_space.shape} for Observations, "
+                                 f"instead got shape {obs.shape}")
+            elif not isinstance(reward, int):
+                raise TypeError(f"Expected type int for Reward, got type: {type(reward)}")
+            elif not isinstance(done, bool):
+                raise TypeError(f"Expected type bool for Done, got type {type(done)}")
+            elif done:
+                raise SystemExit("done is True, shutting down...")
+
+        except (ValueError, TypeError, SystemExit) as e:
+            print(f"Error encountered: {e}")
+            close_and_clean_up(self.conn)
 
         return obs, reward, done, False, {}
 
