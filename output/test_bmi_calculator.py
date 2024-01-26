@@ -6,7 +6,13 @@ import bmi_calculator as module_0
 
 @pytest.mark.xfail(strict=True)
 def test_case_0():
-    float_0 = 19.0
+    int_0 = -991
+    module_0.BMICalc(int_0, int_0, int_0)
+
+
+@pytest.mark.xfail(strict=True)
+def test_case_1():
+    float_0 = 1990.8567
     b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
     assert (
         f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
@@ -24,21 +30,61 @@ def test_case_0():
         f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
         == "builtins.property"
     )
-    var_0 = b_m_i_calc_0.classify_bmi_teens_and_children()
-    assert var_0 == "Obese"
-    bool_0 = False
-    module_0.BMICalc(bool_0, bool_0, bool_0)
+    var_0 = b_m_i_calc_0.bmi_value()
+    assert var_0 == pytest.approx(5.022963229849742, abs=0.01, rel=0.01)
+    var_0.classify_bmi_adults()
 
 
 @pytest.mark.xfail(strict=True)
-def test_case_1():
+def test_case_2():
+    bytes_0 = b"\xeeT\xf7\xe18\xa0N\x80\xa6\xb7\x1e\xfe\x061\x88\r"
+    module_0.BMICalc(bytes_0, bytes_0, bytes_0)
+
+
+@pytest.mark.xfail(strict=True)
+def test_case_3():
     bool_0 = True
     module_0.BMICalc(bool_0, bool_0, bool_0)
 
 
-def test_case_2():
-    int_0 = 188
-    b_m_i_calc_0 = module_0.BMICalc(int_0, int_0, int_0)
+@pytest.mark.xfail(strict=True)
+def test_case_4():
+    bool_0 = True
+    bool_1 = False
+    none_type_0 = None
+    module_0.BMICalc(bool_0, bool_1, none_type_0)
+
+
+def test_case_5():
+    float_0 = 1989.9839017108345
+    b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
+    assert (
+        f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
+        == "bmi_calculator.BMICalc"
+    )
+    assert (
+        f"{type(module_0.BMICalc.height).__module__}.{type(module_0.BMICalc.height).__qualname__}"
+        == "builtins.property"
+    )
+    assert (
+        f"{type(module_0.BMICalc.age).__module__}.{type(module_0.BMICalc.age).__qualname__}"
+        == "builtins.property"
+    )
+    assert (
+        f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
+        == "builtins.property"
+    )
+    b_m_i_calc_1 = module_0.BMICalc(float_0, float_0, float_0)
+    var_0 = b_m_i_calc_1.bmi_value()
+    assert var_0 == pytest.approx(5.02516627968838, abs=0.01, rel=0.01)
+    with pytest.raises(ValueError):
+        b_m_i_calc_0.classify_bmi_teens_and_children()
+
+
+@pytest.mark.xfail(strict=True)
+def test_case_6():
+    float_0 = 1989.9839017108345
+    b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
     assert (
         f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
         == "bmi_calculator.BMICalc"
@@ -56,37 +102,15 @@ def test_case_2():
         == "builtins.property"
     )
     var_0 = b_m_i_calc_0.classify_bmi_adults()
-    assert var_0 == "Severely Obese"
-    var_1 = b_m_i_calc_0.classify_bmi_adults()
-    assert var_1 == "Severely Obese"
+    assert var_0 == "Underweight"
+    var_0.classify_bmi_adults()
 
 
-def test_case_3():
-    int_0 = 188
-    b_m_i_calc_0 = module_0.BMICalc(int_0, int_0, int_0)
-    assert (
-        f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
-        == "bmi_calculator.BMICalc"
-    )
-    assert (
-        f"{type(module_0.BMICalc.height).__module__}.{type(module_0.BMICalc.height).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.age).__module__}.{type(module_0.BMICalc.age).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
-        == "builtins.property"
-    )
-    with pytest.raises(ValueError):
-        b_m_i_calc_0.classify_bmi_teens_and_children()
-
-
-def test_case_4():
-    float_0 = 376.55790379549734
-    b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
+@pytest.mark.xfail(strict=True)
+def test_case_7():
+    float_0 = 371.41
+    float_1 = 371.48707781415584
+    b_m_i_calc_0 = module_0.BMICalc(float_1, float_0, float_0)
     assert (
         f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
         == "bmi_calculator.BMICalc"
@@ -105,23 +129,16 @@ def test_case_4():
     )
     var_0 = b_m_i_calc_0.classify_bmi_adults()
     assert var_0 == "Overweight"
-    var_1 = b_m_i_calc_0.classify_bmi_adults()
-    assert var_1 == "Overweight"
-    with pytest.raises(ValueError):
-        b_m_i_calc_0.classify_bmi_teens_and_children()
+    bool_0 = False
+    int_0 = 1094
+    module_0.BMICalc(int_0, int_0, bool_0)
 
 
 @pytest.mark.xfail(strict=True)
-def test_case_5():
-    bool_0 = False
-    bool_1 = True
-    module_0.BMICalc(bool_1, bool_0, bool_0)
-
-
-def test_case_6():
-    int_0 = 744
-    int_1 = 142
-    b_m_i_calc_0 = module_0.BMICalc(int_0, int_0, int_1)
+def test_case_8():
+    float_0 = 1989.9839017108345
+    bool_0 = True
+    b_m_i_calc_0 = module_0.BMICalc(bool_0, float_0, float_0)
     assert (
         f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
         == "bmi_calculator.BMICalc"
@@ -139,12 +156,40 @@ def test_case_6():
         == "builtins.property"
     )
     var_0 = b_m_i_calc_0.classify_bmi_adults()
-    assert var_0 == "Underweight"
+    assert var_0 == "Severely Obese"
+    float_0.classify_bmi_adults()
+
+
+def test_case_9():
+    float_0 = 371.17583061009736
+    b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
+    assert (
+        f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
+        == "bmi_calculator.BMICalc"
+    )
+    assert (
+        f"{type(module_0.BMICalc.height).__module__}.{type(module_0.BMICalc.height).__qualname__}"
+        == "builtins.property"
+    )
+    assert (
+        f"{type(module_0.BMICalc.age).__module__}.{type(module_0.BMICalc.age).__qualname__}"
+        == "builtins.property"
+    )
+    assert (
+        f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
+        == "builtins.property"
+    )
+    int_0 = 1094
+    b_m_i_calc_1 = module_0.BMICalc(float_0, float_0, int_0)
+    var_0 = b_m_i_calc_1.classify_bmi_adults()
+    assert var_0 == "Overweight"
+    with pytest.raises(ValueError):
+        b_m_i_calc_0.classify_bmi_teens_and_children()
 
 
 @pytest.mark.xfail(strict=True)
-def test_case_7():
-    int_0 = 313
+def test_case_10():
+    int_0 = 417
     b_m_i_calc_0 = module_0.BMICalc(int_0, int_0, int_0)
     assert (
         f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
@@ -162,86 +207,13 @@ def test_case_7():
         f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
         == "builtins.property"
     )
-    var_0 = b_m_i_calc_0.bmi_value()
-    assert var_0 == pytest.approx(31.948881789137385, abs=0.01, rel=0.01)
-    var_1 = b_m_i_calc_0.classify_bmi_adults()
-    assert var_1 == "Obese"
-    b_m_i_calc_1 = module_0.BMICalc(int_0, int_0, int_0)
-    var_2 = b_m_i_calc_1.classify_bmi_adults()
-    assert var_2 == "Obese"
-    b_m_i_calc_2 = module_0.BMICalc(int_0, int_0, int_0)
-    var_3 = b_m_i_calc_1.bmi_value()
-    assert var_3 == pytest.approx(31.948881789137385, abs=0.01, rel=0.01)
-    var_4 = b_m_i_calc_0.classify_bmi_adults()
-    assert var_4 == "Obese"
-    var_5 = b_m_i_calc_2.bmi_value()
-    assert var_5 == pytest.approx(31.948881789137385, abs=0.01, rel=0.01)
-    var_5.classify_bmi_teens_and_children()
+    var_0 = b_m_i_calc_0.classify_bmi_adults()
+    assert var_0 == "Normal weight"
+    var_0.classify_bmi_teens_and_children()
 
 
-@pytest.mark.xfail(strict=True)
-def test_case_8():
-    bool_0 = False
-    int_0 = 142
-    module_0.BMICalc(int_0, int_0, bool_0)
-
-
-def test_case_9():
-    float_0 = 416.2323634142444
-    b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
-    assert (
-        f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
-        == "bmi_calculator.BMICalc"
-    )
-    assert (
-        f"{type(module_0.BMICalc.height).__module__}.{type(module_0.BMICalc.height).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.age).__module__}.{type(module_0.BMICalc.age).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
-        == "builtins.property"
-    )
-    var_0 = b_m_i_calc_0.bmi_value()
-    assert var_0 == pytest.approx(24.025041969280412, abs=0.01, rel=0.01)
-    var_1 = b_m_i_calc_0.classify_bmi_adults()
-    assert var_1 == "Normal weight"
-    b_m_i_calc_1 = module_0.BMICalc(var_0, var_0, float_0)
-    with pytest.raises(ValueError):
-        b_m_i_calc_1.classify_bmi_teens_and_children()
-
-
-def test_case_10():
-    float_0 = 19.0
-    b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
-    assert (
-        f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
-        == "bmi_calculator.BMICalc"
-    )
-    assert (
-        f"{type(module_0.BMICalc.height).__module__}.{type(module_0.BMICalc.height).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.age).__module__}.{type(module_0.BMICalc.age).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
-        == "builtins.property"
-    )
-    var_0 = b_m_i_calc_0.classify_bmi_teens_and_children()
-    assert var_0 == "Obese"
-    with pytest.raises(ValueError):
-        b_m_i_calc_0.classify_bmi_adults()
-
-
-@pytest.mark.xfail(strict=True)
 def test_case_11():
-    float_0 = 19.0
+    float_0 = 2.377165256722806
     b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
     assert (
         f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
@@ -259,192 +231,30 @@ def test_case_11():
         f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
         == "builtins.property"
     )
-    var_0 = b_m_i_calc_0.classify_bmi_teens_and_children()
-    assert var_0 == "Obese"
-    var_0.classify_bmi_teens_and_children()
-
-
-@pytest.mark.xfail(strict=True)
-def test_case_12():
-    float_0 = 4.497254925655529
-    b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
-    assert (
-        f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
-        == "bmi_calculator.BMICalc"
-    )
-    assert (
-        f"{type(module_0.BMICalc.height).__module__}.{type(module_0.BMICalc.height).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.age).__module__}.{type(module_0.BMICalc.age).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
-        == "builtins.property"
-    )
-    var_0 = b_m_i_calc_0.classify_bmi_teens_and_children()
-    assert var_0 == "Obese"
-    var_1 = b_m_i_calc_0.bmi_value()
-    assert var_1 == pytest.approx(2223.5786419295273, abs=0.01, rel=0.01)
-    none_type_0 = None
-    module_0.BMICalc(var_0, none_type_0, none_type_0)
-
-
-@pytest.mark.xfail(strict=True)
-def test_case_13():
-    float_0 = 8.270876447706126
-    b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
-    assert (
-        f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
-        == "bmi_calculator.BMICalc"
-    )
-    assert (
-        f"{type(module_0.BMICalc.height).__module__}.{type(module_0.BMICalc.height).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.age).__module__}.{type(module_0.BMICalc.age).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
-        == "builtins.property"
-    )
-    var_0 = b_m_i_calc_0.classify_bmi_teens_and_children()
-    assert var_0 == "Obese"
-    var_0.bmi_value()
-
-
-@pytest.mark.xfail(strict=True)
-def test_case_14():
-    float_0 = 14.691706340921446
-    b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
-    assert (
-        f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
-        == "bmi_calculator.BMICalc"
-    )
-    assert (
-        f"{type(module_0.BMICalc.height).__module__}.{type(module_0.BMICalc.height).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.age).__module__}.{type(module_0.BMICalc.age).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
-        == "builtins.property"
-    )
-    var_0 = b_m_i_calc_0.classify_bmi_teens_and_children()
-    assert var_0 == "Obese"
-    var_1 = b_m_i_calc_0.classify_bmi_teens_and_children()
-    assert var_1 == "Obese"
-    var_0.classify_bmi_adults()
-
-
-@pytest.mark.xfail(strict=True)
-def test_case_15():
-    float_0 = 8.270876447706126
-    b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
-    assert (
-        f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
-        == "bmi_calculator.BMICalc"
-    )
-    assert (
-        f"{type(module_0.BMICalc.height).__module__}.{type(module_0.BMICalc.height).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.age).__module__}.{type(module_0.BMICalc.age).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
-        == "builtins.property"
-    )
-    var_0 = b_m_i_calc_0.bmi_value()
-    assert var_0 == pytest.approx(1209.0617074534387, abs=0.01, rel=0.01)
-    var_1 = module_0.BMICalc(var_0, float_0, float_0)
-    var_2 = var_1.classify_bmi_teens_and_children()
-    assert var_2 == "Underweight"
-    var_3 = var_1.bmi_value()
-    assert var_3 == pytest.approx(0.05657891304596982, abs=0.01, rel=0.01)
-    var_0.classify_bmi_teens_and_children()
-
-
-@pytest.mark.xfail(strict=True)
-def test_case_16():
-    float_0 = 16.69867400433983
-    float_1 = 1776.503668
-    b_m_i_calc_0 = module_0.BMICalc(float_1, float_0, float_0)
-    assert (
-        f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
-        == "bmi_calculator.BMICalc"
-    )
-    assert (
-        f"{type(module_0.BMICalc.height).__module__}.{type(module_0.BMICalc.height).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.age).__module__}.{type(module_0.BMICalc.age).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
-        == "builtins.property"
-    )
-    var_0 = b_m_i_calc_0.classify_bmi_teens_and_children()
-    assert var_0 == "Underweight"
-    var_0.classify_bmi_teens_and_children()
-
-
-@pytest.mark.xfail(strict=True)
-def test_case_17():
-    float_0 = 2.0
-    b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
-    assert (
-        f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
-        == "bmi_calculator.BMICalc"
-    )
-    assert (
-        f"{type(module_0.BMICalc.height).__module__}.{type(module_0.BMICalc.height).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.age).__module__}.{type(module_0.BMICalc.age).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
-        == "builtins.property"
-    )
-    var_0 = b_m_i_calc_0.classify_bmi_teens_and_children()
-    assert var_0 == "Obese"
-    var_0.classify_bmi_adults()
-
-
-def test_case_18():
-    float_0 = 12.776195680887511
-    b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
-    assert (
-        f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
-        == "bmi_calculator.BMICalc"
-    )
-    assert (
-        f"{type(module_0.BMICalc.height).__module__}.{type(module_0.BMICalc.height).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.age).__module__}.{type(module_0.BMICalc.age).__qualname__}"
-        == "builtins.property"
-    )
-    assert (
-        f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
-        == "builtins.property"
-    )
-    var_0 = b_m_i_calc_0.classify_bmi_teens_and_children()
-    assert var_0 == "Obese"
     with pytest.raises(ValueError):
         b_m_i_calc_0.classify_bmi_adults()
+
+
+def test_case_12():
+    float_0 = 319.2754383971424
+    b_m_i_calc_0 = module_0.BMICalc(float_0, float_0, float_0)
+    assert (
+        f"{type(b_m_i_calc_0).__module__}.{type(b_m_i_calc_0).__qualname__}"
+        == "bmi_calculator.BMICalc"
+    )
+    assert (
+        f"{type(module_0.BMICalc.height).__module__}.{type(module_0.BMICalc.height).__qualname__}"
+        == "builtins.property"
+    )
+    assert (
+        f"{type(module_0.BMICalc.age).__module__}.{type(module_0.BMICalc.age).__qualname__}"
+        == "builtins.property"
+    )
+    assert (
+        f"{type(module_0.BMICalc.weight).__module__}.{type(module_0.BMICalc.weight).__qualname__}"
+        == "builtins.property"
+    )
+    var_0 = b_m_i_calc_0.classify_bmi_adults()
+    assert var_0 == "Obese"
+    with pytest.raises(ValueError):
+        b_m_i_calc_0.classify_bmi_teens_and_children()
