@@ -112,5 +112,5 @@ cov_html/
 .dmypy.json
 pynguin-report/
 docs/_build
-.run/
 .output/
+output/
