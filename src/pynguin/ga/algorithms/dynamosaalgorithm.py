@@ -7,11 +7,13 @@
 from __future__ import annotations
 
 import logging
+import multiprocessing
 
 from typing import TYPE_CHECKING
 from typing import cast
 
 import networkx as nx
+import numpy as np
 
 from networkx.drawing.nx_pydot import to_pydot
 
@@ -23,7 +25,7 @@ from pynguin.ga.algorithms.abstractmosaalgorithm import AbstractMOSAAlgorithm
 from pynguin.ga.operators.ranking import fast_epsilon_dominance_assignment
 from pynguin.utils.orderedset import OrderedSet
 from pynguin.utils.statistics.runtimevariable import RuntimeVariable
-
+from reinforcement.customenv import training
 
 if TYPE_CHECKING:
     import pynguin.ga.computations as ff
@@ -101,7 +103,7 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
 
                 # Send observations, rewards and if we are done
                 conn_1.send((np.array([config.configuration.search_algorithm.population]), best_coverage*100, False))
-                
+
                 # Wait for new action and apply it
                 if conn_1.poll(timeout=30):
                     action = conn_1.recv()
@@ -110,11 +112,11 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
                     print(f"Population after: {config.configuration.search_algorithm.population}")
 
                 iteration = 0
-                
+
             self.evolve()
             self.after_search_iteration(self.create_test_suite(self._archive.solutions))
             iteration += 1
-            
+
         self.after_search_finish()
         return self.create_test_suite(
             self._archive.solutions

@@ -59,6 +59,11 @@ typing_inspect = "^0.9.0"
 asciitree = "^0.3.3"
 libcst = "^1.1.0"
 requests = "^2.31.0"
+torch = {version = "^2.1.2+cpu", source = "pytorch"}
+torchvision = {version = "^0.16.2+cpu", source = "pytorch"}
+torchaudio = {version = "^2.1.2+cpu", source = "pytorch"}
+gymnasium = "^0.29.1"
+stable-baselines3 = "^2.2.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.1"
@@ -88,6 +93,11 @@ pytest-sugar = "^0.9.7"
 
 [tool.poetry.scripts]
 pynguin = "pynguin.cli:main"
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
 
 [tool.black]
 line-length = 88
