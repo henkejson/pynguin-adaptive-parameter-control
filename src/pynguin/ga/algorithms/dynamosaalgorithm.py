@@ -102,7 +102,7 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
                     best_coverage = self.create_test_suite(self._archive.solutions).get_coverage()
 
                 # Send observations, rewards and if we are done
-                conn_1.send((np.array([config.configuration.search_algorithm.population]), best_coverage*100, False))
+                conn_1.send((np.array([config.configuration.search_algorithm.population]), best_coverage, False))
 
                 # Wait for new action and apply it
                 if conn_1.poll(timeout=30):
