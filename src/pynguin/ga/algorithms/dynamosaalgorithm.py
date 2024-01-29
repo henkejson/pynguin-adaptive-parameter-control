@@ -117,6 +117,7 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
             self.after_search_iteration(self.create_test_suite(self._archive.solutions))
             iteration += 1
 
+        conn_1.send((None, None, True))
         self.after_search_finish()
         return self.create_test_suite(
             self._archive.solutions
