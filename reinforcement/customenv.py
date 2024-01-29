@@ -34,26 +34,40 @@ class MyCustomEnv(gym.Env):
         self.observation_space = spaces.Box(1, 100, dtype=np.int32)
         self.conn = conn
         self.stop_training = stop_training
+        elf.coverage_history = [0.0]
 
     def step(self, action):
         self.conn.send(action - 1)
         obs = np.array([])
-        reward = -100.0
+        coverage = 0.0
+        reward = 0.0
         done = True
 
         try:
-            obs, reward, done = self.get_observations()
+            obs, coverage, done = self.get_observations()
 
         except (ValueError, TypeError, SystemExit) as e:
             print(f"Error encountered: {e}")
             close_and_clean_up(self.conn)
+
+        # Add the latest coverage value to the history
+        self.coverage_history.append(coverage)
+
+        # Calculate reward from the coverage
+        # Scale reward to give more as it approaches 1?
+        if len(self.coverage_history) >= 2:
+            reward = max(0.0, (self.coverage_history[-1] - self.coverage_history[-2]))
+            # Scale the reward
+            reward *= 100
+
+        print(f"Reward: {reward}")  # TODO probably remove at some point
 
         return obs, reward, done, False, {}
 
     def get_observations(self):
 
         if self.conn.poll(timeout=60):
-            obs, reward, done = self.conn.recv()
+            obs, coverage, done = self.conn.recv()
         else:
             raise ValueError("No value received, shutting down...")
 
@@ -67,20 +81,14 @@ class MyCustomEnv(gym.Env):
         elif obs.shape != self.observation_space.shape:
             raise ValueError(f"Expected shape {self.observation_space.shape} for Observations, "
                              f"instead got shape {obs.shape}")
-        elif not isinstance(reward, float):
-            raise TypeError(f"Expected type int for Reward, got type: {type(reward)}")
+        elif not isinstance(coverage, float):
+            raise TypeError(f"Expected type int for Coverage, got type: {type(coverage)}")
         elif not isinstance(done, bool):
             raise TypeError(f"Expected type bool for Done, got type {type(done)}")
 
-        return done, obs, reward
+        return obs, coverage, done
 
     def reset(self, **kwargs):
         while self.conn.poll():
             self.conn.recv()
         return np.array([1], dtype=np.int32), {}
-
-
-if __name__ == '__main__':
-    conn_1, conn_2 = Pipe()
-    env = MyCustomEnv(conn_2)
-    check_env(env)
