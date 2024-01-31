@@ -28,6 +28,7 @@ from pynguin.utils.statistics.runtimevariable import RuntimeVariable
 from reinforcement.crossovertransformationhandler import CrossoverTransformationHandler
 from reinforcement.customenv import training
 from reinforcement.normalizationhandler import NormalizationHandler
+from reinforcement.testchangetransformationhandler import TestChangeTransformationHandler
 
 if TYPE_CHECKING:
     import pynguin.ga.computations as ff
@@ -81,13 +82,16 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
         p = multiprocessing.Process(target=training, args=(conn_2,))
         p.start()
 
+        nh = NormalizationHandler([
+            CrossoverTransformationHandler(-0.05, 0.05),
+            TestChangeTransformationHandler(-0.05, 0.05)])
+
         # Fetch initial actions
         actions = np.array([], dtype=np.float32)
         if conn_1.poll(timeout=30):
             actions = conn_1.recv()
             print(f"Action received: {actions}")
 
-        nh = NormalizationHandler()
         nh.apply_actions(actions)
 
         iteration = 0
