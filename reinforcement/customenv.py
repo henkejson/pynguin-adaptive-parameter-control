@@ -30,14 +30,15 @@ def close_and_clean_up(conn: connection.Connection):
 class MyCustomEnv(gym.Env):
 
     def __init__(self, conn: connection.Connection, stop_training: MutableBool):
-        self.action_space = spaces.Discrete(3)  # currently population
-        self.observation_space = spaces.Box(1, 100, dtype=np.int32)
+        self.action_space = gym.spaces.Box(low=-1, high=1, shape=(1,), dtype=np.float32)  # Crossover rate
+        self.observation_space = spaces.Box(low=-1, high=1, dtype=np.float32)  # Crossover rate
+
         self.conn = conn
         self.stop_training = stop_training
         self.coverage_history = [0.0]
 
     def step(self, action):
-        self.conn.send(action - 1)
+        self.conn.send(action)
         obs = np.array([])
         coverage = 0.0
         reward = 0.0
@@ -56,7 +57,8 @@ class MyCustomEnv(gym.Env):
         # Calculate reward from the coverage
         # Scale reward to give more as it approaches 1?
         if len(self.coverage_history) >= 2:
-            reward = max(0.0, (self.coverage_history[-1] - self.coverage_history[-2])) * (2 / (1 + np.exp(-9*(self.coverage_history[-1]-0.5))))
+            reward = max(0.0, (self.coverage_history[-1] - self.coverage_history[-2])) * (
+                    2 / (1 + np.exp(-9 * (self.coverage_history[-1] - 0.5))))
             # Scale the reward
             reward *= 100
 
