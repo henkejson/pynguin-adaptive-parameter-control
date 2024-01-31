@@ -25,7 +25,7 @@ from pynguin.ga.algorithms.abstractmosaalgorithm import AbstractMOSAAlgorithm
 from pynguin.ga.operators.ranking import fast_epsilon_dominance_assignment
 from pynguin.utils.orderedset import OrderedSet
 from pynguin.utils.statistics.runtimevariable import RuntimeVariable
-from reinforcement.crossoverratenormalization import CrossoverRateNormalization
+from reinforcement.crossovertransformationhandler import CrossoverTransformationHandler
 from reinforcement.customenv import training
 from reinforcement.normalizationhandler import NormalizationHandler
 
@@ -87,20 +87,14 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
             actions = conn_1.recv()
             print(f"Action received: {actions}")
 
-        print(config.configuration.search_algorithm.crossover_rate)
-
         nh = NormalizationHandler()
         nh.apply_actions(actions)
-        # config.configuration.search_algorithm.crossover_rate = CrossoverRateNormalization.denormalize(
-        #     config.configuration.search_algorithm.crossover_rate, actions[0])
-
-        print(config.configuration.search_algorithm.crossover_rate)
 
         iteration = 0
         while self.resources_left() and len(self._archive.uncovered_goals) > 0:
             # Update config every 5 iterations
             if iteration >= 5:
-                print(f"Old crossover rate: {config.configuration.search_algorithm.crossover_rate}")
+                #print(f"Old crossover rate: {config.configuration.search_algorithm.crossover_rate}")
 
                 # Get new configuration from RL
                 best_coverage = 0
@@ -113,9 +107,9 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
                 # Wait for new actions and apply it
                 if conn_1.poll(timeout=30):
                     actions = conn_1.recv()
-                    print(f"New Action received: {actions}")
+                    #print(f"New Action received: {actions}")
                     nh.apply_actions(actions)
-                    print(f"New crossover rate: {config.configuration.search_algorithm.crossover_rate}")
+                    #print(f"New crossover rate: {config.configuration.search_algorithm.crossover_rate}")
 
                 iteration = 0
 

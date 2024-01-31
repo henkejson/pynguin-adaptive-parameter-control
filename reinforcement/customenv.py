@@ -3,7 +3,6 @@ from multiprocessing import connection, Pipe
 
 import gymnasium as gym
 import numpy as np
-from gymnasium import spaces
 from stable_baselines3 import A2C
 from stable_baselines3.common.env_checker import check_env
 
@@ -30,8 +29,8 @@ def close_and_clean_up(conn: connection.Connection):
 class MyCustomEnv(gym.Env):
 
     def __init__(self, conn: connection.Connection, stop_training: MutableBool):
-        self.action_space = gym.spaces.Box(low=-1, high=1, shape=(1,), dtype=np.float32)  # Crossover rate
-        self.observation_space = spaces.Box(low=-1, high=1, dtype=np.float32)  # Crossover rate
+        self.action_space = gym.spaces.Box(low=-1, high=1, shape=(2,), dtype=np.float32)  # Crossover rate
+        self.observation_space = gym.spaces.Box(low=-1, high=1, shape=(2,), dtype=np.float32)  # Crossover rate
 
         self.conn = conn
         self.stop_training = stop_training
@@ -62,8 +61,8 @@ class MyCustomEnv(gym.Env):
             # Scale the reward
             reward *= 100
 
-        print(f"Normalized observations: {obs}")  # TODO probably remove at some point
-        print(f"Reward: {reward}")  # TODO probably remove at some point
+        #print(f"Normalized observations: {obs}")  # TODO probably remove at some point
+        #print(f"Reward: {reward}")  # TODO probably remove at some point
 
         return obs, reward, done, False, {}
 
