@@ -27,6 +27,7 @@ from pynguin.utils.orderedset import OrderedSet
 from pynguin.utils.statistics.runtimevariable import RuntimeVariable
 from reinforcement.crossoverratenormalization import CrossoverRateNormalization
 from reinforcement.customenv import training
+from reinforcement.normalizationhandler import NormalizationHandler
 
 if TYPE_CHECKING:
     import pynguin.ga.computations as ff
@@ -80,15 +81,19 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
         p = multiprocessing.Process(target=training, args=(conn_2,))
         p.start()
 
-        # Fetch initial action
-        action = 0
+        # Fetch initial actions
+        actions = np.array([], dtype=np.float32)
         if conn_1.poll(timeout=30):
-            action = conn_1.recv()
-            print(f"Action received: {action}")
+            actions = conn_1.recv()
+            print(f"Action received: {actions}")
 
         print(config.configuration.search_algorithm.crossover_rate)
-        config.configuration.search_algorithm.crossover_rate = CrossoverRateNormalization.denormalize(
-            config.configuration.search_algorithm.crossover_rate, action[0])
+
+        nh = NormalizationHandler()
+        nh.apply_actions(actions)
+        # config.configuration.search_algorithm.crossover_rate = CrossoverRateNormalization.denormalize(
+        #     config.configuration.search_algorithm.crossover_rate, actions[0])
+
         print(config.configuration.search_algorithm.crossover_rate)
 
         iteration = 0
@@ -103,16 +108,13 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
                     best_coverage = self.create_test_suite(self._archive.solutions).get_coverage()
 
                 # Send observations, rewards and if we are done
-                conn_1.send((np.array(
-                    [CrossoverRateNormalization.normalize(config.configuration.search_algorithm.crossover_rate)]),
-                             best_coverage, False))
+                conn_1.send((nh.normalize_observations(), best_coverage, False))
 
-                # Wait for new action and apply it
+                # Wait for new actions and apply it
                 if conn_1.poll(timeout=30):
-                    action = conn_1.recv()
-                    print(f"New Action received: {action}")
-                    config.configuration.search_algorithm.crossover_rate = CrossoverRateNormalization.denormalize(
-                        config.configuration.search_algorithm.crossover_rate, action[0])
+                    actions = conn_1.recv()
+                    print(f"New Action received: {actions}")
+                    nh.apply_actions(actions)
                     print(f"New crossover rate: {config.configuration.search_algorithm.crossover_rate}")
 
                 iteration = 0

@@ -62,6 +62,7 @@ class MyCustomEnv(gym.Env):
             # Scale the reward
             reward *= 100
 
+        print(f"Normalized observations: {obs}")  # TODO probably remove at some point
         print(f"Reward: {reward}")  # TODO probably remove at some point
 
         return obs, reward, done, False, {}
