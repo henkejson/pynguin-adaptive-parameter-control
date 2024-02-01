@@ -1,35 +1,32 @@
 from reinforcement.abstracttransformationhandler import AbstractTransformationHandler
+import pynguin.configuration as config
+
 
 # TODO Should create a general one for probabilities [0, 1]
 
 class CrossoverTransformationHandler(AbstractTransformationHandler):
-    LOWER_BOUND = 0.0
-    UPPER_BOUND = 1.0
 
-    NEW_MIN = -0.05
-    NEW_MAX = 0.05
+    def __init__(self, min_value=-0.05, max_value=0.05):
+        self.min_value = min_value
+        self.max_value = max_value
 
-    @staticmethod
-    def normalize_observation(observation: float) -> float:
-        normalized_observation = ((observation - CrossoverTransformationHandler.LOWER_BOUND) / (
-            CrossoverTransformationHandler.UPPER_BOUND - CrossoverTransformationHandler.LOWER_BOUND)) * 2 - 1
+        self.config_lower_bound = 0.0
+        self.config_upper_bound = 1.0
 
-        return normalized_observation
+    def normalize_observation(self, denormalized_observation: float) -> float:
+        return self.convert_to_normalized(denormalized_observation, self.config_lower_bound, self.config_upper_bound)
 
-    @staticmethod
-    def denormalize_action(normalized_action: float) -> float:
-        action = ((normalized_action + 1) * (
-            (CrossoverTransformationHandler.NEW_MAX - CrossoverTransformationHandler.NEW_MIN) / 2) +
-                  CrossoverTransformationHandler.NEW_MIN)
+    def denormalize_action(self, normalized_action: float) -> float:
+        return self.convert_from_normalized(normalized_action, self.min_value, self.max_value)
 
-        return action
+    def get_value(self):
+        return config.configuration.search_algorithm.crossover_rate
 
-    @staticmethod
-    def calc_new_config_value(current_value: float, action: float) -> float:
-        current_value += CrossoverTransformationHandler.denormalize_action(action)
-        current_value = min(CrossoverTransformationHandler.UPPER_BOUND,
-                            max(CrossoverTransformationHandler.LOWER_BOUND, current_value))
+    def apply_action(self, normalized_action):
+        current_value = self.get_value() + self.denormalize_action(normalized_action)
+        current_value = min(self.config_upper_bound,
+                            max(self.config_lower_bound, current_value))
+        config.configuration.search_algorithm.crossover_rate = current_value
 
-        return current_value
-
-
+    def get_name(self):
+        return "Crossover Rate"
