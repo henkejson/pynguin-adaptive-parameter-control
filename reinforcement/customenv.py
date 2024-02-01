@@ -1,9 +1,11 @@
 import sys
+import time
 from multiprocessing import connection, Pipe
+from threading import Thread
 
 import gymnasium as gym
 import numpy as np
-from stable_baselines3 import A2C
+from stable_baselines3 import A2C, PPO
 from stable_baselines3.common.env_checker import check_env
 
 from reinforcement.MutableBool import MutableBool
@@ -11,11 +13,12 @@ from reinforcement.StoppingCallback import StoppingCallback
 
 
 # Process entry
-def training(conn: connection.Connection):
+def training(n_action: int, n_observations: int, conn: connection.Connection):
     stop_training = MutableBool(False)
     callback = StoppingCallback(stop_training)
-    environment = MyCustomEnv(conn, stop_training)
-    model = A2C("MlpPolicy", environment, verbose=1)
+
+    environment = MyCustomEnv(n_action, n_observations, conn, stop_training)
+    model = PPO("MlpPolicy", environment, verbose=1)
     model.learn(total_timesteps=10_000, callback=callback)
     print("Saving model...")
 
@@ -28,9 +31,9 @@ def close_and_clean_up(conn: connection.Connection):
 
 class MyCustomEnv(gym.Env):
 
-    def __init__(self, conn: connection.Connection, stop_training: MutableBool):
-        self.action_space = gym.spaces.Box(low=-1, high=1, shape=(2,), dtype=np.float32)  # Crossover rate
-        self.observation_space = gym.spaces.Box(low=-1, high=1, shape=(2,), dtype=np.float32)  # Crossover rate
+    def __init__(self, n_action: int, n_observations: int, conn: connection.Connection, stop_training: MutableBool):
+        self.action_space = gym.spaces.Box(low=-1, high=1, shape=(n_action,), dtype=np.float32)  # Crossover rate
+        self.observation_space = gym.spaces.Box(low=-1, high=1, shape=(n_observations,), dtype=np.float32)  # Crossover rate
 
         self.conn = conn
         self.stop_training = stop_training
@@ -56,14 +59,11 @@ class MyCustomEnv(gym.Env):
         # Calculate reward from the coverage
         # Scale reward to give more as it approaches 1?
         if len(self.coverage_history) >= 2:
-            reward = max(0.0, (self.coverage_history[-1] - self.coverage_history[-2])) * (
+            reward = (self.coverage_history[-1] - self.coverage_history[-2]) * (
                     2 / (1 + np.exp(-9 * (self.coverage_history[-1] - 0.5))))
             # Scale the reward
             reward *= 100
-
-        #print(f"Normalized observations: {obs}")  # TODO probably remove at some point
-        #print(f"Reward: {reward}")  # TODO probably remove at some point
-
+        print(f"REWARD | {reward} ")
         return obs, reward, done, False, {}
 
     def get_observations(self):
