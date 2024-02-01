@@ -13,7 +13,7 @@ class AbstractTransformationHandler(ABC):
         return ((denormalized_value - lower_bound) / (upper_bound - lower_bound)) * 2 - 1
 
     def get_name(self):
-        return ""
+        return "Unnamed configuration"
 
     @abstractmethod
     def normalize_observation(self, denormalized_observation: float) -> float:
@@ -25,18 +25,12 @@ class AbstractTransformationHandler(ABC):
         """Scales action from normalized-space ([-1,1]) to environment-space"""
         pass
 
-    # TODO Remove maybe????
-    @abstractmethod
-    def calc_new_config_value(self, current_value: float, action: float) -> float:
-        """Calculates new valid configuration value"""
-        pass
-
     @abstractmethod
     def get_value(self):
         pass
 
     @abstractmethod
-    def set_value(self, normalized_action):
+    def apply_action(self, normalized_action):
         pass
 
 

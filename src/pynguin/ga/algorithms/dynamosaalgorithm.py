@@ -27,7 +27,7 @@ from pynguin.utils.orderedset import OrderedSet
 from pynguin.utils.statistics.runtimevariable import RuntimeVariable
 from reinforcement.crossovertransformationhandler import CrossoverTransformationHandler
 from reinforcement.customenv import training
-from reinforcement.normalizationhandler import NormalizationHandler
+from reinforcement.configurationhandler import ConfigurationHandler
 from reinforcement.testchangetransformationhandler import TestChangeTransformationHandler
 
 if TYPE_CHECKING:
@@ -82,38 +82,36 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
         p = multiprocessing.Process(target=training, args=(conn_2,))
         p.start()
 
-        nh = NormalizationHandler([
+        config_handler = ConfigurationHandler([
             CrossoverTransformationHandler(-0.05, 0.05),
             TestChangeTransformationHandler(-0.05, 0.05)])
 
         # Fetch initial actions
         actions = np.array([], dtype=np.float32)
+
         if conn_1.poll(timeout=30):
             actions = conn_1.recv()
-            print(f"Action received: {actions}")
+        # TODO error handling
 
-        nh.apply_actions(actions)
+        config_handler.apply_actions(actions)
 
         iteration = 0
         while self.resources_left() and len(self._archive.uncovered_goals) > 0:
             # Update config every 5 iterations
             if iteration >= 5:
-                #print(f"Old crossover rate: {config.configuration.search_algorithm.crossover_rate}")
 
-                # Get new configuration from RL
+                # Get the best coverage so far
                 best_coverage = 0
                 if len(self._archive.solutions) > 0:
                     best_coverage = self.create_test_suite(self._archive.solutions).get_coverage()
 
                 # Send observations, rewards and if we are done
-                conn_1.send((nh.normalize_observations(), best_coverage, False))
+                conn_1.send((config_handler.get_normalized_observations(), best_coverage, False))
 
-                # Wait for new actions and apply it
+                # Wait for new actions and apply them
                 if conn_1.poll(timeout=30):
                     actions = conn_1.recv()
-                    #print(f"New Action received: {actions}")
-                    nh.apply_actions(actions)
-                    #print(f"New crossover rate: {config.configuration.search_algorithm.crossover_rate}")
+                    config_handler.apply_actions(actions)
 
                 iteration = 0
 
@@ -122,6 +120,7 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
             iteration += 1
 
         conn_1.send((None, None, True))
+
         self.after_search_finish()
         return self.create_test_suite(
             self._archive.solutions
