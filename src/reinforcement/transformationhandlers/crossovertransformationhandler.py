@@ -1,5 +1,6 @@
-from reinforcement.abstracttransformationhandler import AbstractTransformationHandler
+from reinforcement.transformationhandlers.abstracttransformationhandler import AbstractTransformationHandler
 import pynguin.configuration as config
+from reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
 
 
 # TODO Should create a general one for probabilities [0, 1]
@@ -13,19 +14,22 @@ class CrossoverTransformationHandler(AbstractTransformationHandler):
         self.config_lower_bound = 0.0
         self.config_upper_bound = 1.0
 
+        self.transformation_handler = BasicTransformationHandler(self.config_lower_bound, self.config_upper_bound,
+                                                                 self.min_value, self.max_value)
+
     def normalize_observation(self, denormalized_observation: float) -> float:
-        return self.convert_to_normalized(denormalized_observation, self.config_lower_bound, self.config_upper_bound)
+        return self.transformation_handler.normalize_observation(denormalized_observation)
 
     def denormalize_action(self, normalized_action: float) -> float:
-        return self.convert_from_normalized(normalized_action, self.min_value, self.max_value)
+        return self.transformation_handler.denormalize_action(normalized_action)
 
     def get_value(self):
         return config.configuration.search_algorithm.crossover_rate
 
     def apply_action(self, normalized_action):
         current_value = self.get_value() + self.denormalize_action(normalized_action)
-        current_value = min(self.config_upper_bound,
-                            max(self.config_lower_bound, current_value))
+        current_value = self.transformation_handler.clamp(current_value)
+
         config.configuration.search_algorithm.crossover_rate = current_value
 
     def get_name(self):

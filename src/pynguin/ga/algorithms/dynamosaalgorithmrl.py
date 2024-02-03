@@ -13,7 +13,6 @@ from typing import TYPE_CHECKING
 from typing import cast
 
 import networkx as nx
-import numpy as np
 
 from networkx.drawing.nx_pydot import to_pydot
 
@@ -25,10 +24,10 @@ from pynguin.ga.algorithms.abstractmosaalgorithm import AbstractMOSAAlgorithm
 from pynguin.ga.operators.ranking import fast_epsilon_dominance_assignment
 from pynguin.utils.orderedset import OrderedSet
 from pynguin.utils.statistics.runtimevariable import RuntimeVariable
-from reinforcement.crossovertransformationhandler import CrossoverTransformationHandler
+from reinforcement.transformationhandlers.crossovertransformationhandler import CrossoverTransformationHandler
 from reinforcement.customenv import training
 from reinforcement.configurationhandler import ConfigurationHandler
-from reinforcement.testchangetransformationhandler import TestChangeTransformationHandler
+from reinforcement.transformationhandlers.testchangetransformationhandler import TestChangeTransformationHandler
 
 if TYPE_CHECKING:
     import pynguin.ga.computations as ff
