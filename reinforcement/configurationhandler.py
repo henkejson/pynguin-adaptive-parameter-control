@@ -12,25 +12,27 @@ class ConfigurationHandler:
 
     def apply_actions(self, actions):
         """Apply all actions retrieved to their respective configuration variable, after denormalizing them"""
-        print("ACTIONS | ", end="")
+        print("ACTIONS |",)
         for i, action in enumerate(actions):
             normalizer = self.normalizers[i]
 
             normalizer.apply_action(action)
 
-            print(f"{normalizer.get_name()}: {normalizer.denormalize_action(action)}, ", end="")
-        print("")
+            print(f"        | {normalizer.get_name()}: (DN) {round(normalizer.denormalize_action(action), 4)} "
+                  f"(N) {round(float(action), 4)}, ",)
+        #print("")
 
     def get_normalized_observations(self):
         """Return a numpy array of all normalized observations"""
         observations = []
 
-        print("OBSERVATIONS | ", end="")
+        print("OBSERVATIONS |",)
         for normalizer in self.normalizers:
             observations.append(normalizer.normalize_observation(normalizer.get_value()))
 
-            print(f"{normalizer.get_name()}: {normalizer.get_value()}, ", end="")
-        print("")
+            print(f"             | {normalizer.get_name()}: (DN) {round(normalizer.get_value(), 4)}, "
+                  f"(N) {round(normalizer.normalize_observation(normalizer.get_value()), 4)}",)
+        #print("")
 
         return np.array(observations, dtype=np.float32)
 

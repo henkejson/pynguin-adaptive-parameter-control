@@ -76,11 +76,17 @@ class DynaMOSAAlgorithmRL(AbstractMOSAAlgorithm):
             self.create_test_suite(self._archive.solutions)
         )
 
-        print(config.configuration.rl.tuning_parameters)
+        tuning_parameters = []
 
-        config_handler = ConfigurationHandler([
-            CrossoverTransformationHandler(-0.05, 0.05)])
-        #TestChangeTransformationHandler(-0.05, 0.05)
+        for i in config.configuration.rl.tuning_parameters:
+            if i == config.TuningParameters.CrossoverRate:
+                tuning_parameters.append(CrossoverTransformationHandler(-0.05, 0.05))
+
+            elif i == config.TuningParameters.TestChangeProbability:
+                tuning_parameters.append(TestChangeTransformationHandler(-0.05, 0.05))
+
+        config_handler = ConfigurationHandler(tuning_parameters)
+
         conn_1, conn_2 = multiprocessing.Pipe()
         timeout = 10
         # Create a new process, passing the child connection
@@ -102,7 +108,7 @@ class DynaMOSAAlgorithmRL(AbstractMOSAAlgorithm):
         while self.resources_left() and len(self._archive.uncovered_goals) > 0:
             # Update config every 5 iterations
             #print(f"Coverage???: {self.create_test_suite(self._get_best_individuals())}")
-            if iteration >= 5:
+            if iteration >= config.configuration.rl.update_frequency:
 
                 # Get the best coverage so far
                 best_coverage = 0

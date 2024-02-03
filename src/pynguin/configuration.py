@@ -609,6 +609,8 @@ class ReinforcementLearningConfiguration:
         ]
     )
 
+    update_frequency: int = 5
+
 @dataclasses.dataclass
 class Configuration:
     """General configuration for the test generator."""
