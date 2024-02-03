@@ -7,11 +7,13 @@
 from __future__ import annotations
 
 import logging
+import multiprocessing
 
 from typing import TYPE_CHECKING
 from typing import cast
 
 import networkx as nx
+import numpy as np
 
 from networkx.drawing.nx_pydot import to_pydot
 
@@ -23,7 +25,10 @@ from pynguin.ga.algorithms.abstractmosaalgorithm import AbstractMOSAAlgorithm
 from pynguin.ga.operators.ranking import fast_epsilon_dominance_assignment
 from pynguin.utils.orderedset import OrderedSet
 from pynguin.utils.statistics.runtimevariable import RuntimeVariable
-
+from reinforcement.crossovertransformationhandler import CrossoverTransformationHandler
+from reinforcement.customenv import training
+from reinforcement.configurationhandler import ConfigurationHandler
+from reinforcement.testchangetransformationhandler import TestChangeTransformationHandler
 
 if TYPE_CHECKING:
     import pynguin.ga.computations as ff
@@ -34,7 +39,7 @@ if TYPE_CHECKING:
     from pynguin.testcase.execution import SubjectProperties
 
 
-class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
+class DynaMOSAAlgorithmRL(AbstractMOSAAlgorithm):
     """Implements the Dynamic Many-Objective Sorting Algorithm DynaMOSA."""
 
     _logger = logging.getLogger(__name__)
@@ -70,9 +75,59 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
         self.before_first_search_iteration(
             self.create_test_suite(self._archive.solutions)
         )
+
+        print(config.configuration.rl.tuning_parameters)
+
+        config_handler = ConfigurationHandler([
+            CrossoverTransformationHandler(-0.05, 0.05)])
+        #TestChangeTransformationHandler(-0.05, 0.05)
+        conn_1, conn_2 = multiprocessing.Pipe()
+        timeout = 10
+        # Create a new process, passing the child connection
+        p = multiprocessing.Process(target=training,
+                                    args=(len(config_handler.normalizers),  # number of actions
+                                          len(config_handler.normalizers),  # number of observations
+                                          conn_2,))
+        p.start()
+
+        if conn_1.poll(timeout=timeout):
+            actions = conn_1.recv()
+        else:
+            self._logger.info("No initial action received... ")
+            raise ValueError("No initial action received from RL ")
+
+        config_handler.apply_actions(actions)
+
+        iteration = 0
         while self.resources_left() and len(self._archive.uncovered_goals) > 0:
+            # Update config every 5 iterations
+            #print(f"Coverage???: {self.create_test_suite(self._get_best_individuals())}")
+            if iteration >= 5:
+
+                # Get the best coverage so far
+                best_coverage = 0
+                if len(self._archive.solutions) > 0:
+                    best_coverage = self.create_test_suite(self._population).get_coverage()
+
+                print(f"Coverage???: {self.create_test_suite(self._population).get_coverage()}")
+
+                # Send observations, rewards and if we are done
+                conn_1.send((config_handler.get_normalized_observations(), best_coverage, False))
+
+                # Wait for new actions and apply them
+                if conn_1.poll(timeout=timeout):
+                    actions = conn_1.recv()
+                    config_handler.apply_actions(actions)
+                else:
+                    self._logger.info("No action received... ")
+                    raise ValueError("No action received from RL.")
+                iteration = 0
+
             self.evolve()
             self.after_search_iteration(self.create_test_suite(self._archive.solutions))
+            iteration += 1
+
+        conn_1.send((None, None, True))
 
         self.after_search_finish()
         return self.create_test_suite(

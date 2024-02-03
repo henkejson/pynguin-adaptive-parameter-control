@@ -16,7 +16,7 @@
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/pynguin/__main__.py" />
-    <option name="PARAMETERS" value="--project-path input/ --output-path output/ --module-name bmi_calculator --maximum_search_time 300 --algorithm DYNAMOSA -v" />
+    <option name="PARAMETERS" value="--project-path input/ --output-path output/ --module-name bmi_calculator --maximum_search_time 10 --algorithm DYNAMOSA_RL --tuning_parameters CrossoverRate,TestChangeProbability -v" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

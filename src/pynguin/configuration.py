@@ -36,6 +36,9 @@ class Algorithm(str, enum.Enum):
     test case generation as a many-objective optimisation problem with dynamic selection
     of the targets.  TSE vol. 44 issue 2)."""
 
+    DYNAMOSA_RL = "DYNAMOSA_RL" #TODO add more info
+    "RL version of the dynamic many-objective sorting algorithm"
+
     MIO = "MIO"
     """The MIO test suite generation algorithm (cf. Andrea Arcuri. Many Independent
     Objective (MIO) Algorithm for Test Suite Generation.  Proc. SBSE 2017)."""
@@ -587,6 +590,25 @@ class StoppingConfiguration:
     (up to maximum_test_execution_timeout)."""
 
 
+
+@enum.unique
+class TuningParameters(str, enum.Enum):
+
+    CrossoverRate = "CrossoverRate"
+    """INFOOOO"""
+
+    TestChangeProbability = "TestChangeProbability"
+    """More Infoooo"""
+
+
+@dataclasses.dataclass
+class ReinforcementLearningConfiguration:
+    tuning_parameters: list[TuningParameters] = dataclasses.field(
+        default_factory=lambda: [
+            TuningParameters.CrossoverRate,
+        ]
+    )
+
 @dataclasses.dataclass
 class Configuration:
     """General configuration for the test generator."""
@@ -638,6 +660,8 @@ class Configuration:
 
     random: RandomConfiguration = dataclasses.field(default_factory=RandomConfiguration)
     """Configuration used for the RANDOM algorithm."""
+
+    rl: ReinforcementLearningConfiguration = dataclasses.field(default_factory=ReinforcementLearningConfiguration)
 
 
 # Singleton instance of the configuration.
