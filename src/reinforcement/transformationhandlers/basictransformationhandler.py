@@ -2,16 +2,16 @@ from reinforcement.transformationhandlers.abstracttransformationhandler import A
 import pynguin.configuration as config
 
 
-# TODO Should create a general one for probabilities [0, 1]
-
 class BasicTransformationHandler(AbstractTransformationHandler):
 
-    def __init__(self, lower_bound: float, upper_bound: float, min_value: float, max_value: float):
+    def __init__(self, lower_bound: float, upper_bound: float, min_value: float, max_value: float, name="UNNAMED"):
         self.min_value = min_value
         self.max_value = max_value
 
         self.config_lower_bound = lower_bound
         self.config_upper_bound = upper_bound
+
+        self.name = name
 
     @staticmethod
     def convert_from_normalized(normalized_value, min_value, max_value):
@@ -37,4 +37,4 @@ class BasicTransformationHandler(AbstractTransformationHandler):
         pass
 
     def get_name(self):
-        return "UNNAMED; Basic Transformation Handler"
+        return self.name
