@@ -600,6 +600,9 @@ class TuningParameters(str, enum.Enum):
     TestChangeProbability = "TestChangeProbability"
     """More Infoooo"""
 
+    ChangeParameterProbability = "ChangeParameterProbability"
+    """Change parameter probability info"""
+
 
 @dataclasses.dataclass
 class ReinforcementLearningConfiguration:

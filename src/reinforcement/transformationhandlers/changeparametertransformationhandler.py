@@ -3,9 +3,7 @@ import pynguin.configuration as config
 from reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
 
 
-# TODO Should create a general one for probabilities [0, 1]
-
-class CrossoverTransformationHandler(AbstractTransformationHandler):
+class ChangeParameterTransformationHandler(AbstractTransformationHandler):
 
     def __init__(self, min_value: float = -0.05, max_value: float = 0.05):
         self.min_value = min_value
@@ -17,6 +15,9 @@ class CrossoverTransformationHandler(AbstractTransformationHandler):
         self.transformation_handler = BasicTransformationHandler(self.config_lower_bound, self.config_upper_bound,
                                                                  self.min_value, self.max_value)
 
+    def get_name(self):
+        return "Change Parameter Probability"
+
     def normalize_observation(self, denormalized_observation: float) -> float:
         return self.transformation_handler.normalize_observation(denormalized_observation)
 
@@ -24,13 +25,10 @@ class CrossoverTransformationHandler(AbstractTransformationHandler):
         return self.transformation_handler.denormalize_action(normalized_action)
 
     def get_value(self):
-        return config.configuration.search_algorithm.crossover_rate
+        return config.configuration.search_algorithm.change_parameter_probability
 
     def apply_action(self, normalized_action):
-        current_value = self.get_value() + self.denormalize_action(normalized_action)
-        current_value = self.transformation_handler.clamp(current_value)
+        new_value = self.get_value() + self.denormalize_action(normalized_action)
+        new_value = self.transformation_handler.clamp(new_value)
 
-        config.configuration.search_algorithm.crossover_rate = current_value
-
-    def get_name(self):
-        return "Crossover Rate"
+        config.configuration.search_algorithm.change_parameter_probability = new_value

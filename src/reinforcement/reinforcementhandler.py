@@ -3,9 +3,11 @@ import logging
 import pynguin.configuration as config
 import multiprocessing
 from reinforcement.transformationhandlers.crossovertransformationhandler import CrossoverTransformationHandler
+from reinforcement.transformationhandlers.testchangetransformationhandler import TestChangeTransformationHandler
+from reinforcement.transformationhandlers.changeparametertransformationhandler import ChangeParameterTransformationHandler
 from reinforcement.customenv import training
 from reinforcement.configurationhandler import ConfigurationHandler
-from reinforcement.transformationhandlers.testchangetransformationhandler import TestChangeTransformationHandler
+
 
 
 class ReinforcementHandler:
@@ -40,12 +42,17 @@ class ReinforcementHandler:
     @staticmethod
     def set_up_tuning_parameters() -> ConfigurationHandler:
         tuning_parameters = []
-        for i in config.configuration.rl.tuning_parameters:
-            if i == config.TuningParameters.CrossoverRate:
-                tuning_parameters.append(CrossoverTransformationHandler(-0.05, 0.05))
+        for parameter in config.configuration.rl.tuning_parameters:
 
-            elif i == config.TuningParameters.TestChangeProbability:
-                tuning_parameters.append(TestChangeTransformationHandler(-0.05, 0.05))
+            match parameter:
+                case config.TuningParameters.CrossoverRate:
+                    tuning_parameters.append(CrossoverTransformationHandler(-0.05, 0.05))
+                case config.TuningParameters.TestChangeProbability:
+                    tuning_parameters.append(TestChangeTransformationHandler(-0.05, 0.05))
+                case config.TuningParameters.ChangeParameterProbability:
+                    tuning_parameters.append(ChangeParameterTransformationHandler(-0.05, 0.05))
+                case _:
+                    raise Exception()
 
         return ConfigurationHandler(tuning_parameters)
 
