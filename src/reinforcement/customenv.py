@@ -55,11 +55,12 @@ class MyCustomEnv(gym.Env):
         return obs, reward, done, False, {}
 
     def get_observations(self):
-
-        if self.conn.poll(timeout=60):
-            obs, reward, done = self.conn.recv()
-        else:
-            raise ValueError("No value received, shutting down...")
+        cont = False
+        while not cont:
+            if self.conn.poll(timeout=120):
+                obs, reward, cont, done = self.conn.recv()
+            else:
+                raise ValueError("No value received, shutting down...")
 
         if done:
             self.stop_training.set(True)

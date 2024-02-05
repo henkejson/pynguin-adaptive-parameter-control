@@ -76,8 +76,7 @@ class DynaMOSAAlgorithmRL(AbstractMOSAAlgorithm):
             self.create_test_suite(self._archive.solutions)
         )
 
-        rl_handler = ReinforcementHandler(lambda: self.create_test_suite(self._population).get_coverage(),
-                                          lambda: self.create_test_suite(self._archive.solutions).get_coverage(),
+        rl_handler = ReinforcementHandler(lambda: self.create_test_suite(self._archive.solutions).get_coverage(),
                                           self._logger)
 
         while self.resources_left() and len(self._archive.uncovered_goals) > 0:
