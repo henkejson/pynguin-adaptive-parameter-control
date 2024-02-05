@@ -42,34 +42,22 @@ class MyCustomEnv(gym.Env):
     def step(self, action):
         self.conn.send(action)
         obs = np.array([])
-        coverage = 0.0
         reward = 0.0
         done = True
 
         try:
-            obs, coverage, done = self.get_observations()
+            obs, reward, done = self.get_observations()
 
         except (ValueError, TypeError, SystemExit) as e:
             print(f"Error encountered: {e}")
             close_and_clean_up(self.conn)
 
-        # Add the latest coverage value to the history
-        self.coverage_history.append(coverage)
-
-        # Calculate reward from the coverage
-        # Scale reward to give more as it approaches 1?
-        if len(self.coverage_history) >= 2:
-            reward = (self.coverage_history[-1] - self.coverage_history[-2]) * (
-                    2 / (1 + np.exp(-9 * (self.coverage_history[-1] - 0.5))))
-            # Scale the reward
-            reward *= 100
-        print(f"REWARD | {reward} ")
         return obs, reward, done, False, {}
 
     def get_observations(self):
 
         if self.conn.poll(timeout=60):
-            obs, coverage, done = self.conn.recv()
+            obs, reward, done = self.conn.recv()
         else:
             raise ValueError("No value received, shutting down...")
 
@@ -83,12 +71,12 @@ class MyCustomEnv(gym.Env):
         elif obs.shape != self.observation_space.shape:
             raise ValueError(f"Expected shape {self.observation_space.shape} for Observations, "
                              f"instead got shape {obs.shape}")
-        elif not isinstance(coverage, float):
-            raise TypeError(f"Expected type int for Coverage, got type: {type(coverage)}")
+        elif not isinstance(reward, float):
+            raise TypeError(f"Expected type float for Reward, got type: {type(reward)}")
         elif not isinstance(done, bool):
             raise TypeError(f"Expected type bool for Done, got type {type(done)}")
 
-        return obs, coverage, done
+        return obs, reward, done
 
     def reset(self, **kwargs):
         while self.conn.poll():

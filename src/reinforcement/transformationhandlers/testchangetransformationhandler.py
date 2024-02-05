@@ -3,8 +3,6 @@ import pynguin.configuration as config
 from reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
 
 
-# TODO Should create a general one for probabilities [0, 1]
-
 class TestChangeTransformationHandler(AbstractTransformationHandler):
 
     def __init__(self, min_value=-0.05, max_value=0.05):

@@ -15,7 +15,10 @@ class ReinforcementHandler:
         self.timeout = 20
         self._logger = _logger
 
+        self.current_coverage_history = [0.0]
         self.get_current_coverage = current_coverage
+
+        self.best_coverage_history = [0.0]
         self.get_best_coverage = best_coverage
 
         conn_1, conn_2 = multiprocessing.Pipe()
@@ -51,13 +54,12 @@ class ReinforcementHandler:
         if self.iteration >= config.configuration.rl.update_frequency:
 
             # Get the best coverage so far
-            current_coverage = self.get_current_coverage()
-            best_coverage = self.get_best_coverage()
+            reward = self.calc_reward()
 
             # Send observations, rewards and if we are done
-            self.conn.send((self.config_handler.get_normalized_observations(), current_coverage, False))
-            print(f"Current Coverage: {current_coverage}")
-            print(f"Best Coverage: {best_coverage}")
+            self.conn.send((self.config_handler.get_normalized_observations(), reward, False))
+            print(f"Current Coverage: {self.get_current_coverage()}")
+            print(f"Best Coverage: {self.get_best_coverage()}")
             # Wait for new actions and apply them
             self.get_action()
 
@@ -73,6 +75,18 @@ class ReinforcementHandler:
             self._logger.info("No action received... ")
             raise ValueError("No action received from RL.")
 
+    def calc_reward(self):
+        # Add the latest coverage value to the history
+        self.current_coverage_history.append(self.get_current_coverage())
+        self.best_coverage_history.append(self.get_best_coverage())
+
+        # Calculate reward from the coverage
+        # Scale reward to give more as it approaches 1?
+        best_coverage_diff = self.best_coverage_history[-1] - self.best_coverage_history[-2]
+
+        reward = best_coverage_diff
+        print(f"REWARD | (Best): {reward}")
+        return reward
 
     def stop(self):
         self.conn.send((None, None, True))
