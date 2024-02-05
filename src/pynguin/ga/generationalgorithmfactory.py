@@ -38,6 +38,7 @@ from pynguin.analyses.constants import EmptyConstantProvider
 from pynguin.analyses.module import FilteredModuleTestCluster
 from pynguin.analyses.module import ModuleTestCluster
 from pynguin.analyses.seeding import InitialPopulationProvider
+from pynguin.ga.algorithms.dynamosaalgorithmrl import DynaMOSAAlgorithmRL
 from pynguin.ga.algorithms.dynamosaalgorithm import DynaMOSAAlgorithm
 from pynguin.ga.algorithms.mioalgorithm import MIOAlgorithm
 from pynguin.ga.algorithms.mosaalgorithm import MOSAAlgorithm
@@ -62,7 +63,6 @@ from pynguin.testcase.execution import AbstractTestCaseExecutor
 from pynguin.testcase.execution import TypeTracingTestCaseExecutor
 from pynguin.utils.exceptions import ConfigurationException
 from pynguin.utils.orderedset import OrderedSet
-
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -144,6 +144,7 @@ class TestSuiteGenerationAlgorithmFactory(
 
     _strategies: ClassVar[dict[config.Algorithm, Callable[[], GenerationAlgorithm]]] = {
         config.Algorithm.DYNAMOSA: DynaMOSAAlgorithm,
+        config.Algorithm.DYNAMOSA_RL: DynaMOSAAlgorithmRL,
         config.Algorithm.MIO: MIOAlgorithm,
         config.Algorithm.MOSA: MOSAAlgorithm,
         config.Algorithm.RANDOM: RandomAlgorithm,
@@ -225,6 +226,7 @@ class TestSuiteGenerationAlgorithmFactory(
             )
         if config.configuration.algorithm in {
             config.Algorithm.DYNAMOSA,
+            config.Algorithm.DYNAMOSA_RL,
             config.Algorithm.MIO,
             config.Algorithm.MOSA,
             config.Algorithm.RANDOM_TEST_CASE_SEARCH,
@@ -344,7 +346,8 @@ class TestSuiteGenerationAlgorithmFactory(
             )
         # Use CoverageArchive as default, even if the algorithm does not use it.
         self._logger.info("Using CoverageArchive")
-        if config.configuration.algorithm == config.Algorithm.DYNAMOSA:
+        if config.configuration.algorithm == config.Algorithm.DYNAMOSA or \
+           config.configuration.algorithm == config.Algorithm.DYNAMOSA_RL:
             # DynaMOSA gradually adds its fitness functions, so we initialize
             # with an empty set.
             return arch.CoverageArchive(OrderedSet())
@@ -367,6 +370,7 @@ class TestSuiteGenerationAlgorithmFactory(
         """
         if config.configuration.algorithm in {
             config.Algorithm.DYNAMOSA,
+            config.Algorithm.DYNAMOSA_RL,
             config.Algorithm.MIO,
             config.Algorithm.MOSA,
             config.Algorithm.RANDOM_TEST_CASE_SEARCH,

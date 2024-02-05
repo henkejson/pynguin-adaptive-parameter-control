@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import logging
+import multiprocessing
 
 from typing import TYPE_CHECKING
 from typing import cast
@@ -23,7 +24,11 @@ from pynguin.ga.algorithms.abstractmosaalgorithm import AbstractMOSAAlgorithm
 from pynguin.ga.operators.ranking import fast_epsilon_dominance_assignment
 from pynguin.utils.orderedset import OrderedSet
 from pynguin.utils.statistics.runtimevariable import RuntimeVariable
-
+from reinforcement.reinforcementhandler import ReinforcementHandler
+from reinforcement.transformationhandlers.crossovertransformationhandler import CrossoverTransformationHandler
+from reinforcement.customenv import training
+from reinforcement.configurationhandler import ConfigurationHandler
+from reinforcement.transformationhandlers.testchangetransformationhandler import TestChangeTransformationHandler
 
 if TYPE_CHECKING:
     import pynguin.ga.computations as ff
@@ -34,7 +39,7 @@ if TYPE_CHECKING:
     from pynguin.testcase.execution import SubjectProperties
 
 
-class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
+class DynaMOSAAlgorithmRL(AbstractMOSAAlgorithm):
     """Implements the Dynamic Many-Objective Sorting Algorithm DynaMOSA."""
 
     _logger = logging.getLogger(__name__)
@@ -70,10 +75,18 @@ class DynaMOSAAlgorithm(AbstractMOSAAlgorithm):
         self.before_first_search_iteration(
             self.create_test_suite(self._archive.solutions)
         )
+
+        rl_handler = ReinforcementHandler(lambda: self.create_test_suite(self._population).get_coverage(),
+                                          lambda: self.create_test_suite(self._archive.solutions).get_coverage(),
+                                          self._logger)
+
         while self.resources_left() and len(self._archive.uncovered_goals) > 0:
+            rl_handler.update()
+
             self.evolve()
             self.after_search_iteration(self.create_test_suite(self._archive.solutions))
 
+        rl_handler.stop()
         self.after_search_finish()
         return self.create_test_suite(
             self._archive.solutions

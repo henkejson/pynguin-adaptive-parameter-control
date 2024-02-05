@@ -3,17 +3,9 @@ from abc import ABC, abstractmethod
 
 class AbstractTransformationHandler(ABC):
     """Handles transformation in between environment-space and normalized-space (used in the RL)"""
-
-    @staticmethod
-    def convert_from_normalized(normalized_value, min_value, max_value):
-        return (normalized_value + 1) * ((max_value - min_value) / 2) + min_value
-
-    @staticmethod
-    def convert_to_normalized(denormalized_value, lower_bound, upper_bound):
-        return ((denormalized_value - lower_bound) / (upper_bound - lower_bound)) * 2 - 1
-
+    @abstractmethod
     def get_name(self):
-        return "Unnamed configuration"
+        pass
 
     @abstractmethod
     def normalize_observation(self, denormalized_observation: float) -> float:
