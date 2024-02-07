@@ -4,27 +4,29 @@ import pynguin.configuration as config
 import multiprocessing
 from reinforcement.transformationhandlers.crossovertransformationhandler import CrossoverTransformationHandler
 from reinforcement.transformationhandlers.testchangetransformationhandler import TestChangeTransformationHandler
-from reinforcement.transformationhandlers.changeparametertransformationhandler import ChangeParameterTransformationHandler
+from reinforcement.transformationhandlers.changeparametertransformationhandler import \
+    ChangeParameterTransformationHandler
 from reinforcement.customenv import training
 from reinforcement.configurationhandler import ConfigurationHandler
 
 
-
 class ReinforcementHandler:
 
-    def __init__(self,  best_coverage: Callable[[], float], _logger):
+    def __init__(self, best_coverage: Callable[[], float], _logger):
         # current_coverage: Callable[[], float],
         self.config_handler = self.set_up_tuning_parameters()
         self.timeout = 20
         self._logger = _logger
 
-        #self.current_coverage_history = [0.0]
-        #self.get_current_coverage = current_coverage
+        # self.current_coverage_history = [0.0]
+        # self.get_current_coverage = current_coverage
 
         self.best_coverage_history = [0.0]
         self.get_best_coverage = best_coverage
         self.previous_coverage = 0.0
 
+        self.is_rl_activated = False
+        self.first_activation = True
         conn_1, conn_2 = multiprocessing.Pipe()
         self.conn = conn_1
         self.set_up_process(conn_2)
@@ -66,23 +68,24 @@ class ReinforcementHandler:
             print("Under Threshold")
             return False
 
-        return True
-        # self.coverage_diff = best_coverage - self.best_coverage_history[-1]
-        # if self.coverage_diff > 0:
-        #     self.best_coverage_history.clear()
-        #     self.best_coverage_history.append(best_coverage)
-        #     print("Improvement!")
-        #     return False
-        # elif len(self.best_coverage_history) > 4:
-        #     self.best_coverage_history.append(best_coverage)
-        #     print("Over three in a row!")
-        #     return True
-        # else:
-        #     self.best_coverage_history.append(best_coverage)
-        #     print("Add one more to the stack")
-        #     return False
-
-
+        coverage_diff = best_coverage - self.best_coverage_history[-1]
+        if coverage_diff > 0:
+            if self.is_rl_activated:
+                self.previous_coverage = self.best_coverage_history[0]
+                self.is_rl_activated = False
+            self.best_coverage_history.clear()
+            self.best_coverage_history.append(best_coverage)
+            print("Improvement!")
+            return False
+        elif len(self.best_coverage_history) > 4:
+            self.best_coverage_history.append(best_coverage)
+            self.is_rl_activated = True
+            print("Over three in a row!")
+            return True
+        else:
+            self.best_coverage_history.append(best_coverage)
+            print("Add one more to the stack")
+            return False
 
     def update(self):
 
@@ -114,12 +117,18 @@ class ReinforcementHandler:
 
     def calc_reward(self):
         # Add the latest coverage value to the history
-        #self.current_coverage_history.append(self.get_current_coverage())
-        #self.best_coverage_history.append(self.get_best_coverage())
+        # self.current_coverage_history.append(self.get_current_coverage())
+        # self.best_coverage_history.append(self.get_best_coverage())
+
+        best_coverage = self.get_best_coverage()
+
+        if self.first_activation:
+            self.first_activation = False
+            self.previous_coverage = best_coverage
+            return 0.0
 
         # Calculate reward from the coverage
         # Scale reward to give more as it approaches 1?
-        best_coverage = self.get_best_coverage()
 
         reward = best_coverage - self.previous_coverage
         self.previous_coverage = best_coverage
