@@ -21,12 +21,10 @@ class ReinforcementHandler:
         # self.current_coverage_history = [0.0]
         # self.get_current_coverage = current_coverage
 
-        self.best_coverage_history = [0.0]
         self.get_best_coverage = best_coverage
         self.previous_coverage = 0.0
-
-        self.is_rl_activated = False
         self.first_activation = True
+
         conn_1, conn_2 = multiprocessing.Pipe()
         self.conn = conn_1
         self.set_up_process(conn_2)
@@ -61,32 +59,18 @@ class ReinforcementHandler:
         return ConfigurationHandler(tuning_parameters)
 
     def activate_reinforcement(self):
-        threshold = 0.6
-        best_coverage = self.get_best_coverage()
 
-        if best_coverage < threshold:
-            print("Under Threshold")
-            return False
+        if self.first_activation:
+            threshold = 0.6
+            best_coverage = self.get_best_coverage()
 
-        coverage_diff = best_coverage - self.best_coverage_history[-1]
-        if coverage_diff > 0:
-            if self.is_rl_activated:
-                self.previous_coverage = self.best_coverage_history[0]
-                self.is_rl_activated = False
-            self.best_coverage_history.clear()
-            self.best_coverage_history.append(best_coverage)
-            print("Improvement!")
-            return False
-        elif len(self.best_coverage_history) > 4:
-            self.best_coverage_history.append(best_coverage)
-            self.is_rl_activated = True
-            print("Over three in a row!")
-            return True
-        else:
-            self.best_coverage_history.append(best_coverage)
-            print("Add one more to the stack")
-            return False
+            if best_coverage > threshold:
+                self.previous_coverage = best_coverage
+                self.first_activation = False
+            else:
+                return False
 
+        return True
     def update(self):
 
         if self.iteration >= config.configuration.rl.update_frequency:
@@ -121,11 +105,6 @@ class ReinforcementHandler:
         # self.best_coverage_history.append(self.get_best_coverage())
 
         best_coverage = self.get_best_coverage()
-
-        if self.first_activation:
-            self.first_activation = False
-            self.previous_coverage = best_coverage
-            return 0.0
 
         # Calculate reward from the coverage
         # Scale reward to give more as it approaches 1?
