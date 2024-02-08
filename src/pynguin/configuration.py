@@ -603,6 +603,17 @@ class TuningParameters(str, enum.Enum):
     ChangeParameterProbability = "ChangeParameterProbability"
     """Change parameter probability info"""
 
+    StatementInsertionProbability = "StatementInsertionProbability"
+    """INFOOO"""
+
+    TestDeleteProbability = "TestDeleteProbability"
+    """INFOOO"""
+
+    TestInsertProbability = "TestInsertProbability"
+    """INFOOO"""
+
+    TestInsertionProbability = "TestInsertionProbability"
+    """INFOOOO"""
 
 @dataclasses.dataclass
 class ReinforcementLearningConfiguration:

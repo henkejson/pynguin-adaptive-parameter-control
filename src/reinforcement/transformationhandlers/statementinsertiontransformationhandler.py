@@ -3,7 +3,7 @@ import pynguin.configuration as config
 from reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
 
 
-class CrossoverTransformationHandler(AbstractTransformationHandler):
+class StatementInsertionTransformationHandler(AbstractTransformationHandler):
 
     def __init__(self, min_value: float = -0.05, max_value: float = 0.05):
         self.min_value = min_value
@@ -22,13 +22,13 @@ class CrossoverTransformationHandler(AbstractTransformationHandler):
         return self.transformation_handler.denormalize_action(normalized_action)
 
     def get_value(self):
-        return config.configuration.search_algorithm.crossover_rate
+        return config.configuration.search_algorithm.statement_insertion_probability
 
     def apply_action(self, normalized_action):
         current_value = self.get_value() + self.denormalize_action(normalized_action)
         current_value = self.transformation_handler.clamp(current_value)
 
-        config.configuration.search_algorithm.crossover_rate = current_value
+        config.configuration.search_algorithm.statement_insertion_probability = current_value
 
     def get_name(self):
-        return "Crossover Rate"
+        return "Statement Insertion Probability"

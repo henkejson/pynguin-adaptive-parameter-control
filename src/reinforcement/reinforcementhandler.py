@@ -3,11 +3,16 @@ import logging
 import pynguin.configuration as config
 import multiprocessing
 from reinforcement.transformationhandlers.crossovertransformationhandler import CrossoverTransformationHandler
+from reinforcement.transformationhandlers.statementinsertiontransformationhandler import \
+    StatementInsertionTransformationHandler
 from reinforcement.transformationhandlers.testchangetransformationhandler import TestChangeTransformationHandler
 from reinforcement.transformationhandlers.changeparametertransformationhandler import \
     ChangeParameterTransformationHandler
 from reinforcement.customenv import training
 from reinforcement.configurationhandler import ConfigurationHandler
+from reinforcement.transformationhandlers.testdeletetransformationhandler import TestDeleteTransformationHandler
+from reinforcement.transformationhandlers.testinsertiontransformationhandler import TestInsertionTransformationHandler
+from reinforcement.transformationhandlers.testinserttransformationhandler import TestInsertTransformationHandler
 
 
 class ReinforcementHandler:
@@ -18,9 +23,7 @@ class ReinforcementHandler:
         self.timeout = 20
         self._logger = _logger
 
-        # self.current_coverage_history = [0.0]
-        # self.get_current_coverage = current_coverage
-
+        # Variables associated with coverage
         self.get_best_coverage = best_coverage
         self.previous_coverage = 0.0
         self.first_activation = True
@@ -30,8 +33,7 @@ class ReinforcementHandler:
         self.set_up_process(conn_2)
 
         self.iteration = 0
-
-        self.get_action()
+        self.get_action()  # Get the initial action from the RL
 
     def set_up_process(self, conn):
         # Create a new process, passing the child connection
@@ -53,6 +55,14 @@ class ReinforcementHandler:
                     tuning_parameters.append(TestChangeTransformationHandler(-0.05, 0.05))
                 case config.TuningParameters.ChangeParameterProbability:
                     tuning_parameters.append(ChangeParameterTransformationHandler(-0.05, 0.05))
+                case config.TuningParameters.StatementInsertionProbability:
+                    tuning_parameters.append(StatementInsertionTransformationHandler(-0.05, 0.05))
+                case config.TuningParameters.TestDeleteProbability:
+                    tuning_parameters.append(TestDeleteTransformationHandler(-0.05, 0.05))
+                case config.TuningParameters.TestInsertProbability:
+                    tuning_parameters.append(TestInsertTransformationHandler(-0.05, 0.05))
+                case config.TuningParameters.TestInsertionProbability:
+                    tuning_parameters.append(TestInsertionTransformationHandler(-0.05, 0.05))
                 case _:
                     raise Exception()
 
@@ -71,6 +81,7 @@ class ReinforcementHandler:
                 return False
 
         return True
+
     def update(self):
 
         if self.iteration >= config.configuration.rl.update_frequency:
