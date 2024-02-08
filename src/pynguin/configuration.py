@@ -615,6 +615,18 @@ class TuningParameters(str, enum.Enum):
     TestInsertionProbability = "TestInsertionProbability"
     """INFOOOO"""
 
+    TournamentSize = "TournamentSize"
+    """Tournament Size"""
+
+    Elite = "Elite"
+    """Elite"""
+
+    Population = "Population"
+    """Population"""
+
+    ChromosomeLength = "ChromosomeLength"
+    """Chromosome Length"""
+
 @dataclasses.dataclass
 class ReinforcementLearningConfiguration:
     tuning_parameters: list[TuningParameters] = dataclasses.field(

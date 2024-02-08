@@ -2,17 +2,24 @@ from typing import Callable
 import logging
 import pynguin.configuration as config
 import multiprocessing
+
+from reinforcement.customenv import training
+from reinforcement.configurationhandler import ConfigurationHandler
+
+from reinforcement.transformationhandlers.changeparametertransformationhandler import \
+    ChangeParameterTransformationHandler
+from reinforcement.transformationhandlers.chromosomelengthtransformationhandler import \
+    ChromosomeLengthTransformationHandler
 from reinforcement.transformationhandlers.crossovertransformationhandler import CrossoverTransformationHandler
+from reinforcement.transformationhandlers.elitetransformationhandler import EliteTransformationHandler
+from reinforcement.transformationhandlers.populationtransformationhandler import PopulationTransformationHandler
 from reinforcement.transformationhandlers.statementinsertiontransformationhandler import \
     StatementInsertionTransformationHandler
 from reinforcement.transformationhandlers.testchangetransformationhandler import TestChangeTransformationHandler
-from reinforcement.transformationhandlers.changeparametertransformationhandler import \
-    ChangeParameterTransformationHandler
-from reinforcement.customenv import training
-from reinforcement.configurationhandler import ConfigurationHandler
 from reinforcement.transformationhandlers.testdeletetransformationhandler import TestDeleteTransformationHandler
 from reinforcement.transformationhandlers.testinsertiontransformationhandler import TestInsertionTransformationHandler
 from reinforcement.transformationhandlers.testinserttransformationhandler import TestInsertTransformationHandler
+from reinforcement.transformationhandlers.tournamentsizetransformationhandler import TournamentSizeTransformationHandler
 
 
 class ReinforcementHandler:
@@ -63,6 +70,14 @@ class ReinforcementHandler:
                     tuning_parameters.append(TestInsertTransformationHandler(-0.05, 0.05))
                 case config.TuningParameters.TestInsertionProbability:
                     tuning_parameters.append(TestInsertionTransformationHandler(-0.05, 0.05))
+                case config.TuningParameters.TournamentSize:
+                    tuning_parameters.append(TournamentSizeTransformationHandler(-1, 1))
+                case config.TuningParameters.Elite:
+                    tuning_parameters.append(EliteTransformationHandler(-1, 1))
+                case config.TuningParameters.Population:
+                    tuning_parameters.append(PopulationTransformationHandler(-15, 15))
+                case config.TuningParameters.ChromosomeLength:
+                    tuning_parameters.append(ChromosomeLengthTransformationHandler(-5, 5))
                 case _:
                     raise Exception()
 
