@@ -23,24 +23,31 @@ def run_container():
     root_path = os.getcwd()
     volumes = {
         os.path.join(root_path, 'projects'): {'bind': '/input', 'mode': 'ro'},
-        os.path.join(root_path, 'project_test_output'): {'bind': '/output', 'mode': 'rw'},
-        os.path.join(root_path, 'project_requirements'): {'bind': '/package', 'mode': 'ro'}
-        #os.path.join(root_path, 'run_results'): {'bind': '/results', 'mode': 'rw'}
+        os.path.join(root_path, 'projects_test_output'): {'bind': '/output', 'mode': 'rw'},
+        os.path.join(root_path, 'project_packages'): {'bind': '/package', 'mode': 'ro'},
+        os.path.join(root_path, 'run_results'): {'bind': '/results', 'mode': 'rw'}
     }
 
     print(root_path)
     print(volumes)
 
-    command_input = """
-            --project-path /projects \
-            --output-path /project_test_output \
-            --module-name bmi_calculator \
-            --maximum_search_time 60 \
-            --algorithm 'DYNAMOSA' \
-            -v
-            """
-    #--report_dir "/results" \
-    return client.containers.run("pynguin_image:latest", detach=True, volumes=volumes, command=command_input)
+    command = [
+        "--project-path", "/input",
+        "--module-name", "bmi_calculator",
+        "--output-path", "/output",
+        "--maximum_search_time", "10",
+        "--report_dir", "/results",
+        "-v"
+    ]
+    return client.containers.run(
+        "pynguin_image:latest",
+        command=command,
+        volumes=volumes,
+        detach=True,
+        auto_remove=False,
+        stdout=True,
+        stderr=True
+    )
 
 
 if __name__ == '__main__':
@@ -52,12 +59,19 @@ if __name__ == '__main__':
     container = run_container()
     # print(container.logs())
 
-    print(container.status)
-    print(container.logs())
-    time.sleep(5)
-    print(container.status)
-    print(container.logs())
+    # Stream the logs
+    # Wait for the container to finish
+    container.wait()
 
-    time.sleep(10)
-    print(container.status)
-    print(container.logs())
+    # Fetch logs after completion
+    logs = container.logs()
+    print(logs.decode("utf-8"))
+
+    # Optionally, remove the container manually if needed
+    container.remove()
+
+    # Optionally, remove the container after execution
+    #container.remove()
+
+
+

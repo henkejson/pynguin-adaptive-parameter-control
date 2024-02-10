@@ -22,13 +22,10 @@ import pynguin.utils.statistics.statistics as stat
 
 from pynguin.ga.algorithms.abstractmosaalgorithm import AbstractMOSAAlgorithm
 from pynguin.ga.operators.ranking import fast_epsilon_dominance_assignment
+from pynguin.reinforcement.reinforcementhandler import ReinforcementHandler
 from pynguin.utils.orderedset import OrderedSet
 from pynguin.utils.statistics.runtimevariable import RuntimeVariable
-from reinforcement.reinforcementhandler import ReinforcementHandler
-from reinforcement.transformationhandlers.crossovertransformationhandler import CrossoverTransformationHandler
-from reinforcement.customenv import training
-from reinforcement.configurationhandler import ConfigurationHandler
-from reinforcement.transformationhandlers.testchangetransformationhandler import TestChangeTransformationHandler
+
 
 if TYPE_CHECKING:
     import pynguin.ga.computations as ff
