@@ -1,6 +1,6 @@
-from reinforcement.transformationhandlers.abstracttransformationhandler import AbstractTransformationHandler
+from pynguin.reinforcement.transformationhandlers.abstracttransformationhandler import AbstractTransformationHandler
 import pynguin.configuration as config
-from reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
+from pynguin.reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
 
 
 class TestChangeTransformationHandler(AbstractTransformationHandler):

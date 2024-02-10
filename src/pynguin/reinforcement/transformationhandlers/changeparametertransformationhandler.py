@@ -1,9 +1,9 @@
-from reinforcement.transformationhandlers.abstracttransformationhandler import AbstractTransformationHandler
+from pynguin.reinforcement.transformationhandlers.abstracttransformationhandler import AbstractTransformationHandler
 import pynguin.configuration as config
-from reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
+from pynguin.reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
 
 
-class StatementInsertionTransformationHandler(AbstractTransformationHandler):
+class ChangeParameterTransformationHandler(AbstractTransformationHandler):
 
     def __init__(self, min_value: float = -0.05, max_value: float = 0.05):
         self.min_value = min_value
@@ -15,6 +15,9 @@ class StatementInsertionTransformationHandler(AbstractTransformationHandler):
         self.transformation_handler = BasicTransformationHandler(self.config_lower_bound, self.config_upper_bound,
                                                                  self.min_value, self.max_value)
 
+    def get_name(self):
+        return "Change Parameter Probability"
+
     def normalize_observation(self, denormalized_observation: float) -> float:
         return self.transformation_handler.normalize_observation(denormalized_observation)
 
@@ -22,13 +25,10 @@ class StatementInsertionTransformationHandler(AbstractTransformationHandler):
         return self.transformation_handler.denormalize_action(normalized_action)
 
     def get_value(self):
-        return config.configuration.search_algorithm.statement_insertion_probability
+        return config.configuration.search_algorithm.change_parameter_probability
 
     def apply_action(self, normalized_action):
-        current_value = self.get_value() + self.denormalize_action(normalized_action)
-        current_value = self.transformation_handler.clamp(current_value)
+        new_value = self.get_value() + self.denormalize_action(normalized_action)
+        new_value = self.transformation_handler.clamp(new_value)
 
-        config.configuration.search_algorithm.statement_insertion_probability = current_value
-
-    def get_name(self):
-        return "Statement Insertion Probability"
+        config.configuration.search_algorithm.change_parameter_probability = new_value

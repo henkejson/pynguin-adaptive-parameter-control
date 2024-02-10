@@ -1,15 +1,12 @@
 import sys
-import time
-from multiprocessing import connection, Pipe
-from threading import Thread
+from multiprocessing import connection
 
 import gymnasium as gym
 import numpy as np
-from stable_baselines3 import A2C, PPO
-from stable_baselines3.common.env_checker import check_env
+from stable_baselines3 import PPO
 
-from reinforcement.MutableBool import MutableBool
-from reinforcement.StoppingCallback import StoppingCallback
+from pynguin.reinforcement.MutableBool import MutableBool
+from pynguin.reinforcement.StoppingCallback import StoppingCallback
 
 
 # Process entry

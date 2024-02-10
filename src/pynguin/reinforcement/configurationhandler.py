@@ -1,8 +1,8 @@
 import numpy as np
 
-from reinforcement.transformationhandlers.abstracttransformationhandler import AbstractTransformationHandler
+from pynguin.reinforcement.transformationhandlers.abstracttransformationhandler import AbstractTransformationHandler
 import pynguin.configuration as config
-from reinforcement.transformationhandlers.crossovertransformationhandler import CrossoverTransformationHandler
+from pynguin.reinforcement.transformationhandlers.crossovertransformationhandler import CrossoverTransformationHandler
 
 
 class ConfigurationHandler:

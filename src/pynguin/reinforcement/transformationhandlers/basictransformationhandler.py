@@ -1,5 +1,4 @@
-from reinforcement.transformationhandlers.abstracttransformationhandler import AbstractTransformationHandler
-import pynguin.configuration as config
+from pynguin.reinforcement.transformationhandlers.abstracttransformationhandler import AbstractTransformationHandler
 
 
 class BasicTransformationHandler(AbstractTransformationHandler):

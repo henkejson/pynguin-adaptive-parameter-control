@@ -1,9 +1,9 @@
-from reinforcement.transformationhandlers.abstracttransformationhandler import AbstractTransformationHandler
+from pynguin.reinforcement.transformationhandlers.abstracttransformationhandler import AbstractTransformationHandler
 import pynguin.configuration as config
-from reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
+from pynguin.reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
 
 
-class TestDeleteTransformationHandler(AbstractTransformationHandler):
+class TestInsertionTransformationHandler(AbstractTransformationHandler):
 
     def __init__(self, min_value: float = -0.05, max_value: float = 0.05):
         self.min_value = min_value
@@ -22,13 +22,13 @@ class TestDeleteTransformationHandler(AbstractTransformationHandler):
         return self.transformation_handler.denormalize_action(normalized_action)
 
     def get_value(self):
-        return config.configuration.search_algorithm.test_delete_probability
+        return config.configuration.search_algorithm.test_insertion_probability
 
     def apply_action(self, normalized_action):
         current_value = self.get_value() + self.denormalize_action(normalized_action)
         current_value = self.transformation_handler.clamp(current_value)
 
-        config.configuration.search_algorithm.test_delete_probability = current_value
+        config.configuration.search_algorithm.test_insertion_probability = current_value
 
     def get_name(self):
-        return "Test Delete Probability"
+        return "Test Insertion Probability"
