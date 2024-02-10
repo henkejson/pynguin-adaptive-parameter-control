@@ -114,3 +114,4 @@ pynguin-report/
 docs/_build
 .output/
 /project_test_output/
+/run_results/

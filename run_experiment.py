@@ -1,3 +1,4 @@
+import json
 import os
 import time
 
@@ -14,12 +15,12 @@ def build_image(image_tag: str):
 
     if not image_exists:
         print("Building Docker image locally... This will take a couple of minutes")
-        test_image = client.images.build(path=".", dockerfile="docker/Dockerfile", tag=image_tag)
+        image, build_output = client.images.build(path=".", dockerfile="docker/Dockerfile", tag=image_tag)
     else:
         print(f"Image {image_tag} already exist. Skip build.")
 
 
-def run_container():
+def run_container(image_tag: str):
     root_path = os.getcwd()
     volumes = {
         os.path.join(root_path, 'projects'): {'bind': '/input', 'mode': 'ro'},
@@ -36,11 +37,13 @@ def run_container():
         "--module-name", "bmi_calculator",
         "--output-path", "/output",
         "--maximum_search_time", "10",
-        "--report_dir", "/results",
+        "--report_dir", "/results/experiment1/dyna",
         "-v"
     ]
+
+    print("Starting Container...")
     return client.containers.run(
-        "pynguin_image:latest",
+        image_tag,
         command=command,
         volumes=volumes,
         detach=True,
@@ -56,11 +59,12 @@ if __name__ == '__main__':
     image_tag = "pynguin_image:latest"
     build_image(image_tag)
     # Run a container
-    container = run_container()
+    container = run_container(image_tag)
     # print(container.logs())
 
     # Stream the logs
     # Wait for the container to finish
+    print("Waiting for Pynguin to finish...")
     container.wait()
 
     # Fetch logs after completion
@@ -68,10 +72,9 @@ if __name__ == '__main__':
     print(logs.decode("utf-8"))
 
     # Optionally, remove the container manually if needed
+    print("Removing container...")
     container.remove()
 
-    # Optionally, remove the container after execution
-    #container.remove()
 
 
 
