@@ -32,6 +32,12 @@ class RuntimeVariable(str, enum.Enum):
     # An identifier of the cluster job
     RunId = "RunId"
 
+    # An identifier for the algorithm in this configuration
+    Algorithm = "Algorithm"
+
+    # An identifier for all parameters tuned by RL model
+    TuningParameters = "TuningParameters"
+
     # An identifier for the project's name for benchmarking
     ProjectName = "ProjectName"
 
