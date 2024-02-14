@@ -10,6 +10,14 @@ import docker
 from src.pynguin.configuration import configuration
 
 
+
+
+
+
+
+
+
+
 def build_image(image_tag: str):
     image_exists = False
     for image in client.images.list():
