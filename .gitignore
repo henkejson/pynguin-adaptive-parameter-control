@@ -113,5 +113,8 @@ cov_html/
 pynguin-report/
 docs/_build
 .output/
+
 /project_test_output/
 /run_results/
+/projects_test_output/
+/logs/

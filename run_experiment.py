@@ -7,9 +7,8 @@ import requests
 
 import docker
 from pynguin.utils.statistics.runtimevariable import RuntimeVariable
-from pynguin.utils.statistics.runtimevariable import RuntimeVariable as rv
+from pynguin.utils.statistics.runtimevariable import RuntimeVariable as RVar
 
-from src.pynguin.configuration import configuration
 from src.pynguin.configuration import TuningParameters, Algorithm
 
 
@@ -26,7 +25,6 @@ class RunCommand:
         return self.argument_dict.get(argument, None)
 
     def add_volume(self, base_directory: str, host_folder: str, container_folder: str, mode: str):
-        #self.volumes[os.path.join(base_directory, host_folder)] = {'bind': container_folder, 'mode': mode}
         self.volumes.append(f"{os.path.join(base_directory,host_folder)}:{container_folder}:{mode}")
 
     def build_command(self, start_command: str = "") -> list[str]:
@@ -95,10 +93,12 @@ def run_container(command: RunCommand):
 
 
 def get_path_modules() -> (str, str):
-    """Get ..."""
+    """Paths and modules for all python files used for experimentation"""
     # Relative address (from input/) and module names for all files
     path_modules = [
-        ("projects/httpie", "httpie.sessions")
+        # ("projects/httpie", "httpie.output.writer"),
+        # ("projects/httpie", "httpie.output.formatters.colors"),
+        # ("projects/httpie", "httpie.sessions"),
         # ("projects/toy_example", "bmi_calculator")
         # ("numpy/", "vector")
     ]
@@ -106,7 +106,7 @@ def get_path_modules() -> (str, str):
 
 
 def get_run_config_algorithms() -> list[Algorithm]:
-    """GET ..."""
+    """Algorithms used for experimentation"""
     algorithms = [
         Algorithm.DYNAMOSA
         # configuration.algorithm.MIO.value,
@@ -117,14 +117,14 @@ def get_run_config_algorithms() -> list[Algorithm]:
 
 
 def get_run_config_tuning_params() -> list[TuningParameters]:
-    """GET ..."""
+    """Parameters to tune for experimentation (only used with RL-enabled algorithms)"""
     # parameters = [param.value for param in configuration.TuningParameters]
     parameters = [TuningParameters.CrossoverRate]
     return parameters
 
 
 def construct_run_configurations(max_search_time: int = 60, times_per_config: int = 1) -> list[RunCommand]:
-    """Construct a list of all configuration commands ..."""
+    """Construct a list of all run configuration commands"""
 
     # get the ...
     path_modules = get_path_modules()
@@ -152,12 +152,12 @@ def construct_run_configurations(max_search_time: int = 60, times_per_config: in
                     command.add_argument("run_id", f"{run_id}")
                     command.add_argument("maximum_search_time", f"{max_search_time}")
                     command.add_argument("report_dir", "/results")
-                    command.add_output_variables([rv.RunId,
-                                                  rv.TargetModule,
-                                                  rv.Algorithm,
-                                                  rv.TuningParameters,
-                                                  rv.Coverage,
-                                                  rv.CoverageTimeline
+                    command.add_output_variables([RVar.RunId,
+                                                  RVar.TargetModule,
+                                                  RVar.Algorithm,
+                                                  RVar.TuningParameters,
+                                                  RVar.Coverage,
+                                                  RVar.CoverageTimeline
                                                   ])
                     command.add_argument("v", "")
                     run_id += 1
