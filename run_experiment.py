@@ -6,16 +6,61 @@ import time
 import requests
 
 import docker
+from pynguin.utils.statistics.runtimevariable import RuntimeVariable
+from pynguin.utils.statistics.runtimevariable import RuntimeVariable as rv
 
 from src.pynguin.configuration import configuration
+from src.pynguin.configuration import TuningParameters, Algorithm
 
 
+class RunCommand:
 
+    def __init__(self):
+        self.argument_dict = {}
+        self.volumes = []
 
+    def add_argument(self, argument: str, value: str):
+        self.argument_dict[argument] = value
 
+    def get_argument(self, argument: str):
+        return self.argument_dict.get(argument, None)
 
+    def add_volume(self, base_directory: str, host_folder: str, container_folder: str, mode: str):
+        #self.volumes[os.path.join(base_directory, host_folder)] = {'bind': container_folder, 'mode': mode}
+        self.volumes.append(f"{os.path.join(base_directory,host_folder)}:{container_folder}:{mode}")
 
+    def build_command(self, start_command: str = "") -> list[str]:
+        command_list = []
+        if start_command != "":
+            command_list.append(start_command)
 
+        for argument, value in self.argument_dict.items():
+            if len(argument) > 1:
+                command_list.append("--" + argument)
+                command_list.append(value)
+            else:
+                command_list.append("-" + argument)
+
+        return command_list
+
+    def add_algorithm(self, algorithm: Algorithm):
+        self.add_argument("algorithm", algorithm.value)
+
+    def add_tuning_parameters(self, tuning_parameters: list[TuningParameters]):
+        tmp = []
+        for parm in tuning_parameters:
+            tmp.append(parm.value)
+
+        param_string = ",".join(tmp)
+        self.add_argument("tuning_parameters", param_string)
+
+    def add_output_variables(self, output_variables: list[RuntimeVariable]):
+        tmp = []
+        for parm in output_variables:
+            tmp.append(parm.value)
+
+        variables_string = ",".join(tmp)
+        self.add_argument("output_variables", variables_string)
 
 
 def build_image(image_tag: str):
@@ -33,23 +78,15 @@ def build_image(image_tag: str):
         print(f"Image {image_tag} already exist. Skip build.")
 
 
-def run_container(image_tag: str, command: list[str]):
-    root_path = os.getcwd()
-    volumes = {
-        os.path.join(root_path, 'projects'): {'bind': '/input', 'mode': 'ro'},
-        os.path.join(root_path, 'projects_test_output'): {'bind': '/output', 'mode': 'rw'},
-        os.path.join(root_path, 'project_packages'): {'bind': '/package', 'mode': 'ro'},
-        os.path.join(root_path, 'run_results'): {'bind': '/results', 'mode': 'rw'}
-    }
-
-    print(root_path)
-    print(volumes)
+def run_container(command: RunCommand):
+    print(command.build_command())
+    print(command.volumes)
 
     print("Starting Container...")
     return client.containers.run(
         image_tag,
-        command=command,
-        volumes=volumes,
+        command=command.build_command(),
+        volumes=command.volumes,
         detach=True,
         auto_remove=False,
         stdout=True,
@@ -57,49 +94,71 @@ def run_container(image_tag: str, command: list[str]):
     )
 
 
-def construct_run_configurations() -> list[(str, list[str])]:
+def construct_run_configurations() -> list[RunCommand]:
     """Construct a list of all configuration commands ..."""
 
     # Relative address (from input/) and module names for all files
     path_modules = [
-        ("toy_example", "bmi_calculator")
+        ("projects/toy_example", "bmi_calculator")
         # ("numpy/", "vector")
     ]
 
     algorithms = [
-        configuration.algorithm.DYNAMOSA.value,
+        Algorithm.DYNAMOSA
         # configuration.algorithm.MIO.value,
         # configuration.algorithm.MOSA.value,
         # configuration.algorithm.WHOLE_SUITE.value
     ]
 
     # parameters = [param.value for param in configuration.TuningParameters]
-    parameters = ["CrossoverRate"]
+    parameters = [TuningParameters.CrossoverRate]
 
     run_id = 0
     commands = []
     max_search_time = 5
 
-    for path, module in path_modules:
+    for path, module, in path_modules:
         for algorithm in algorithms:
             for parameter in parameters:
+                for _ in range(1):
+                    command = RunCommand()
+                    command.add_volume(os.getcwd(), path, "/input", "ro")
+                    command.add_volume(os.getcwd(), "projects_test_output", "/output", "rw")
+                    command.add_volume(os.getcwd(), path, "/package", "ro")
+                    command.add_volume(os.getcwd(), "run_results", "/results", "rw")
 
-                for i in range(1):
-                    commands.append((run_id,
-                                     [
-                                         "--project-path", os.path.join("/input/", path),
-                                         "--module-name", module,
-                                         "--output-path", f"/output/{run_id}",
-                                         "--algorithm", algorithm,
-                                         "--tuning_parameters", parameter,
-                                         "--run_id", f"{run_id}",
-                                         "--maximum_search_time", f"{max_search_time}",
-                                         "--report_dir", "/results",
-                                         "--output_variables",
-                                         "RunId,TargetModule,Algorithm,TuningParameters,Coverage,CoverageTimeline",
-                                         "-v"
-                                     ]))
+                    command.add_argument("project_path", "/input")
+                    command.add_argument("output_path", "/output")
+                    command.add_argument("module_name", module)
+                    command.add_algorithm(algorithm)
+                    command.add_tuning_parameters([parameter])
+                    command.add_argument("run_id", f"{run_id}")
+                    command.add_argument("maximum_search_time", f"{max_search_time}")
+                    command.add_argument("report_dir", "/results")
+                    command.add_output_variables([rv.RunId,
+                                                  rv.TargetModule,
+                                                  rv.Algorithm,
+                                                  rv.TuningParameters,
+                                                  rv.Coverage,
+                                                  rv.CoverageTimeline
+                                                  ])
+                    command.add_argument("v", "")
                     run_id += 1
+                    commands.append(command)
+                    # commands.append((run_id,
+                    #                  [
+                    #                      "--project-path", os.path.join("/input/", path),
+                    #                      "--module-name", module,
+                    #                      "--output-path", f"/output/{run_id}",
+                    #                      "--algorithm", algorithm,
+                    #                      "--tuning_parameters", parameter,
+                    #                      "--run_id", f"{run_id}",
+                    #                      "--maximum_search_time", f"{max_search_time}",
+                    #                      "--report_dir", "/results",
+                    #                      "--output_variables",
+                    #                      "RunId,TargetModule,Algorithm,TuningParameters,Coverage,CoverageTimeline",
+                    #                      "-v"
+                    #                  ]))
 
     print(commands)
     return commands
@@ -121,11 +180,11 @@ if __name__ == '__main__':
     i = 1
 
     # Run a container
-    for run_id, run_config in run_configs:
-        print(f"Running config {i}/{len(run_configs)} (run id: {run_id})")
+    for run_config in run_configs:
+        print(f"Running config {i}/{len(run_configs)} (run id: {run_config.get_argument('run_id')})")
         i += 1
 
-        container = run_container(image_tag, run_config)
+        container = run_container(run_config)
         # print(container.logs())
 
         # Stream the logs
@@ -147,7 +206,7 @@ if __name__ == '__main__':
 
         # Prepare for logging
         log_directory = "logs"
-        log_filename = f"{run_id}.txt"
+        log_filename = f"{run_config.get_argument('run_id')}.txt"
         log_path = os.path.join(log_directory, log_filename)
 
         if not os.path.exists(log_directory):
