@@ -94,33 +94,50 @@ def run_container(command: RunCommand):
     )
 
 
-def construct_run_configurations() -> list[RunCommand]:
-    """Construct a list of all configuration commands ..."""
-
+def get_path_modules() -> (str, str):
+    """Get ..."""
     # Relative address (from input/) and module names for all files
     path_modules = [
-        ("projects/toy_example", "bmi_calculator")
+        ("projects/httpie", "httpie.sessions")
+        # ("projects/toy_example", "bmi_calculator")
         # ("numpy/", "vector")
     ]
+    return path_modules
 
+
+def get_run_config_algorithms() -> list[Algorithm]:
+    """GET ..."""
     algorithms = [
         Algorithm.DYNAMOSA
         # configuration.algorithm.MIO.value,
         # configuration.algorithm.MOSA.value,
         # configuration.algorithm.WHOLE_SUITE.value
     ]
+    return algorithms
 
+
+def get_run_config_tuning_params() -> list[TuningParameters]:
+    """GET ..."""
     # parameters = [param.value for param in configuration.TuningParameters]
     parameters = [TuningParameters.CrossoverRate]
+    return parameters
+
+
+def construct_run_configurations(max_search_time: int = 60, times_per_config: int = 1) -> list[RunCommand]:
+    """Construct a list of all configuration commands ..."""
+
+    # get the ...
+    path_modules = get_path_modules()
+    algorithms = get_run_config_algorithms()
+    parameters = get_run_config_tuning_params()
 
     run_id = 0
     commands = []
-    max_search_time = 5
 
     for path, module, in path_modules:
         for algorithm in algorithms:
             for parameter in parameters:
-                for _ in range(1):
+                for _ in range(times_per_config):
                     command = RunCommand()
                     command.add_volume(os.getcwd(), path, "/input", "ro")
                     command.add_volume(os.getcwd(), "projects_test_output", "/output", "rw")
@@ -145,27 +162,13 @@ def construct_run_configurations() -> list[RunCommand]:
                     command.add_argument("v", "")
                     run_id += 1
                     commands.append(command)
-                    # commands.append((run_id,
-                    #                  [
-                    #                      "--project-path", os.path.join("/input/", path),
-                    #                      "--module-name", module,
-                    #                      "--output-path", f"/output/{run_id}",
-                    #                      "--algorithm", algorithm,
-                    #                      "--tuning_parameters", parameter,
-                    #                      "--run_id", f"{run_id}",
-                    #                      "--maximum_search_time", f"{max_search_time}",
-                    #                      "--report_dir", "/results",
-                    #                      "--output_variables",
-                    #                      "RunId,TargetModule,Algorithm,TuningParameters,Coverage,CoverageTimeline",
-                    #                      "-v"
-                    #                  ]))
 
     print(commands)
     return commands
 
 
 if __name__ == '__main__':
-    run_configs = construct_run_configurations()
+    run_configs = construct_run_configurations(10, 1)
     random.seed(41753)
     random.shuffle(run_configs)
     print(run_configs)
