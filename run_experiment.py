@@ -96,11 +96,22 @@ def get_path_modules() -> (str, str):
     """Paths and modules for all python files used for experimentation"""
     # Relative address (from input/) and module names for all files
     path_modules = [
-        # ("projects/httpie", "httpie.output.writer"),
+        # ("projects/httpie", "httpie.cli.dicts"),
+        # ("projects/httpie", "httpie.config"),
+        # ("projects/httpie", "httpie.models"),
         # ("projects/httpie", "httpie.output.formatters.colors"),
+        # ("projects/httpie", "httpie.output.formatters.headers"),
+        # ("projects/httpie", "httpie.output.formatters.json"),
+        # ("projects/httpie", "httpie.output.processing"),
+        # ("projects/httpie", "httpie.output.streams"),
+        # ("projects/httpie", "httpie.plugins.base"),
+        # ("projects/httpie", "httpie.plugins.manager"),
+
+        # ("projects/httpie", "httpie.output.writer"),
         # ("projects/httpie", "httpie.sessions"),
+
         # ("projects/toy_example", "bmi_calculator")
-        # ("numpy/", "vector")
+        # ("numpy/", "vector")  # ??
     ]
     return path_modules
 
@@ -163,7 +174,6 @@ def construct_run_configurations(max_search_time: int = 60, times_per_config: in
                     run_id += 1
                     commands.append(command)
 
-    print(commands)
     return commands
 
 
@@ -171,7 +181,7 @@ if __name__ == '__main__':
     run_configs = construct_run_configurations(10, 1)
     random.seed(41753)
     random.shuffle(run_configs)
-    print(run_configs)
+    # print(run_configs)
 
     client = docker.from_env()
 
