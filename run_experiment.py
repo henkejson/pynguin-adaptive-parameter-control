@@ -130,7 +130,7 @@ def get_run_config_algorithms() -> list[Algorithm]:
 def get_run_config_tuning_params() -> list[TuningParameters]:
     """Parameters to tune for experimentation (only used with RL-enabled algorithms)"""
     # parameters = [param.value for param in configuration.TuningParameters]
-    parameters = [TuningParameters.CrossoverRate]
+    parameters = [TuningParameters.NONE]
     return parameters
 
 

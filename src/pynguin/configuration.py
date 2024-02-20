@@ -36,7 +36,7 @@ class Algorithm(str, enum.Enum):
     test case generation as a many-objective optimisation problem with dynamic selection
     of the targets.  TSE vol. 44 issue 2)."""
 
-    DYNAMOSA_RL = "DYNAMOSA_RL" #TODO add more info
+    DYNAMOSA_RL = "DYNAMOSA_RL"  # TODO add more info
     "RL version of the dynamic many-objective sorting algorithm"
 
     MIO = "MIO"
@@ -590,52 +590,56 @@ class StoppingConfiguration:
     (up to maximum_test_execution_timeout)."""
 
 
-
 @enum.unique
 class TuningParameters(str, enum.Enum):
 
-    CrossoverRate = "CrossoverRate"
-    """INFOOOO"""
-
-    TestChangeProbability = "TestChangeProbability"
-    """More Infoooo"""
-
     ChangeParameterProbability = "ChangeParameterProbability"
-    """Change parameter probability info"""
-
-    StatementInsertionProbability = "StatementInsertionProbability"
-    """INFOOO"""
-
-    TestDeleteProbability = "TestDeleteProbability"
-    """INFOOO"""
-
-    TestInsertProbability = "TestInsertProbability"
-    """INFOOO"""
-
-    TestInsertionProbability = "TestInsertionProbability"
-    """INFOOOO"""
-
-    TournamentSize = "TournamentSize"
-    """Tournament Size"""
-
-    Elite = "Elite"
-    """Elite"""
-
-    Population = "Population"
-    """Population"""
+    """Probability of replacing parameters when mutating a method or constructor statement in a test case (0.1)"""
 
     ChromosomeLength = "ChromosomeLength"
-    """Chromosome Length"""
+    """Maximum length of chromosomes during the search (40)"""
+
+    CrossoverRate = "CrossoverRate"
+    """probability of two parent chromosomes exchanging genetic information to create offspring (0.75)"""
+
+    Elite = "Elite"
+    """Number of 'top-performing' chromosomes that are carried over to the next generation (1)"""
+
+    NONE = "NONE"
+    """Standard value for no parameter tuning"""
+
+    Population = "Population"
+    """Population size for the genetic algorithm (50)"""
+
+    StatementInsertionProbability = "StatementInsertionProbability"
+    """Initial probability of inserting a new statement in a test case (0.5)"""
+
+    TestChangeProbability = "TestChangeProbability"
+    """Probability of changing statements during mutation (0.3333333333333333)"""
+
+    TestDeleteProbability = "TestDeleteProbability"
+    """Probability of deleting statements during mutation (0.3333333333333333)"""
+
+    TestInsertionProbability = "TestInsertionProbability"
+    """Initial probability of inserting a new test in a test suite (0.1)"""
+
+    TestInsertProbability = "TestInsertProbability"
+    """Probability of inserting new statements during mutation (0.3333333333333333)"""
+
+    TournamentSize = "TournamentSize"
+    """Number of chromosomes for tournament selection (5)"""
+
 
 @dataclasses.dataclass
 class ReinforcementLearningConfiguration:
     tuning_parameters: list[TuningParameters] = dataclasses.field(
         default_factory=lambda: [
-            TuningParameters.CrossoverRate,
+            TuningParameters.NONE,
         ]
     )
 
     update_frequency: int = 5
+
 
 @dataclasses.dataclass
 class Configuration:
