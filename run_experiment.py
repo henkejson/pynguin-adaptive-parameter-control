@@ -148,7 +148,7 @@ def construct_run_configurations(max_search_time: int = 60, repetitions: int = 1
         for algorithm in algorithms:
             for parameter in parameters:
                 for rep in range(1, repetitions + 1):
-                    module_rep_id = f"{module}:{'{:02d}'.format(rep)}"
+                    module_rep_id = f"{module}#{'{:02d}'.format(rep)}"
 
                     command = RunCommand()
                     command.add_volume(os.getcwd(), path, "/input", "ro")
@@ -165,7 +165,8 @@ def construct_run_configurations(max_search_time: int = 60, repetitions: int = 1
                     command.add_argument("maximum_search_time", f"{max_search_time}")
                     command.add_argument("report_dir", "/results")
                     # command.add_argument("post_process", "False")
-                    command.add_argument("assertion_generation", "NONE")
+                    command.add_argument("update_frequency", "10")
+                    command.add_argument("plateau_length", "30")
                     command.add_output_variables([RVar.RunId,
                                                   RVar.TargetModule,
                                                   RVar.Algorithm,
@@ -173,6 +174,7 @@ def construct_run_configurations(max_search_time: int = 60, repetitions: int = 1
                                                   RVar.Coverage,
                                                   RVar.CoverageTimeline
                                                   ])
+                    command.add_argument("assertion_generation", "NONE")
                     command.add_argument("v", "")
                     commands.append(command)
 
