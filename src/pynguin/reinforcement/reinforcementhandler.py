@@ -77,6 +77,8 @@ class ReinforcementHandler:
                     tuning_parameters.append(PopulationTransformationHandler(-15, 15))
                 case config.TuningParameters.ChromosomeLength:
                     tuning_parameters.append(ChromosomeLengthTransformationHandler(-5, 5))
+                case config.TuningParameters.NONE:
+                    raise ValueError("Cannot tune no parameters when using an RL-enabled algorithm")
                 case _:
                     raise Exception()
 

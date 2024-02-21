@@ -96,11 +96,22 @@ def get_path_modules() -> (str, str):
     """Paths and modules for all python files used for experimentation"""
     # Relative address (from input/) and module names for all files
     path_modules = [
-        # ("projects/httpie", "httpie.output.writer"),
+        # ("projects/httpie", "httpie.cli.dicts"),
+        # ("projects/httpie", "httpie.config"),
+        # ("projects/httpie", "httpie.models"),
         # ("projects/httpie", "httpie.output.formatters.colors"),
+        # ("projects/httpie", "httpie.output.formatters.headers"),
+        # ("projects/httpie", "httpie.output.formatters.json"),
+        # ("projects/httpie", "httpie.output.processing"),
+        # ("projects/httpie", "httpie.output.streams"),
+        # ("projects/httpie", "httpie.plugins.base"),
+        # ("projects/httpie", "httpie.plugins.manager"),
+
+        # ("projects/httpie", "httpie.output.writer"),
         # ("projects/httpie", "httpie.sessions"),
-        # ("projects/toy_example", "bmi_calculator")
-        # ("numpy/", "vector")
+
+        ("projects/toy_example", "bmi_calculator")
+        # ("numpy/", "vector")  # ??
     ]
     return path_modules
 
@@ -119,11 +130,11 @@ def get_run_config_algorithms() -> list[Algorithm]:
 def get_run_config_tuning_params() -> list[TuningParameters]:
     """Parameters to tune for experimentation (only used with RL-enabled algorithms)"""
     # parameters = [param.value for param in configuration.TuningParameters]
-    parameters = [TuningParameters.CrossoverRate]
+    parameters = [TuningParameters.NONE]
     return parameters
 
 
-def construct_run_configurations(max_search_time: int = 60, times_per_config: int = 1) -> list[RunCommand]:
+def construct_run_configurations(max_search_time: int = 60, repetitions: int = 1) -> list[RunCommand]:
     """Construct a list of all run configuration commands"""
 
     # get the ...
@@ -131,13 +142,14 @@ def construct_run_configurations(max_search_time: int = 60, times_per_config: in
     algorithms = get_run_config_algorithms()
     parameters = get_run_config_tuning_params()
 
-    run_id = 0
     commands = []
 
     for path, module, in path_modules:
         for algorithm in algorithms:
             for parameter in parameters:
-                for _ in range(times_per_config):
+                for rep in range(1, repetitions + 1):
+                    module_rep_id = f"{module}:{'{:02d}'.format(rep)}"
+
                     command = RunCommand()
                     command.add_volume(os.getcwd(), path, "/input", "ro")
                     command.add_volume(os.getcwd(), "projects_test_output", "/output", "rw")
@@ -145,13 +157,15 @@ def construct_run_configurations(max_search_time: int = 60, times_per_config: in
                     command.add_volume(os.getcwd(), "run_results", "/results", "rw")
 
                     command.add_argument("project_path", "/input")
-                    command.add_argument("output_path", "/output")
+                    command.add_argument("output_path", f"/output/{module_rep_id}")
                     command.add_argument("module_name", module)
                     command.add_algorithm(algorithm)
                     command.add_tuning_parameters([parameter])
-                    command.add_argument("run_id", f"{run_id}")
+                    command.add_argument("run_id", f"{module_rep_id}")
                     command.add_argument("maximum_search_time", f"{max_search_time}")
                     command.add_argument("report_dir", "/results")
+                    # command.add_argument("post_process", "False")
+                    command.add_argument("assertion_generation", "NONE")
                     command.add_output_variables([RVar.RunId,
                                                   RVar.TargetModule,
                                                   RVar.Algorithm,
@@ -160,10 +174,8 @@ def construct_run_configurations(max_search_time: int = 60, times_per_config: in
                                                   RVar.CoverageTimeline
                                                   ])
                     command.add_argument("v", "")
-                    run_id += 1
                     commands.append(command)
 
-    print(commands)
     return commands
 
 
@@ -171,7 +183,7 @@ if __name__ == '__main__':
     run_configs = construct_run_configurations(10, 1)
     random.seed(41753)
     random.shuffle(run_configs)
-    print(run_configs)
+    # print(run_configs)
 
     client = docker.from_env()
 
@@ -208,7 +220,7 @@ if __name__ == '__main__':
             encountered_error = True
 
         # Prepare for logging
-        log_directory = "logs"
+        log_directory = f"logs/{run_config.get_argument('module_name')}"
         log_filename = f"{run_config.get_argument('run_id')}.txt"
         log_path = os.path.join(log_directory, log_filename)
 
