@@ -32,14 +32,16 @@ class ReinforcementHandler:
         # Variables associated with coverage
         self.get_best_coverage = best_coverage
         self.previous_coverage = 0.0
-        self.first_activation = True
+        self.rl_activated = False
+        self.plateau = [0.0, 0.0]
+
 
         conn_1, conn_2 = multiprocessing.Pipe()
         self.conn = conn_1
-        self.set_up_process(conn_2)
+        self.conn_2 = conn_2
 
         self.iteration = 0
-        self.get_action()  # Get the initial action from the RL
+
 
     def set_up_process(self, conn):
         # Create a new process, passing the child connection
@@ -86,23 +88,28 @@ class ReinforcementHandler:
 
     def activate_reinforcement(self):
 
-        if self.first_activation:
-            threshold = 0.6
-            best_coverage = self.get_best_coverage()
-
-            if best_coverage > threshold:
-                self.previous_coverage = best_coverage
-                self.first_activation = False
-            else:
-                return False
-
-        return True
+        best_coverage = self.get_best_coverage()
+        if best_coverage > self.plateau[1]:
+            self.plateau[0] = 0
+            self.plateau[1] = best_coverage
+            print("NEW COVERAGE ACHIEVED")
+            return False
+        elif self.plateau[0] >= config.configuration.rl.plateau_length:
+            self.rl_activated = True
+            self.set_up_process(self.conn_2)
+            self.previous_coverage = best_coverage
+            self.get_action()  # Get the initial action from the RL
+            print("😨😨😨 RL ACTIVATED 😨😨😨")
+            return False
+        else:
+            print("Plateau not ACHIEVED... waiting 😴 ")
+            return False
 
     def update(self):
-
+        self.plateau[0] += 1
         if self.iteration >= config.configuration.rl.update_frequency:
 
-            if self.activate_reinforcement():
+            if self.rl_activated or self.activate_reinforcement():
 
                 # Get the best coverage so far
                 reward = self.calc_reward()

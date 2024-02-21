@@ -640,6 +640,8 @@ class ReinforcementLearningConfiguration:
 
     update_frequency: int = 5
 
+    plateau_length: int = 20
+
 
 @dataclasses.dataclass
 class Configuration:
