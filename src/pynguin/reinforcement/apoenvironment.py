@@ -53,6 +53,10 @@ class APOEnvironment(gym.Env):
 
     def get_observations(self):
         cont = False
+        obs = np.array([])
+        reward = 0.0
+        done = True
+
         while not cont:
             if self.conn.poll(timeout=120):
                 obs, reward, cont, done = self.conn.recv()
