@@ -1,6 +1,6 @@
 from stable_baselines3.common.callbacks import BaseCallback
 
-from pynguin.reinforcement.MutableBool import MutableBool
+from pynguin.reinforcement.mutablebool import MutableBool
 
 
 class StoppingCallback(BaseCallback):

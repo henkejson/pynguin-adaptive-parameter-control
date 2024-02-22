@@ -2,7 +2,7 @@ from typing import Callable
 import pynguin.configuration as config
 import multiprocessing
 
-from pynguin.reinforcement.customenv import training
+from pynguin.reinforcement.apoenvironment import training
 from pynguin.reinforcement.configurationhandler import ConfigurationHandler
 
 from pynguin.reinforcement.transformationhandlers.changeparametertransformationhandler import \
@@ -11,6 +11,8 @@ from pynguin.reinforcement.transformationhandlers.chromosomelengthtransformation
     ChromosomeLengthTransformationHandler
 from pynguin.reinforcement.transformationhandlers.crossovertransformationhandler import CrossoverTransformationHandler
 from pynguin.reinforcement.transformationhandlers.elitetransformationhandler import EliteTransformationHandler
+from pynguin.reinforcement.transformationhandlers.perturbationtransformationhandler import \
+    PerturbationTransformationHandler
 from pynguin.reinforcement.transformationhandlers.populationtransformationhandler import PopulationTransformationHandler
 from pynguin.reinforcement.transformationhandlers.statementinsertiontransformationhandler import \
     StatementInsertionTransformationHandler
@@ -57,14 +59,22 @@ class ReinforcementHandler:
         for parameter in config.configuration.rl.tuning_parameters:
 
             match parameter:
-                case config.TuningParameters.CrossoverRate:
-                    tuning_parameters.append(CrossoverTransformationHandler(-0.05, 0.05))
-                case config.TuningParameters.TestChangeProbability:
-                    tuning_parameters.append(TestChangeTransformationHandler(-0.05, 0.05))
                 case config.TuningParameters.ChangeParameterProbability:
                     tuning_parameters.append(ChangeParameterTransformationHandler(-0.05, 0.05))
+                case config.TuningParameters.ChromosomeLength:
+                    tuning_parameters.append(ChromosomeLengthTransformationHandler(-5, 5))
+                case config.TuningParameters.CrossoverRate:
+                    tuning_parameters.append(CrossoverTransformationHandler(-0.05, 0.05))
+                case config.TuningParameters.Elite:
+                    tuning_parameters.append(EliteTransformationHandler(-1, 1))
+                case config.TuningParameters.Population:
+                    tuning_parameters.append(PopulationTransformationHandler(-15, 15))
+                case config.TuningParameters.RandomPerturbation:
+                    tuning_parameters.append(PerturbationTransformationHandler(-0.05, 0.05))
                 case config.TuningParameters.StatementInsertionProbability:
                     tuning_parameters.append(StatementInsertionTransformationHandler(-0.05, 0.05))
+                case config.TuningParameters.TestChangeProbability:
+                    tuning_parameters.append(TestChangeTransformationHandler(-0.05, 0.05))
                 case config.TuningParameters.TestDeleteProbability:
                     tuning_parameters.append(TestDeleteTransformationHandler(-0.05, 0.05))
                 case config.TuningParameters.TestInsertProbability:
@@ -73,12 +83,7 @@ class ReinforcementHandler:
                     tuning_parameters.append(TestInsertionTransformationHandler(-0.05, 0.05))
                 case config.TuningParameters.TournamentSize:
                     tuning_parameters.append(TournamentSizeTransformationHandler(-1, 1))
-                case config.TuningParameters.Elite:
-                    tuning_parameters.append(EliteTransformationHandler(-1, 1))
-                case config.TuningParameters.Population:
-                    tuning_parameters.append(PopulationTransformationHandler(-15, 15))
-                case config.TuningParameters.ChromosomeLength:
-                    tuning_parameters.append(ChromosomeLengthTransformationHandler(-5, 5))
+
                 case config.TuningParameters.NONE:
                     raise ValueError("Cannot tune no parameters when using an RL-enabled algorithm")
                 case _:

@@ -5,8 +5,8 @@ import gymnasium as gym
 import numpy as np
 from stable_baselines3 import PPO
 
-from pynguin.reinforcement.MutableBool import MutableBool
-from pynguin.reinforcement.StoppingCallback import StoppingCallback
+from pynguin.reinforcement.mutablebool import MutableBool
+from pynguin.reinforcement.stoppingcallback import StoppingCallback
 
 
 # Process entry
@@ -14,7 +14,7 @@ def training(n_action: int, n_observations: int, conn: connection.Connection):
     stop_training = MutableBool(False)
     callback = StoppingCallback(stop_training)
 
-    environment = MyCustomEnv(n_action, n_observations, conn, stop_training)
+    environment = APOEnvironment(n_action, n_observations, conn, stop_training)
     model = PPO("MlpPolicy", environment, verbose=1)
     model.learn(total_timesteps=10_000, callback=callback)
     print("Saving model...")
@@ -26,7 +26,7 @@ def close_and_clean_up(conn: connection.Connection):
     sys.exit()
 
 
-class MyCustomEnv(gym.Env):
+class APOEnvironment(gym.Env):
 
     def __init__(self, n_action: int, n_observations: int, conn: connection.Connection, stop_training: MutableBool):
         self.action_space = gym.spaces.Box(low=-1, high=1, shape=(n_action,), dtype=np.float32)  # Crossover rate

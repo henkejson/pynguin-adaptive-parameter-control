@@ -611,6 +611,9 @@ class TuningParameters(str, enum.Enum):
     Population = "Population"
     """Population size for the genetic algorithm (50)"""
 
+    RandomPerturbation = "RandomPerturbation"
+    """Probability to replace a primitive with a random new value rather than adding a delta"""
+
     StatementInsertionProbability = "StatementInsertionProbability"
     """Initial probability of inserting a new statement in a test case (0.5)"""
 
@@ -620,11 +623,11 @@ class TuningParameters(str, enum.Enum):
     TestDeleteProbability = "TestDeleteProbability"
     """Probability of deleting statements during mutation (0.3333333333333333)"""
 
-    TestInsertionProbability = "TestInsertionProbability"
-    """Initial probability of inserting a new test in a test suite (0.1)"""
-
     TestInsertProbability = "TestInsertProbability"
     """Probability of inserting new statements during mutation (0.3333333333333333)"""
+
+    TestInsertionProbability = "TestInsertionProbability"
+    """Initial probability of inserting a new test in a test suite (0.1)"""
 
     TournamentSize = "TournamentSize"
     """Number of chromosomes for tournament selection (5)"""
