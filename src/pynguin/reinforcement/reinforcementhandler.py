@@ -4,11 +4,13 @@ import multiprocessing
 
 from pynguin.reinforcement.apoenvironment import training
 from pynguin.reinforcement.configurationhandler import ConfigurationHandler
+from pynguin.reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
 
 from pynguin.reinforcement.transformationhandlers.changeparametertransformationhandler import \
     ChangeParameterTransformationHandler
 from pynguin.reinforcement.transformationhandlers.chromosomelengthtransformationhandler import \
     ChromosomeLengthTransformationHandler
+from pynguin.reinforcement.transformationhandlers.coveragetransformationhandler import CoverageTransformationHandler
 from pynguin.reinforcement.transformationhandlers.crossovertransformationhandler import CrossoverTransformationHandler
 from pynguin.reinforcement.transformationhandlers.elitetransformationhandler import EliteTransformationHandler
 from pynguin.reinforcement.transformationhandlers.perturbationtransformationhandler import \
@@ -18,9 +20,11 @@ from pynguin.reinforcement.transformationhandlers.statementinsertiontransformati
     StatementInsertionTransformationHandler
 from pynguin.reinforcement.transformationhandlers.testchangetransformationhandler import TestChangeTransformationHandler
 from pynguin.reinforcement.transformationhandlers.testdeletetransformationhandler import TestDeleteTransformationHandler
-from pynguin.reinforcement.transformationhandlers.testinsertiontransformationhandler import TestInsertionTransformationHandler
+from pynguin.reinforcement.transformationhandlers.testinsertiontransformationhandler import \
+    TestInsertionTransformationHandler
 from pynguin.reinforcement.transformationhandlers.testinserttransformationhandler import TestInsertTransformationHandler
-from pynguin.reinforcement.transformationhandlers.tournamentsizetransformationhandler import TournamentSizeTransformationHandler
+from pynguin.reinforcement.transformationhandlers.tournamentsizetransformationhandler import \
+    TournamentSizeTransformationHandler
 
 
 class ReinforcementHandler:
@@ -33,10 +37,10 @@ class ReinforcementHandler:
 
         # Variables associated with coverage
         self.get_best_coverage = best_coverage
+        self.coverage_transformation_handler = CoverageTransformationHandler(best_coverage)
         self.previous_coverage = 0.0
         self.rl_activated = False
         self.plateau = [0.0, 0.0]
-
 
         conn_1, conn_2 = multiprocessing.Pipe()
         self.conn = conn_1
@@ -44,12 +48,11 @@ class ReinforcementHandler:
 
         self.iteration = 0
 
-
     def set_up_process(self, conn):
         # Create a new process, passing the child connection
         p = multiprocessing.Process(target=training,
                                     args=(len(self.config_handler.normalizers),  # number of actions
-                                          len(self.config_handler.normalizers),  # number of observations
+                                          len(self.config_handler.normalizers) + 1,  # number of observations (+ cov)
                                           conn,))
         p.start()
 
@@ -68,7 +71,7 @@ class ReinforcementHandler:
                 case config.TuningParameters.Elite:
                     tuning_parameters.append(EliteTransformationHandler(-1, 1))
                 case config.TuningParameters.Population:
-                    tuning_parameters.append(PopulationTransformationHandler(-15, 15))
+                    tuning_parameters.append(PopulationTransformationHandler(-5, 5))
                 case config.TuningParameters.RandomPerturbation:
                     tuning_parameters.append(PerturbationTransformationHandler(-0.05, 0.05))
                 case config.TuningParameters.StatementInsertionProbability:
@@ -120,8 +123,9 @@ class ReinforcementHandler:
                 reward = self.calc_reward()
 
                 # Send observations, rewards and if we are done
-                self.conn.send((self.config_handler.get_normalized_observations(), reward, True, False))
-                print(f"Best Coverage: {self.get_best_coverage()}")
+                self.conn.send((self.config_handler.get_normalized_observations([self.coverage_transformation_handler]),
+                                reward, True, False))
+                # print(f"Best Coverage: {self.get_best_coverage()}")
                 # Wait for new actions and apply them
                 self.get_action()
 

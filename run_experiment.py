@@ -170,6 +170,7 @@ def construct_run_configurations(max_search_time: int = 60, repetitions: int = 1
                     command.add_output_variables([RVar.RunId,
                                                   RVar.TargetModule,
                                                   RVar.Algorithm,
+                                                  RVar.AlgorithmIterations,
                                                   RVar.TuningParameters,
                                                   RVar.Coverage,
                                                   RVar.CoverageTimeline

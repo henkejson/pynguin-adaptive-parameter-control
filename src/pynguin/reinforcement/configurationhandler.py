@@ -22,12 +22,15 @@ class ConfigurationHandler:
                   f"(N) {round(float(action), 4)}, ",)
         #print("")
 
-    def get_normalized_observations(self):
+    def get_normalized_observations(self, handlers: list[AbstractTransformationHandler] = None):
         """Return a numpy array of all normalized observations"""
         observations = []
 
+        if handlers is None:
+            handlers = []
+
         print("OBSERVATIONS |",)
-        for normalizer in self.normalizers:
+        for normalizer in handlers + self.normalizers:
             observations.append(normalizer.normalize_observation(normalizer.get_value()))
 
             print(f"             | {normalizer.get_name()}: (DN) {round(normalizer.get_value(), 4)}, "
