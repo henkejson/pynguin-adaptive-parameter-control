@@ -67,6 +67,8 @@ WORKDIR /pynguin
 COPY --from=build /pynguin-build/dist/pynguin-${PYNGUIN_VERSION}-py3-none-any.whl .
 COPY --from=build /pynguin-build/pynguin-docker.sh .
 
+RUN pip install torch --index-url https://download.pytorch.org/whl/cpu
+
 RUN pip install /pynguin/pynguin-${PYNGUIN_VERSION}-py3-none-any.whl \
     typing-extensions==4.8.0 \
     mypy==1.6.0
