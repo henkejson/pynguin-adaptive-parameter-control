@@ -4,7 +4,7 @@ from pynguin.reinforcement.transformationhandlers.basictransformationhandler imp
 
 
 class TestChangeTransformationHandler(AbstractTransformationHandler):
-
+    """Transformation handler for the parameter TestChangeProbability"""
     def __init__(self, min_value=-0.05, max_value=0.05):
         self.min_value = min_value
         self.max_value = max_value

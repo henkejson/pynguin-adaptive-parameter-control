@@ -4,7 +4,7 @@ import pynguin.configuration as config
 
 
 class TournamentSizeTransformationHandler(AbstractTransformationHandler):
-
+    """Transformation handler for the parameter TournamentSize"""
     def __init__(self, min_value: int = -1, max_value: int = 1):
         self.min_value = float(min_value)
         self.max_value = float(max_value)

@@ -4,7 +4,7 @@ from pynguin.reinforcement.transformationhandlers.basictransformationhandler imp
 
 
 class TestDeleteTransformationHandler(AbstractTransformationHandler):
-
+    """Transformation handler for the parameter TestDeleteProbability"""
     def __init__(self, min_value: float = -0.05, max_value: float = 0.05):
         self.min_value = min_value
         self.max_value = max_value

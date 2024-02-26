@@ -2,10 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class AbstractTransformationHandler(ABC):
-    """Handles transformation in between environment-space and normalized-space (used in the RL)"""
-    @abstractmethod
-    def get_name(self):
-        pass
+    """Handles transformation in between environment-space and normalized-space (used in the RL) of a single variable"""
 
     @abstractmethod
     def normalize_observation(self, denormalized_observation: float) -> float:
@@ -19,11 +16,15 @@ class AbstractTransformationHandler(ABC):
 
     @abstractmethod
     def get_value(self):
+        """Get the current environment-space variable value"""
         pass
 
     @abstractmethod
     def apply_action(self, normalized_action):
+        """Apply a normalized-action to the environment"""
         pass
 
-
-
+    @abstractmethod
+    def get_name(self):
+        """Get the reader friendly name of the transformation handler"""
+        pass

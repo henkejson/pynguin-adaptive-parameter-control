@@ -2,7 +2,7 @@ from typing import Callable
 import pynguin.configuration as config
 import multiprocessing
 
-from pynguin.reinforcement.apoenvironment import training
+from pynguin.reinforcement.apoenvironment import start_learning_loop
 from pynguin.reinforcement.configurationhandler import ConfigurationHandler
 from pynguin.reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
 
@@ -50,7 +50,7 @@ class ReinforcementHandler:
 
     def set_up_process(self, conn):
         # Create a new process, passing the child connection
-        p = multiprocessing.Process(target=training,
+        p = multiprocessing.Process(target=start_learning_loop,
                                     args=(len(self.config_handler.normalizers),  # number of actions
                                           len(self.config_handler.normalizers) + 1,  # number of observations (+ cov)
                                           conn,))

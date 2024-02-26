@@ -5,9 +5,9 @@ from typing import Callable
 
 
 class CoverageTransformationHandler(AbstractTransformationHandler):
-
-    def __init__(self, coverage_function: Callable[[], float]):
-        self.get_coverage = coverage_function
+    """Transformation handler for coverage"""
+    def __init__(self, get_coverage_function: Callable[[], float]):
+        self.get_coverage = get_coverage_function
 
         self.transformation_handler = BasicTransformationHandler(lower_bound=0, upper_bound=1,
                                                                  min_value=0, max_value=0)

@@ -10,14 +10,15 @@ from pynguin.reinforcement.stoppingcallback import StoppingCallback
 
 
 # Process entry
-def training(n_action: int, n_observations: int, conn: connection.Connection):
+def start_learning_loop(n_action: int, n_observations: int, conn: connection.Connection):
+    """Initializes the environment and starts the learning loop"""
     stop_training = MutableBool(False)
     callback = StoppingCallback(stop_training)
 
     environment = APOEnvironment(n_action, n_observations, conn, stop_training)
     model = PPO("MlpPolicy", environment, verbose=1)
     model.learn(total_timesteps=10_000, callback=callback)
-    print("Saving model...")
+    # print("Saving model...")
 
 
 def close_and_clean_up(conn: connection.Connection):

@@ -4,7 +4,7 @@ from pynguin.reinforcement.transformationhandlers.basictransformationhandler imp
 
 
 class ChangeParameterTransformationHandler(AbstractTransformationHandler):
-
+    """Transformation handler for the parameter ChangeParameterProbability"""
     def __init__(self, min_value: float = -0.05, max_value: float = 0.05):
         self.min_value = min_value
         self.max_value = max_value
@@ -14,9 +14,6 @@ class ChangeParameterTransformationHandler(AbstractTransformationHandler):
 
         self.transformation_handler = BasicTransformationHandler(self.config_lower_bound, self.config_upper_bound,
                                                                  self.min_value, self.max_value)
-
-    def get_name(self):
-        return "Change Parameter Probability"
 
     def normalize_observation(self, denormalized_observation: float) -> float:
         return self.transformation_handler.normalize_observation(denormalized_observation)
@@ -32,3 +29,6 @@ class ChangeParameterTransformationHandler(AbstractTransformationHandler):
         new_value = self.transformation_handler.clamp(new_value)
 
         config.configuration.search_algorithm.change_parameter_probability = new_value
+
+    def get_name(self):
+        return "Change Parameter Probability"
