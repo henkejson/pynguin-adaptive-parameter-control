@@ -62,42 +62,33 @@ class RunCommand:
 
 
 def build_image(image_tag: str):
-    image_exists = False
-    for image in client.images.list():
-        for tag in image.tags:
-            if tag == image_tag:
-                image_exists = True
-                break
+    """Build Pynguin docker image"""
+    print("Building Docker image locally... This can take a couple of minutes")
 
-    if not image_exists:
-        print("Building Docker image locally... This will take a couple of minutes")
-        try:
-            image, build_output = client.images.build(
-                path=".",
-                dockerfile="docker/Dockerfile",
-                tag=image_tag,
-                rm=True)
+    # Attempt to build Pynguin image
+    try:
+        image, build_output = client.images.build(
+            path=".",
+            dockerfile="docker/Dockerfile",
+            tag=image_tag,
+            rm=True)
 
-            for line in build_output:
-                if 'stream' in line:
-                    print(line['stream'].strip())
+        for line in build_output:
+            if 'stream' in line:
+                print(line['stream'].strip())
 
-        except docker.errors.BuildError as e:
-            # Handle build errors (e.g., error in Dockerfile)
-            print(f"Build failed: {e.msg}")
-            # Print build logs that might contain clues to what went wrong
-            for line in e.build_log:
-                if 'stream' in line:
-                    print(line['stream'].strip())
+    except docker.errors.BuildError as e:
+        # Handle build errors (e.g., error in Dockerfile)
+        print(f"Build failed: {e.msg}")
+        # Print build logs that might contain clues to what went wrong
+        for line in e.build_log:
+            if 'stream' in line:
+                print(line['stream'].strip())
 
 
-    else:
-        print(f"Image {image_tag} already exist. Skip build.")
-
-
-def run_container(command: RunCommand):
+def run_container(command: RunCommand, image_tag: str):
+    """Run container with specified command"""
     print(command.build_command())
-    print(command.volumes)
 
     print("Starting Container...")
     return client.containers.run(
@@ -105,9 +96,7 @@ def run_container(command: RunCommand):
         command=command.build_command(),
         volumes=command.volumes,
         detach=True,
-        auto_remove=False,
-        stdout=True,
-        stderr=True
+        auto_remove=False
     )
 
 
@@ -130,7 +119,6 @@ def get_path_modules() -> (str, str):
         ("projects/httpie", "httpie.sessions"),
 
         ("projects/toy_example", "bmi_calculator")
-        # ("numpy/", "vector")  # ??
     ]
     return path_modules
 
@@ -139,33 +127,31 @@ def get_run_config_algorithms() -> list[Algorithm]:
     """Algorithms used for experimentation"""
     algorithms = [
         Algorithm.DYNAMOSA
-        # configuration.algorithm.MIO.value,
-        # configuration.algorithm.MOSA.value,
-        # configuration.algorithm.WHOLE_SUITE.value
+        # Algorithm.DYNAMOSA_RL
     ]
     return algorithms
 
 
-def get_run_config_tuning_params() -> list[TuningParameters]:
+def get_run_config_tuning_params() -> list[list[TuningParameters]]:
     """Parameters to tune for experimentation (only used with RL-enabled algorithms)"""
-    # parameters = [param.value for param in configuration.TuningParameters]
-    parameters = [TuningParameters.NONE]
+    # parameters = [[param.value] for param in configuration.TuningParameters]
+    parameters = [[TuningParameters.NONE]]
     return parameters
 
 
-def construct_run_configurations(max_search_time: int = 60, repetitions: int = 1) -> list[RunCommand]:
+def construct_run_configurations(max_search_time: int, repetitions: int, update_freq: int, plateau_length: int) -> list[RunCommand]:
     """Construct a list of all run configuration commands"""
 
-    # get the ...
+    # Get the components for the run-configurations
     path_modules = get_path_modules()
     algorithms = get_run_config_algorithms()
-    parameters = get_run_config_tuning_params()
+    parameters_list = get_run_config_tuning_params()
 
     commands = []
 
     for path, module, in path_modules:
         for algorithm in algorithms:
-            for parameter in parameters:
+            for parameters in parameters_list:
                 for rep in range(1, repetitions + 1):
                     module_rep_id = f"{module}#{'{:02d}'.format(rep)}"
 
@@ -173,6 +159,7 @@ def construct_run_configurations(max_search_time: int = 60, repetitions: int = 1
                     module_rep_path = f"data/{module}/{module_rep_id}"
                     os.makedirs(os.path.join(os.getcwd(), module_rep_path), exist_ok=True)
 
+                    # Construct run command
                     command = RunCommand()
                     command.add_volume(os.getcwd(), path, "/input", "ro")
                     command.add_volume(os.getcwd(), path, "/package", "ro")
@@ -181,14 +168,14 @@ def construct_run_configurations(max_search_time: int = 60, repetitions: int = 1
 
                     command.add_argument("project_path", "/input")
                     command.add_argument("output_path", "/output")
+                    command.add_argument("report_dir", "/results")
                     command.add_argument("module_name", module)
                     command.add_algorithm(algorithm)
-                    command.add_tuning_parameters([parameter])
+                    command.add_tuning_parameters(parameters)
                     command.add_argument("run_id", f"{module_rep_id}")
                     command.add_argument("maximum_search_time", f"{max_search_time}")
-                    command.add_argument("report_dir", "/results")
-                    command.add_argument("update_frequency", "10")
-                    command.add_argument("plateau_length", "30")
+                    command.add_argument("update_frequency", f"{update_freq}")
+                    command.add_argument("plateau_length", f"{plateau_length}")
                     command.add_output_variables([RVar.RunId,
                                                   RVar.TargetModule,
                                                   RVar.Algorithm,
@@ -206,33 +193,32 @@ def construct_run_configurations(max_search_time: int = 60, repetitions: int = 1
 
 
 if __name__ == '__main__':
-    run_configs = construct_run_configurations(10, 2)
+    run_configs = construct_run_configurations(10, 2, 10, 30)
     random.seed(41753)
     random.shuffle(run_configs)
-    # print(run_configs)
 
+    # Establish communication with the docker daemon
     client = docker.from_env()
 
-    image_tag = "pynguin_image:latest"
-    build_image(image_tag)
+    # Build Pynguin image
+    img_tag = "pynguin_image:latest"
+    build_image(image_tag=img_tag)
 
+    # (Prep for run_config loop)
     encountered_error = False
-
     i = 1
 
-    # Run a container
+    # Run a container per run configuration
     for run_config in run_configs:
         print(f"Running config {i}/{len(run_configs)} (run id: {run_config.get_argument('run_id')})")
         i += 1
 
-        container = run_container(run_config)
-        # print(container.logs())
+        container = run_container(run_config, img_tag)
 
-        # Stream the logs
-        # Wait for the container to finish
         print("Waiting for Pynguin to finish...")
         try:
-            result = container.wait(timeout=1200)
+            timeout_time = int(run_config.get_argument("maximum_search_time")) + 180
+            result = container.wait(timeout=timeout_time)
 
             # Check for internal errors
             exit_code = result['StatusCode']
@@ -253,17 +239,14 @@ if __name__ == '__main__':
         # Should already exist, only for some extra peace of mind
         os.makedirs(log_directory, exist_ok=True)
 
-        # Fetch logs after completion
+        # Fetch and save logs
         logs = container.logs()
-
         with open(log_path, 'w', encoding="utf-8") as file:
             file.write(logs.decode("utf-8"))
 
-        #Move penguin-config.txt to the correct directory
-        os.rename("data/pynguin-config.txt", os.path.join(log_directory, "pynguin-config.txt"))
+        #Move penguin-config.txt to the current run config data directory
+        os.replace("data/pynguin-config.txt", os.path.join(log_directory, "pynguin-config.txt"))
 
-
-        # Optionally, remove the container manually if needed
         print("Removing container...")
         container.remove()
 
