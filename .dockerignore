@@ -40,6 +40,5 @@ venv
 
 run_experiment.py
 projects/
-project_test_output/
-run_statistics/
 pynguin-report/
+data/

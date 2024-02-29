@@ -114,7 +114,6 @@ pynguin-report/
 docs/_build
 .output/
 
-/project_test_output/
-/run_results/
+# Pynguin output
 /projects_test_output/
-/logs/
+/data/

@@ -71,7 +71,26 @@ def build_image(image_tag: str):
 
     if not image_exists:
         print("Building Docker image locally... This will take a couple of minutes")
-        image, build_output = client.images.build(path=".", dockerfile="docker/Dockerfile", tag=image_tag)
+        try:
+            image, build_output = client.images.build(
+                path=".",
+                dockerfile="docker/Dockerfile",
+                tag=image_tag,
+                rm=True)
+
+            for line in build_output:
+                if 'stream' in line:
+                    print(line['stream'].strip())
+
+        except docker.errors.BuildError as e:
+            # Handle build errors (e.g., error in Dockerfile)
+            print(f"Build failed: {e.msg}")
+            # Print build logs that might contain clues to what went wrong
+            for line in e.build_log:
+                if 'stream' in line:
+                    print(line['stream'].strip())
+
+
     else:
         print(f"Image {image_tag} already exist. Skip build.")
 
@@ -108,7 +127,7 @@ def get_path_modules() -> (str, str):
         # ("projects/httpie", "httpie.plugins.manager"),
 
         # ("projects/httpie", "httpie.output.writer"),
-        # ("projects/httpie", "httpie.sessions"),
+        ("projects/httpie", "httpie.sessions"),
 
         ("projects/toy_example", "bmi_calculator")
         # ("numpy/", "vector")  # ??
@@ -150,21 +169,24 @@ def construct_run_configurations(max_search_time: int = 60, repetitions: int = 1
                 for rep in range(1, repetitions + 1):
                     module_rep_id = f"{module}#{'{:02d}'.format(rep)}"
 
+                    # Setup directories
+                    module_rep_path = f"data/{module}/{module_rep_id}"
+                    os.makedirs(os.path.join(os.getcwd(), module_rep_path), exist_ok=True)
+
                     command = RunCommand()
                     command.add_volume(os.getcwd(), path, "/input", "ro")
-                    command.add_volume(os.getcwd(), "projects_test_output", "/output", "rw")
                     command.add_volume(os.getcwd(), path, "/package", "ro")
-                    command.add_volume(os.getcwd(), "run_results", "/results", "rw")
+                    command.add_volume(os.getcwd(), module_rep_path, "/output", "rw")
+                    command.add_volume(os.getcwd(), "data", "/results", "rw")
 
                     command.add_argument("project_path", "/input")
-                    command.add_argument("output_path", f"/output/{module_rep_id}")
+                    command.add_argument("output_path", "/output")
                     command.add_argument("module_name", module)
                     command.add_algorithm(algorithm)
                     command.add_tuning_parameters([parameter])
                     command.add_argument("run_id", f"{module_rep_id}")
                     command.add_argument("maximum_search_time", f"{max_search_time}")
                     command.add_argument("report_dir", "/results")
-                    # command.add_argument("post_process", "False")
                     command.add_argument("update_frequency", "10")
                     command.add_argument("plateau_length", "30")
                     command.add_output_variables([RVar.RunId,
@@ -184,7 +206,7 @@ def construct_run_configurations(max_search_time: int = 60, repetitions: int = 1
 
 
 if __name__ == '__main__':
-    run_configs = construct_run_configurations(10, 1)
+    run_configs = construct_run_configurations(10, 2)
     random.seed(41753)
     random.shuffle(run_configs)
     # print(run_configs)
@@ -224,18 +246,22 @@ if __name__ == '__main__':
             encountered_error = True
 
         # Prepare for logging
-        log_directory = f"logs/{run_config.get_argument('module_name')}"
-        log_filename = f"{run_config.get_argument('run_id')}.txt"
+        log_directory = f"data/{run_config.get_argument('module_name')}/{run_config.get_argument('run_id')}"
+        log_filename = f"logs.txt"
         log_path = os.path.join(log_directory, log_filename)
 
-        if not os.path.exists(log_directory):
-            os.makedirs(log_directory)
+        # Should already exist, only for some extra peace of mind
+        os.makedirs(log_directory, exist_ok=True)
 
         # Fetch logs after completion
         logs = container.logs()
 
         with open(log_path, 'w', encoding="utf-8") as file:
             file.write(logs.decode("utf-8"))
+
+        #Move penguin-config.txt to the correct directory
+        os.rename("data/pynguin-config.txt", os.path.join(log_directory, "pynguin-config.txt"))
+
 
         # Optionally, remove the container manually if needed
         print("Removing container...")
