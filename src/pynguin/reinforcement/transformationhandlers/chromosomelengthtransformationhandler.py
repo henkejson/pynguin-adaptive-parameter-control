@@ -31,4 +31,4 @@ class ChromosomeLengthTransformationHandler(AbstractTransformationHandler):
         config.configuration.search_algorithm.chromosome_length = int(round(current_value, 0))
 
     def get_name(self):
-        return "Chromosome Length"
+        return config.TuningParameters.ChromosomeLength.value

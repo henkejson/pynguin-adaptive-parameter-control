@@ -31,4 +31,4 @@ class TestDeleteTransformationHandler(AbstractTransformationHandler):
         config.configuration.search_algorithm.test_delete_probability = current_value
 
     def get_name(self):
-        return "Test Delete Probability"
+        return config.TuningParameters.TestDeleteProbability.value

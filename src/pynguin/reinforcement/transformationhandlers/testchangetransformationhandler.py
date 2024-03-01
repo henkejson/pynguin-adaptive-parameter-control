@@ -31,4 +31,4 @@ class TestChangeTransformationHandler(AbstractTransformationHandler):
         config.configuration.search_algorithm.test_change_probability = current_value
 
     def get_name(self):
-        return "Test Change Probability"
+        return config.TuningParameters.TestChangeProbability.value

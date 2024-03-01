@@ -31,4 +31,4 @@ class EliteTransformationHandler(AbstractTransformationHandler):
         config.configuration.search_algorithm.elite = int(round(current_value, 0))
 
     def get_name(self):
-        return "Elite"
+        return config.TuningParameters.Elite.value

@@ -31,4 +31,4 @@ class StatementInsertionTransformationHandler(AbstractTransformationHandler):
         config.configuration.search_algorithm.statement_insertion_probability = current_value
 
     def get_name(self):
-        return "Statement Insertion Probability"
+        return config.TuningParameters.StatementInsertionProbability.value

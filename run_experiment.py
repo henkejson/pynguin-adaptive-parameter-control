@@ -193,7 +193,7 @@ def construct_run_configurations(max_search_time: int, repetitions: int, update_
 
 
 if __name__ == '__main__':
-    run_configs = construct_run_configurations(10, 2, 10, 30)
+    run_configs = construct_run_configurations(60, 2, 5, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 

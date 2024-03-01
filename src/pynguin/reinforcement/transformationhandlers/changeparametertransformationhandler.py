@@ -31,4 +31,4 @@ class ChangeParameterTransformationHandler(AbstractTransformationHandler):
         config.configuration.search_algorithm.change_parameter_probability = new_value
 
     def get_name(self):
-        return "Change Parameter Probability"
+        return config.TuningParameters.ChangeParameterProbability.value

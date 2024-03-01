@@ -31,4 +31,4 @@ class TestInsertionTransformationHandler(AbstractTransformationHandler):
         config.configuration.search_algorithm.test_insertion_probability = current_value
 
     def get_name(self):
-        return "Test Insertion Probability"
+        return config.TuningParameters.TestInsertionProbability.value

@@ -31,4 +31,4 @@ class TournamentSizeTransformationHandler(AbstractTransformationHandler):
         config.configuration.search_algorithm.tournament_size = int(round(current_value, 0))
 
     def get_name(self):
-        return "Tournament Size"
+        return config.TuningParameters.TournamentSize.value

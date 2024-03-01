@@ -31,4 +31,4 @@ class PerturbationTransformationHandler(AbstractTransformationHandler):
         config.configuration.search_algorithm.random_perturbation = current_value
 
     def get_name(self):
-        return "Random Perturbation"
+        return config.TuningParameters.RandomPerturbation.value

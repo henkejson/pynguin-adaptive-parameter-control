@@ -31,4 +31,4 @@ class PopulationTransformationHandler(AbstractTransformationHandler):
         config.configuration.search_algorithm.population = int(round(current_value, 0))
 
     def get_name(self):
-        return "Population"
+        return config.TuningParameters.Population.value

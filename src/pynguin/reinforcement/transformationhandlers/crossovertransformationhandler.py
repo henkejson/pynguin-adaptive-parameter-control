@@ -31,4 +31,4 @@ class CrossoverTransformationHandler(AbstractTransformationHandler):
         config.configuration.search_algorithm.crossover_rate = current_value
 
     def get_name(self):
-        return "Crossover Rate"
+        return config.TuningParameters.CrossoverRate.value

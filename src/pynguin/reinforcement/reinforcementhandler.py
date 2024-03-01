@@ -42,6 +42,8 @@ class ReinforcementHandler:
         self.rl_activated = False
         self.plateau = [0.0, 0.0]
 
+        self.parameter_timeline = {}
+
         conn_1, conn_2 = multiprocessing.Pipe()
         self.conn = conn_1
         self.conn_2 = conn_2
@@ -51,8 +53,8 @@ class ReinforcementHandler:
     def set_up_process(self, conn):
         # Create a new process, passing the child connection
         p = multiprocessing.Process(target=start_learning_loop,
-                                    args=(len(self.config_handler.normalizers),  # number of actions
-                                          len(self.config_handler.normalizers) + 1,  # number of observations (+ cov)
+                                    args=(len(self.config_handler.transformation_handlers),  # number of actions
+                                          len(self.config_handler.transformation_handlers) + 1,  # number of observations (+ cov)
                                           conn,))
         p.start()
 
@@ -106,7 +108,7 @@ class ReinforcementHandler:
             self.rl_activated = True
             self.set_up_process(self.conn_2)
             self.previous_coverage = best_coverage
-            self.get_action()  # Get the initial action from the RL
+            self.get_and_apply_action()  # Get the initial action from the RL
             print("😨😨😨 RL ACTIVATED 😨😨😨")
             return False
         else:
@@ -127,14 +129,17 @@ class ReinforcementHandler:
                                 reward, True, False))
                 # print(f"Best Coverage: {self.get_best_coverage()}")
                 # Wait for new actions and apply them
-                self.get_action()
+                self.get_and_apply_action()
+
+                self.log_parameters()
+
 
             else:
                 self.conn.send((None, 0, False, False))
             self.iteration = 0
         self.iteration += 1
 
-    def get_action(self):
+    def get_and_apply_action(self):
         if self.conn.poll(timeout=self.timeout):
             actions = self.conn.recv()
             self.config_handler.apply_actions(actions)
@@ -159,3 +164,10 @@ class ReinforcementHandler:
 
     def stop(self):
         self.conn.send((None, None, True, True))
+
+    def log_parameters(self):
+        for n in self.config_handler.iterate_transformation_handlers():
+            if n.get_name() not in self.parameter_timeline:
+                self.parameter_timeline[n.get_name()] = [n.get_value()]
+            else:
+                self.parameter_timeline[n.get_name()].append(n.get_value())
