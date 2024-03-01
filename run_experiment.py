@@ -126,8 +126,8 @@ def get_path_modules() -> (str, str):
 def get_run_config_algorithms() -> list[Algorithm]:
     """Algorithms used for experimentation"""
     algorithms = [
-        Algorithm.DYNAMOSA
-        # Algorithm.DYNAMOSA_RL
+        #Algorithm.DYNAMOSA,
+        Algorithm.DYNAMOSA_RL
     ]
     return algorithms
 
@@ -135,7 +135,7 @@ def get_run_config_algorithms() -> list[Algorithm]:
 def get_run_config_tuning_params() -> list[list[TuningParameters]]:
     """Parameters to tune for experimentation (only used with RL-enabled algorithms)"""
     # parameters = [[param.value] for param in configuration.TuningParameters]
-    parameters = [[TuningParameters.NONE]]
+    parameters = [[TuningParameters.CrossoverRate], [TuningParameters.TournamentSize]]
     return parameters
 
 
@@ -150,10 +150,12 @@ def construct_run_configurations(max_search_time: int, repetitions: int, update_
     commands = []
 
     for path, module, in path_modules:
+        module_rep = 1
         for algorithm in algorithms:
             for parameters in parameters_list:
                 for rep in range(1, repetitions + 1):
-                    module_rep_id = f"{module}#{'{:02d}'.format(rep)}"
+                    module_rep_id = f"{module}#{'{:02d}'.format(module_rep)}"
+                    module_rep += 1
 
                     # Setup directories
                     module_rep_path = f"data/{module}/{module_rep_id}"
@@ -193,7 +195,7 @@ def construct_run_configurations(max_search_time: int, repetitions: int, update_
 
 
 if __name__ == '__main__':
-    run_configs = construct_run_configurations(60, 2, 5, 15)
+    run_configs = construct_run_configurations(10, 2, 5, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 

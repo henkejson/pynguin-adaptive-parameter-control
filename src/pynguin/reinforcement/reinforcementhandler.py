@@ -4,6 +4,7 @@ import multiprocessing
 
 from pynguin.reinforcement.apoenvironment import start_learning_loop
 from pynguin.reinforcement.configurationhandler import ConfigurationHandler
+from pynguin.reinforcement.parameterjsonhandler import save_parameter_data
 from pynguin.reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
 
 from pynguin.reinforcement.transformationhandlers.changeparametertransformationhandler import \
@@ -54,7 +55,8 @@ class ReinforcementHandler:
         # Create a new process, passing the child connection
         p = multiprocessing.Process(target=start_learning_loop,
                                     args=(len(self.config_handler.transformation_handlers),  # number of actions
-                                          len(self.config_handler.transformation_handlers) + 1,  # number of observations (+ cov)
+                                          len(self.config_handler.transformation_handlers) + 1,
+                                          # number of observations (+ cov)
                                           conn,))
         p.start()
 
@@ -131,9 +133,6 @@ class ReinforcementHandler:
                 # Wait for new actions and apply them
                 self.get_and_apply_action()
 
-                self.log_parameters()
-
-
             else:
                 self.conn.send((None, 0, False, False))
             self.iteration = 0
@@ -143,6 +142,7 @@ class ReinforcementHandler:
         if self.conn.poll(timeout=self.timeout):
             actions = self.conn.recv()
             self.config_handler.apply_actions(actions)
+            self.log_parameters()
         else:
             self._logger.info("No action received... ")
             raise ValueError("No action received from RL.")
@@ -164,6 +164,9 @@ class ReinforcementHandler:
 
     def stop(self):
         self.conn.send((None, None, True, True))
+        save_parameter_data(config.configuration.module_name,
+                            config.configuration.statistics_output.run_id,
+                            self.parameter_timeline)
 
     def log_parameters(self):
         for n in self.config_handler.iterate_transformation_handlers():
