@@ -2,7 +2,7 @@ import json
 import os
 import random
 import time
-
+from typing import Callable
 import requests
 
 import docker
@@ -104,6 +104,15 @@ def get_path_modules() -> (str, str):
     """Paths and modules for all python files used for experimentation"""
     # Relative address (from input/) and module names for all files
     path_modules = [
+        ("projects/pyMonet", "pymonet.box"),
+        ("projects/pyMonet", "pymonet.immutable_list"),
+        ("projects/pyMonet", "pymonet.lazy"),
+        ("projects/pyMonet", "pymonet.maybe"),
+        ("projects/pyMonet", "pymonet.monad_try"),
+        ("projects/pyMonet", "pymonet.semigroups"),
+        ("projects/pyMonet", "pymonet.task"),
+        ("projects/pyMonet", "pymonet.validation"),
+
         # ("projects/httpie", "httpie.cli.dicts"),
         # ("projects/httpie", "httpie.config"),
         # ("projects/httpie", "httpie.models"),
@@ -116,9 +125,9 @@ def get_path_modules() -> (str, str):
         # ("projects/httpie", "httpie.plugins.manager"),
 
         # ("projects/httpie", "httpie.output.writer"),
-        ("projects/httpie", "httpie.sessions"),
+        #("projects/httpie", "httpie.sessions"),
 
-        ("projects/toy_example", "bmi_calculator")
+        #("projects/toy_example", "bmi_calculator")
     ]
     return path_modules
 
@@ -135,7 +144,7 @@ def get_run_config_algorithms() -> list[Algorithm]:
 def get_run_config_tuning_params() -> list[list[TuningParameters]]:
     """Parameters to tune for experimentation (only used with RL-enabled algorithms)"""
     # parameters = [[param.value] for param in configuration.TuningParameters]
-    parameters = [[TuningParameters.CrossoverRate], [TuningParameters.TournamentSize]]
+    parameters = [[TuningParameters.Population]]
     return parameters
 
 
@@ -195,7 +204,7 @@ def construct_run_configurations(max_search_time: int, repetitions: int, update_
 
 
 if __name__ == '__main__':
-    run_configs = construct_run_configurations(10, 2, 5, 15)
+    run_configs = construct_run_configurations(60, 2, 10, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 
