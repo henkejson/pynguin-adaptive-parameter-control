@@ -107,9 +107,15 @@ def get_path_modules() -> (str, str):
 
         #("projects/codetiming", "codetiming._timer"),
 
-        ("projects/dataclasses-json", "dataclasses_json.api"),
-        #("projects/dataclasses-json", "dataclasses_json.mm"),
-        #("projects/dataclasses-json", "dataclasses_json.undefined")
+        #("projects/dataclasses-json", "dataclasses_json.api"),
+        # X ("projects/dataclasses-json", "dataclasses_json.mm"),
+        # X ("projects/dataclasses-json", "dataclasses_json.undefined")
+
+
+        ("projects/flake8/src", "flake8.exceptions"),
+        ("projects/flake8/src", "flake8.formatting.base"),
+        ("projects/flake8/src", "flake8.formatting.default"),
+        ("projects/flake8/src", "flake8.main.debug")
 
 
         #("projects/docstring_parser", "docstring_parser.parser"),
@@ -216,7 +222,7 @@ def construct_run_configurations(max_search_time: int, repetitions: int, update_
 
 
 if __name__ == '__main__':
-    run_configs = construct_run_configurations(20, 1, 10, 15)
+    run_configs = construct_run_configurations(120, 2, 10, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 
@@ -269,7 +275,8 @@ if __name__ == '__main__':
 
         #Move penguin-config.txt to the current run config data directory
         os.replace("data/pynguin-config.txt", os.path.join(log_directory, "pynguin-config.txt"))
-
+        os.replace("data/cov_report.xml", os.path.join(log_directory, "cov_report.xml"))
+        os.replace("data/cov_report.html", os.path.join(log_directory, "cov_report.html"))
         print("Removing container...")
         container.remove()
 
