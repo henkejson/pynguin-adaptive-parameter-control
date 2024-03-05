@@ -158,8 +158,8 @@ def get_path_modules() -> (str, str):
 def get_run_config_algorithms() -> list[Algorithm]:
     """Algorithms used for experimentation"""
     algorithms = [
-        #Algorithm.DYNAMOSA,
-        Algorithm.DYNAMOSA_RL
+        Algorithm.DYNAMOSA,
+        #Algorithm.DYNAMOSA_RL
     ]
     return algorithms
 
@@ -173,7 +173,8 @@ def get_run_config_tuning_params() -> list[list[TuningParameters]]:
     # - crossover rate
     # - elite
 
-    parameters = [[TuningParameters.StatementInsertionProbability], [TuningParameters.CrossoverRate], [TuningParameters.Elite]]
+    #parameters = [[TuningParameters.StatementInsertionProbability], [TuningParameters.CrossoverRate], [TuningParameters.Elite]]
+    parameters = [[TuningParameters.NONE]]
     return parameters
 
 
