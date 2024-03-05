@@ -105,36 +105,36 @@ def get_path_modules() -> (str, str):
     # Relative address (from input/) and module names for all files
     path_modules = [
 
-        #("projects/codetiming", "codetiming._timer"),
+        ("projects/codetiming", "codetiming._timer"),
 
-        #("projects/dataclasses-json", "dataclasses_json.api"),
+        # X ("projects/dataclasses-json", "dataclasses_json.api"),
         # X ("projects/dataclasses-json", "dataclasses_json.mm"),
-        # X ("projects/dataclasses-json", "dataclasses_json.undefined")
+        # ("projects/dataclasses-json", "dataclasses_json.undefined")
 
 
-        #("projects/flake8/src", "flake8.exceptions"),
-        #("projects/flake8/src", "flake8.formatting.base"),
-        #("projects/flake8/src", "flake8.formatting.default"),
-        #("projects/flake8/src", "flake8.main.debug")
+        # ("projects/flake8/src", "flake8.exceptions"),
+        # ("projects/flake8/src", "flake8.formatting.base"),
+        # ("projects/flake8/src", "flake8.formatting.default"),
+        # ("projects/flake8/src", "flake8.main.debug")
 
-        #("projects/flutils", "flutils.decorators"),
-        ("projects/flutils", "flutils.namedtupleutils"),
-        #("projects/flutils", "flutils.packages"),
-        #("projects/flutils", "flutils.pathutils"),
-        #("projects/flutils", "flutils.setuputils.cmd"),
-        #("projects/flutils", "flutils.strutils"),
+        # ("projects/flutils", "flutils.decorators"),
+        # ("projects/flutils", "flutils.namedtupleutils"),
+        ("projects/flutils", "flutils.packages"),
+        # ("projects/flutils", "flutils.pathutils"),
+        # ("projects/flutils", "flutils.setuputils.cmd"),
+        # ("projects/flutils", "flutils.strutils"),
 
 
-        #("projects/docstring_parser", "docstring_parser.parser"),
-        #("projects/docstring_parser", "docstring_parser.google"),
-        #("projects/pyMonet", "pymonet.box"),
-        #("projects/pyMonet", "pymonet.immutable_list"),
-        #("projects/pyMonet", "pymonet.lazy"),
-        #("projects/pyMonet", "pymonet.maybe"),
-        #("projects/pyMonet", "pymonet.monad_try"),
-        #("projects/pyMonet", "pymonet.semigroups"),
-        #("projects/pyMonet", "pymonet.task"),
-        #("projects/pyMonet", "pymonet.validation"),
+        # ("projects/docstring_parser", "docstring_parser.parser"),
+        # ("projects/docstring_parser", "docstring_parser.google"),
+        # ("projects/pyMonet", "pymonet.box"),
+        # ("projects/pyMonet", "pymonet.immutable_list"),
+        # ("projects/pyMonet", "pymonet.lazy"),
+        # ("projects/pyMonet", "pymonet.maybe"),
+        # ("projects/pyMonet", "pymonet.monad_try"),
+        # ("projects/pyMonet", "pymonet.semigroups"),
+        # ("projects/pyMonet", "pymonet.task"),
+        # ("projects/pyMonet", "pymonet.validation"),
 
         # ("projects/httpie", "httpie.cli.dicts"),
         # ("projects/httpie", "httpie.config"),
@@ -148,9 +148,9 @@ def get_path_modules() -> (str, str):
         # ("projects/httpie", "httpie.plugins.manager"),
 
         # ("projects/httpie", "httpie.output.writer"),
-        #("projects/httpie", "httpie.sessions"),
+        # ("projects/httpie", "httpie.sessions"),
 
-        #("projects/toy_example", "bmi_calculator")
+        # ("projects/toy_example", "bmi_calculator")
     ]
     return path_modules
 
@@ -158,8 +158,8 @@ def get_path_modules() -> (str, str):
 def get_run_config_algorithms() -> list[Algorithm]:
     """Algorithms used for experimentation"""
     algorithms = [
-        Algorithm.DYNAMOSA,
-        #Algorithm.DYNAMOSA_RL
+        #Algorithm.DYNAMOSA,
+        Algorithm.DYNAMOSA_RL
     ]
     return algorithms
 
@@ -167,7 +167,13 @@ def get_run_config_algorithms() -> list[Algorithm]:
 def get_run_config_tuning_params() -> list[list[TuningParameters]]:
     """Parameters to tune for experimentation (only used with RL-enabled algorithms)"""
     # parameters = [[param.value] for param in configuration.TuningParameters]
-    parameters = [[TuningParameters.Population]]
+
+    # Tuned for now:
+    # - statement insertion probability
+    # - crossover rate
+    # - elite
+
+    parameters = [[TuningParameters.StatementInsertionProbability], [TuningParameters.CrossoverRate], [TuningParameters.Elite]]
     return parameters
 
 
@@ -229,7 +235,7 @@ def construct_run_configurations(max_search_time: int, repetitions: int, update_
 
 
 if __name__ == '__main__':
-    run_configs = construct_run_configurations(20, 1, 10, 15)
+    run_configs = construct_run_configurations(300, 30, 10, 20)
     random.seed(41753)
     random.shuffle(run_configs)
 
