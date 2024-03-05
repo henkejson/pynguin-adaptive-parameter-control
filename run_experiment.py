@@ -105,7 +105,12 @@ def get_path_modules() -> (str, str):
     # Relative address (from input/) and module names for all files
     path_modules = [
 
-        ("projects/codetiming", "codetiming._timer"),
+        #("projects/codetiming", "codetiming._timer"),
+
+        ("projects/dataclasses-json", "dataclasses_json.api"),
+        #("projects/dataclasses-json", "dataclasses_json.mm"),
+        #("projects/dataclasses-json", "dataclasses_json.undefined")
+
 
         #("projects/docstring_parser", "docstring_parser.parser"),
         #("projects/docstring_parser", "docstring_parser.google"),
