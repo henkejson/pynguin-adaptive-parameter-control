@@ -105,11 +105,12 @@ def get_path_modules() -> (str, str):
     # Relative address (from input/) and module names for all files
     path_modules = [
 
+        ("projects/codetiming", "codetiming._timer"),
 
-        ("projects/docstring_parser", "docstring_parser.parser"),
+        #("projects/docstring_parser", "docstring_parser.parser"),
         #("projects/docstring_parser", "docstring_parser.google"),
         #("projects/pyMonet", "pymonet.box"),
-        ("projects/pyMonet", "pymonet.immutable_list"),
+        #("projects/pyMonet", "pymonet.immutable_list"),
         #("projects/pyMonet", "pymonet.lazy"),
         #("projects/pyMonet", "pymonet.maybe"),
         #("projects/pyMonet", "pymonet.monad_try"),
@@ -200,7 +201,7 @@ def construct_run_configurations(max_search_time: int, repetitions: int, update_
                                                   RVar.Coverage,
                                                   RVar.CoverageTimeline
                                                   ])
-                    #command.add_argument("assertion_generation", "NONE")
+                    command.add_argument("assertion_generation", "SIMPLE")
                     command.add_argument("create-coverage-report", "True")
                     #command.add_argument("coverage_metrics", "LINE")
                     command.add_argument("v", "")
@@ -210,7 +211,7 @@ def construct_run_configurations(max_search_time: int, repetitions: int, update_
 
 
 if __name__ == '__main__':
-    run_configs = construct_run_configurations(60, 1, 10, 15)
+    run_configs = construct_run_configurations(20, 1, 10, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 
