@@ -112,10 +112,17 @@ def get_path_modules() -> (str, str):
         # X ("projects/dataclasses-json", "dataclasses_json.undefined")
 
 
-        ("projects/flake8/src", "flake8.exceptions"),
-        ("projects/flake8/src", "flake8.formatting.base"),
-        ("projects/flake8/src", "flake8.formatting.default"),
-        ("projects/flake8/src", "flake8.main.debug")
+        #("projects/flake8/src", "flake8.exceptions"),
+        #("projects/flake8/src", "flake8.formatting.base"),
+        #("projects/flake8/src", "flake8.formatting.default"),
+        #("projects/flake8/src", "flake8.main.debug")
+
+        #("projects/flutils", "flutils.decorators"),
+        ("projects/flutils", "flutils.namedtupleutils"),
+        #("projects/flutils", "flutils.packages"),
+        #("projects/flutils", "flutils.pathutils"),
+        #("projects/flutils", "flutils.setuputils.cmd"),
+        #("projects/flutils", "flutils.strutils"),
 
 
         #("projects/docstring_parser", "docstring_parser.parser"),
@@ -212,7 +219,7 @@ def construct_run_configurations(max_search_time: int, repetitions: int, update_
                                                   RVar.Coverage,
                                                   RVar.CoverageTimeline
                                                   ])
-                    command.add_argument("assertion_generation", "SIMPLE")
+                    command.add_argument("assertion_generation", "NONE")
                     command.add_argument("create-coverage-report", "True")
                     #command.add_argument("coverage_metrics", "LINE")
                     command.add_argument("v", "")
@@ -222,7 +229,7 @@ def construct_run_configurations(max_search_time: int, repetitions: int, update_
 
 
 if __name__ == '__main__':
-    run_configs = construct_run_configurations(120, 2, 10, 15)
+    run_configs = construct_run_configurations(20, 1, 10, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 
