@@ -1,7 +1,9 @@
 import json
-import os
 import random
 import time
+import logging
+import datetime
+import os
 
 import requests
 
@@ -64,7 +66,8 @@ class RunCommand:
 
 def build_image(image_tag: str):
     """Build Pynguin docker image"""
-    print("Building Docker image locally... This can take a couple of minutes")
+    logger = logging.getLogger(__name__)
+    logger.info("Building Docker image locally... This can take a couple of minutes")
 
     # Attempt to build Pynguin image
     try:
@@ -76,22 +79,23 @@ def build_image(image_tag: str):
 
         for line in build_output:
             if 'stream' in line:
-                print(line['stream'].strip())
+                logger.debug(line['stream'].strip())
 
     except docker.errors.BuildError as e:
         # Handle build errors (e.g., error in Dockerfile)
-        print(f"Build failed: {e.msg}")
+        logger.exception(f"Docker image build failed...")
         # Print build logs that might contain clues to what went wrong
         for line in e.build_log:
             if 'stream' in line:
-                print(line['stream'].strip())
+                logger.error(line['stream'].strip())
 
 
 def run_container(command: RunCommand, image_tag: str):
     """Run container with specified command"""
-    print(command.build_command())
+    logger = logging.getLogger(__name__)
+    logger.debug(command.build_command())
 
-    print("Starting Container...")
+    logger.info("Starting Container...")
     return client.containers.run(
         image_tag,
         command=command.build_command(),
@@ -235,8 +239,41 @@ def construct_run_configurations(max_search_time: int, repetitions: int, update_
 
     return commands
 
+def set_up_logging():
+    # Get the current time and format it as a string suitable for a filename
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    log_file_name = f"full_log_{current_time}.txt"
+
+    log_directory = "data"
+    os.makedirs(log_directory, exist_ok=True)
+    log_file_path = os.path.join(log_directory, log_file_name)
+
+    # Configure logging
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)  # Adjust the level as needed
+
+    # Create console handler and set level to debug (or info, as needed)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.DEBUG)  # Or logging.INFO
+
+    # Create file handler and set level to debug
+    file_handler = logging.FileHandler(log_file_path)
+    file_handler.setLevel(logging.DEBUG)  # Or another level
+
+    # Create formatter and add it to the handlers
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    console_handler.setFormatter(formatter)
+    file_handler.setFormatter(formatter)
+
+    # Add the handlers to the logger
+    logger.addHandler(console_handler)
+    logger.addHandler(file_handler)
+
+    return logger
 
 if __name__ == '__main__':
+    set_up_logging()
+    logger = logging.getLogger(__name__)
     run_configs = construct_run_configurations(5, 1, 10, 15)
     random.seed(41753)
     random.shuffle(run_configs)
@@ -256,12 +293,12 @@ if __name__ == '__main__':
     # Run a container per run configuration
     for run_config in run_configs:
         encountered_error = False
-        print(f"Running config {i}/{len(run_configs)} (run id: {run_config.get_argument('run_id')})")
+        logger.info(f"Running config {i}/{len(run_configs)} (run id: {run_config.get_argument('run_id')})")
         i += 1
 
         container = run_container(run_config, img_tag)
 
-        print("Waiting for Pynguin to finish...")
+        logger.info("Waiting for Pynguin to finish...")
         try:
             timeout_time = int(run_config.get_argument("maximum_search_time")) + 180
             result = container.wait(timeout=timeout_time)
@@ -269,11 +306,11 @@ if __name__ == '__main__':
             # Check for internal errors
             exit_code = result['StatusCode']
             if exit_code != 0:
-                print(f"Container exited with error code {exit_code}")
+                logger.error(f"Container exited with error code {exit_code}")
                 encountered_error = True
 
-        except requests.exceptions.ConnectionError:
-            print("Timed out waiting for container, stopping...")
+        except requests.exceptions.ConnectionError as e:
+            logger.exception("Timed out waiting for container, stopping...")
             container.stop()
             encountered_error = True
 
@@ -290,7 +327,7 @@ if __name__ == '__main__':
         with open(log_path, 'w', encoding="utf-8") as file:
             file.write(logs.decode("utf-8"))
 
-        print("Removing container...")
+        logger.info("Removing container...")
         container.remove()
 
         save_config_data("failed_runs" if encountered_error else "completed_runs",
