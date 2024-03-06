@@ -6,9 +6,10 @@ import time
 import requests
 
 import docker
+from pynguin.reinforcement.jsonhandler import save_config_data
 from pynguin.utils.statistics.runtimevariable import RuntimeVariable
 from pynguin.utils.statistics.runtimevariable import RuntimeVariable as RVar
-
+import pynguin.configuration as config
 from src.pynguin.configuration import TuningParameters, Algorithm
 
 
@@ -107,9 +108,9 @@ def get_path_modules() -> (str, str):
 
         ("projects/codetiming", "codetiming._timer"),
 
-        # X ("projects/dataclasses-json", "dataclasses_json.api"),
+        #("projects/dataclasses-json", "dataclasses_json.api"),
         # X ("projects/dataclasses-json", "dataclasses_json.mm"),
-        # ("projects/dataclasses-json", "dataclasses_json.undefined")
+        ("projects/dataclasses-json", "dataclasses_json.undefined"),
 
 
         # ("projects/flake8/src", "flake8.exceptions"),
@@ -236,7 +237,7 @@ def construct_run_configurations(max_search_time: int, repetitions: int, update_
 
 
 if __name__ == '__main__':
-    run_configs = construct_run_configurations(300, 30, 10, 20)
+    run_configs = construct_run_configurations(5, 1, 10, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 
@@ -248,11 +249,13 @@ if __name__ == '__main__':
     build_image(image_tag=img_tag)
 
     # (Prep for run_config loop)
-    encountered_error = False
+    #encountered_error = False
     i = 1
 
+    config.configuration.statistics_output.report_dir = "data/"
     # Run a container per run configuration
     for run_config in run_configs:
+        encountered_error = False
         print(f"Running config {i}/{len(run_configs)} (run id: {run_config.get_argument('run_id')})")
         i += 1
 
@@ -287,13 +290,22 @@ if __name__ == '__main__':
         with open(log_path, 'w', encoding="utf-8") as file:
             file.write(logs.decode("utf-8"))
 
-        #Move penguin-config.txt to the current run config data directory
-        os.replace("data/pynguin-config.txt", os.path.join(log_directory, "pynguin-config.txt"))
-        os.replace("data/cov_report.xml", os.path.join(log_directory, "cov_report.xml"))
-        os.replace("data/cov_report.html", os.path.join(log_directory, "cov_report.html"))
         print("Removing container...")
         container.remove()
 
-        # If we encountered an error, stop the loop
+        save_config_data("failed_runs" if encountered_error else "completed_runs",
+                         f"{run_config.get_argument('module_name')}",
+                         f"{run_config.get_argument('run_id')}",
+                         run_config.argument_dict)
+
+        # If we encountered an error, continue to next
         if encountered_error:
-            break
+            continue
+
+        # Move penguin-config.txt to the current run config data directory
+        os.replace("data/pynguin-config.txt", os.path.join(log_directory, "pynguin-config.txt"))
+        os.replace("data/cov_report.xml", os.path.join(log_directory, "cov_report.xml"))
+        os.replace("data/cov_report.html", os.path.join(log_directory, "cov_report.html"))
+
+
+

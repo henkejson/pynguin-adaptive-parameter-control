@@ -4,7 +4,7 @@ import multiprocessing
 
 from pynguin.reinforcement.apoenvironment import start_learning_loop
 from pynguin.reinforcement.configurationhandler import ConfigurationHandler
-from pynguin.reinforcement.parameterjsonhandler import save_parameter_data
+from pynguin.reinforcement.jsonhandler import save_parameter_data
 from pynguin.reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
 
 from pynguin.reinforcement.transformationhandlers.changeparametertransformationhandler import \
