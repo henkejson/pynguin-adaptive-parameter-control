@@ -110,11 +110,11 @@ def get_path_modules() -> (str, str):
     # Relative address (from input/) and module names for all files
     path_modules = [
 
-        ("projects/codetiming", "codetiming._timer"),
+        #("projects/codetiming", "codetiming._timer"),
 
-        #("projects/dataclasses-json", "dataclasses_json.api"),
+        # X("projects/dataclasses-json", "dataclasses_json.api"),
         # X ("projects/dataclasses-json", "dataclasses_json.mm"),
-        ("projects/dataclasses-json", "dataclasses_json.undefined"),
+        # ("projects/dataclasses-json", "dataclasses_json.undefined"),
 
 
         # ("projects/flake8/src", "flake8.exceptions"),
@@ -124,7 +124,7 @@ def get_path_modules() -> (str, str):
 
         # ("projects/flutils", "flutils.decorators"),
         # ("projects/flutils", "flutils.namedtupleutils"),
-        ("projects/flutils", "flutils.packages"),
+        # ("projects/flutils", "flutils.packages"),
         # ("projects/flutils", "flutils.pathutils"),
         # ("projects/flutils", "flutils.setuputils.cmd"),
         # ("projects/flutils", "flutils.strutils"),
@@ -141,19 +141,21 @@ def get_path_modules() -> (str, str):
         # ("projects/pyMonet", "pymonet.task"),
         # ("projects/pyMonet", "pymonet.validation"),
 
-        # ("projects/httpie", "httpie.cli.dicts"),
-        # ("projects/httpie", "httpie.config"),
-        # ("projects/httpie", "httpie.models"),
-        # ("projects/httpie", "httpie.output.formatters.colors"),
-        # ("projects/httpie", "httpie.output.formatters.headers"),
-        # ("projects/httpie", "httpie.output.formatters.json"),
-        # ("projects/httpie", "httpie.output.processing"),
-        # ("projects/httpie", "httpie.output.streams"),
-        # ("projects/httpie", "httpie.plugins.base"),
-        # ("projects/httpie", "httpie.plugins.manager"),
+        #("projects/httpie", "httpie.cli.dicts"),
+        #("projects/httpie", "httpie.models"),
+        #("projects/httpie", "httpie.output.formatters.colors"),
+        #("projects/httpie", "httpie.output.formatters.headers"),
+        #("projects/httpie", "httpie.output.formatters.json"),
+        #("projects/httpie", "httpie.output.processing"),
+        #("projects/httpie", "httpie.output.streams"),
+        #("projects/httpie", "httpie.plugins.base"),
+        #("projects/httpie", "httpie.plugins.manager"),
+        #("projects/httpie", "httpie.sessions"),
+        #("projects/httpie", "httpie.ssl_"),
+        #("projects/httpie", "httpie.status"),
 
-        # ("projects/httpie", "httpie.output.writer"),
-        # ("projects/httpie", "httpie.sessions"),
+
+
 
         # ("projects/toy_example", "bmi_calculator")
     ]
@@ -274,7 +276,7 @@ def set_up_logging():
 if __name__ == '__main__':
     set_up_logging()
     logger = logging.getLogger(__name__)
-    run_configs = construct_run_configurations(5, 1, 10, 15)
+    run_configs = construct_run_configurations(60, 1, 10, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 
@@ -308,6 +310,8 @@ if __name__ == '__main__':
             if exit_code != 0:
                 logger.error(f"Container exited with error code {exit_code}")
                 encountered_error = True
+            else:
+                logger.info(f"Container successfully exited with error code 0")
 
         except requests.exceptions.ConnectionError as e:
             logger.exception("Timed out waiting for container, stopping...")
@@ -323,6 +327,7 @@ if __name__ == '__main__':
         os.makedirs(log_directory, exist_ok=True)
 
         # Fetch and save logs
+        logger.info("Writing container logs...")
         logs = container.logs()
         with open(log_path, 'w', encoding="utf-8") as file:
             file.write(logs.decode("utf-8"))
@@ -337,9 +342,11 @@ if __name__ == '__main__':
 
         # If we encountered an error, continue to next
         if encountered_error:
+            logger.warning(f"run_id {run_config.get_argument('run_id')} encountered errors...")
             continue
 
         # Move penguin-config.txt to the current run config data directory
+        logger.info("Moving files...")
         os.replace("data/pynguin-config.txt", os.path.join(log_directory, "pynguin-config.txt"))
         os.replace("data/cov_report.xml", os.path.join(log_directory, "cov_report.xml"))
         os.replace("data/cov_report.html", os.path.join(log_directory, "cov_report.html"))
