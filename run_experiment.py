@@ -28,7 +28,7 @@ class RunCommand:
         return self.argument_dict.get(argument, None)
 
     def add_volume(self, base_directory: str, host_folder: str, container_folder: str, mode: str):
-        self.volumes.append(f"{os.path.join(base_directory,host_folder)}:{container_folder}:{mode}")
+        self.volumes.append(f"{os.path.join(base_directory, host_folder)}:{container_folder}:{mode}")
 
     def build_command(self, start_command: str = "") -> list[str]:
         command_list = []
@@ -110,81 +110,69 @@ def get_path_modules() -> (str, str):
     # Relative address (from input/) and module names for all files
     path_modules = [
 
-        #("projects/codetiming", "codetiming._timer"),
+        # ("projects/codetiming", "codetiming._timer"),
 
         # X("projects/dataclasses-json", "dataclasses_json.api"),
         # X ("projects/dataclasses-json", "dataclasses_json.mm"),
         # ("projects/dataclasses-json", "dataclasses_json.undefined"),
 
-
-        #("projects/flake8/src", "flake8.exceptions"),
+        # ("projects/flake8/src", "flake8.exceptions"),
         # ("projects/flake8/src", "flake8.formatting.base"),
-        #("projects/flake8/src", "flake8.formatting.default"),
+        # ("projects/flake8/src", "flake8.formatting.default"),
         # ("projects/flake8/src", "flake8.main.debug")
 
         # ("projects/flutils", "flutils.decorators"),
         # ("projects/flutils", "flutils.namedtupleutils"),
         # ("projects/flutils", "flutils.packages"),
-        #("projects/flutils", "flutils.pathutils"),
+        # ("projects/flutils", "flutils.pathutils"),
         # ("projects/flutils", "flutils.setuputils.cmd"),
         # ("projects/flutils", "flutils.strutils"),
-
 
         # ("projects/docstring_parser", "docstring_parser.parser"),
         # ("projects/docstring_parser", "docstring_parser.google"),
         # ("projects/pyMonet", "pymonet.box"),
-        # ("projects/pyMonet", "pymonet.immutable_list"),
-        # ("projects/pyMonet", "pymonet.lazy"),
+        ("projects/pyMonet", "pymonet.immutable_list"),
+        ("projects/pyMonet", "pymonet.lazy"),
         # ("projects/pyMonet", "pymonet.maybe"),
         # ("projects/pyMonet", "pymonet.monad_try"),
         # ("projects/pyMonet", "pymonet.semigroups"),
         # ("projects/pyMonet", "pymonet.task"),
         # ("projects/pyMonet", "pymonet.validation"),
 
-        #("projects/httpie", "httpie.cli.dicts"),
-        #("projects/httpie", "httpie.models"),
-        #("projects/httpie", "httpie.output.formatters.colors"),
-        #("projects/httpie", "httpie.output.formatters.headers"),
-        #("projects/httpie", "httpie.output.formatters.json"),
-        #("projects/httpie", "httpie.output.processing"),
-        #("projects/httpie", "httpie.output.streams"),
-        #("projects/httpie", "httpie.plugins.base"),
-        #("projects/httpie", "httpie.plugins.manager"),
-        #("projects/httpie", "httpie.sessions"),
-        #("projects/httpie", "httpie.ssl_"),
-        #("projects/httpie", "httpie.status"),
+        # ("projects/httpie", "httpie.cli.dicts"),
+        # ("projects/httpie", "httpie.models"),
+        # ("projects/httpie", "httpie.output.formatters.colors"),
+        # ("projects/httpie", "httpie.output.formatters.headers"),
+        # ("projects/httpie", "httpie.output.formatters.json"),
+        # ("projects/httpie", "httpie.output.processing"),
+        # ("projects/httpie", "httpie.output.streams"),
+        # ("projects/httpie", "httpie.plugins.base"),
+        # ("projects/httpie", "httpie.plugins.manager"),
+        # ("projects/httpie", "httpie.sessions"),
+        # ("projects/httpie", "httpie.ssl_"),
+        # ("projects/httpie", "httpie.status"),
 
+        # ("projects/isort", "isort.comments"),
+        # ("projects/isort", "isort.exceptions"),
+        # ("projects/isort", "isort.utils"),
 
-        #("projects/isort", "isort.comments"),
-        #("projects/isort", "isort.exceptions"),
-        #("projects/isort", "isort.utils"),
-
-        ("projects/mimesis", "mimesis.builtins.da"),
-        ("projects/mimesis", "mimesis.builtins.it"),
-        ("projects/mimesis", "mimesis.builtins.nl"),
-        ("projects/mimesis", "mimesis.builtins.pt_br"),
-        ("projects/mimesis", "mimesis.builtins.uk"),
-        ("projects/mimesis", "mimesis.exceptions"),
-        ("projects/mimesis", "mimesis.providers.choice"),
-        ("projects/mimesis", "mimesis.providers.code"),
-        ("projects/mimesis", "mimesis.providers.development"),
-        ("projects/mimesis", "mimesis.providers.hardware"),
-        ("projects/mimesis", "mimesis.providers.science"),
-        ("projects/mimesis", "mimesis.providers.transport"),
-        ("projects/mimesis", "mimesis.shortcuts"),
+        # ("projects/mimesis", "mimesis.builtins.da"),
+        # ("projects/mimesis", "mimesis.builtins.it"),
+        # ("projects/mimesis", "mimesis.builtins.nl"),
+        # ("projects/mimesis", "mimesis.builtins.pt_br"),
+        # ("projects/mimesis", "mimesis.builtins.uk"),
+        # ("projects/mimesis", "mimesis.exceptions"),
+        #("projects/mimesis", "mimesis.providers.choice"),
+        # ("projects/mimesis", "mimesis.providers.code"),
+        # ("projects/mimesis", "mimesis.providers.development"),
+        # ("projects/mimesis", "mimesis.providers.hardware"),
+        # ("projects/mimesis", "mimesis.providers.science"),
+        # ("projects/mimesis", "mimesis.providers.transport"),
+        # ("projects/mimesis", "mimesis.shortcuts"),
 
         # ("projects/toy_example", "bmi_calculator")
     ]
     return path_modules
-
-
-def get_run_config_algorithms() -> list[Algorithm]:
-    """Algorithms used for experimentation"""
-    algorithms = [
-        Algorithm.DYNAMOSA,
-        #Algorithm.DYNAMOSA_RL
-    ]
-    return algorithms
 
 
 def get_run_config_tuning_params() -> list[list[TuningParameters]]:
@@ -192,83 +180,92 @@ def get_run_config_tuning_params() -> list[list[TuningParameters]]:
     # parameters = [[param.value] for param in configuration.TuningParameters]
 
     # Tuned for now:
+    # - none
     # - statement insertion probability
     # - crossover rate
     # - elite
 
-    #parameters = [[TuningParameters.StatementInsertionProbability], [TuningParameters.CrossoverRate], [TuningParameters.Elite]]
-    parameters = [[TuningParameters.NONE]]
+    parameters = [[TuningParameters.NONE], [TuningParameters.StatementInsertionProbability],
+                  [TuningParameters.CrossoverRate], [TuningParameters.Elite]]
     return parameters
 
 
-def construct_run_configurations(max_search_time: int, repetitions: int, update_freq: int, plateau_length: int) -> list[RunCommand]:
+def construct_run_configurations(max_search_time: int,
+                                 repetitions: int,
+                                 update_freq: int,
+                                 plateau_length: int) -> list[RunCommand]:
     """Construct a list of all run configuration commands"""
 
     # Get the components for the run-configurations
     path_modules = get_path_modules()
-    algorithms = get_run_config_algorithms()
     parameters_list = get_run_config_tuning_params()
 
     commands = []
 
     for path, module, in path_modules:
         module_rep = 1
-        for algorithm in algorithms:
-            for parameters in parameters_list:
-                for rep in range(1, repetitions + 1):
-                    module_rep_id = f"{module}#{'{:02d}'.format(module_rep)}"
-                    module_rep += 1
+        for parameters in parameters_list:
 
-                    # Setup directories
-                    module_rep_path = f"data/{module}/{module_rep_id}"
-                    os.makedirs(os.path.join(os.getcwd(), module_rep_path), exist_ok=True)
+            # Check if we are tuning parameters and set algorithm accordingly
+            algorithm = Algorithm.DYNAMOSA_RL
+            if parameters[0] == TuningParameters.NONE:
+                algorithm = Algorithm.DYNAMOSA
 
-                    # Construct run command
-                    command = RunCommand()
-                    command.add_volume(os.getcwd(), path, "/input", "ro")
-                    command.add_volume(os.getcwd(), path, "/package", "ro")
-                    command.add_volume(os.getcwd(), module_rep_path, "/output", "rw")
-                    command.add_volume(os.getcwd(), "data", "/results", "rw")
+            for rep in range(1, repetitions + 1):
+                module_rep_id = f"{module}#{'{:02d}'.format(module_rep)}"
+                module_rep += 1
 
-                    command.add_argument("project_path", "/input")
-                    command.add_argument("output_path", "/output")
-                    command.add_argument("report_dir", "/results")
-                    command.add_argument("module_name", module)
-                    command.add_algorithm(algorithm)
-                    command.add_tuning_parameters(parameters)
-                    command.add_argument("run_id", f"{module_rep_id}")
-                    command.add_argument("maximum_search_time", f"{max_search_time}")
-                    command.add_argument("update_frequency", f"{update_freq}")
-                    command.add_argument("plateau_length", f"{plateau_length}")
-                    command.add_output_variables([RVar.RunId,
-                                                  RVar.TargetModule,
-                                                  RVar.Algorithm,
-                                                  RVar.AlgorithmIterations,
-                                                  RVar.SearchTime,
-                                                  RVar.TuningParameters,
-                                                  RVar.Coverage,
-                                                  RVar.CoverageTimeline
-                                                  ])
-                    command.add_argument("assertion_generation", "NONE")
-                    command.add_argument("create-coverage-report", "True")
-                    #command.add_argument("coverage_metrics", "LINE")
-                    command.add_argument("v", "")
-                    commands.append(command)
+                # Setup directories
+                module_rep_path = f"data/{module}/{module_rep_id}"
+                os.makedirs(os.path.join(os.getcwd(), module_rep_path), exist_ok=True)
+
+                # Construct run command
+                command = RunCommand()
+                command.add_volume(os.getcwd(), path, "/input", "ro")
+                command.add_volume(os.getcwd(), path, "/package", "ro")
+                command.add_volume(os.getcwd(), module_rep_path, "/output", "rw")
+                command.add_volume(os.getcwd(), "data", "/results", "rw")
+
+                command.add_argument("project_path", "/input")
+                command.add_argument("output_path", "/output")
+                command.add_argument("report_dir", "/results")
+                command.add_argument("module_name", module)
+                command.add_algorithm(algorithm)
+                command.add_tuning_parameters(parameters)
+                command.add_argument("run_id", f"{module_rep_id}")
+                command.add_argument("maximum_search_time", f"{max_search_time}")
+                command.add_argument("update_frequency", f"{update_freq}")
+                command.add_argument("plateau_length", f"{plateau_length}")
+                command.add_output_variables([RVar.RunId,
+                                              RVar.TargetModule,
+                                              RVar.Algorithm,
+                                              RVar.AlgorithmIterations,
+                                              RVar.SearchTime,
+                                              RVar.TuningParameters,
+                                              RVar.Coverage,
+                                              RVar.CoverageTimeline
+                                              ])
+                command.add_argument("assertion_generation", "NONE")
+                command.add_argument("create-coverage-report", "True")
+                # command.add_argument("coverage_metrics", "LINE")
+                command.add_argument("v", "")
+                commands.append(command)
 
     return commands
+
 
 def set_up_logging():
     # Get the current time and format it as a string suitable for a filename
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     log_file_name = f"full_log_{current_time}.txt"
 
-    log_directory = "data"
-    os.makedirs(log_directory, exist_ok=True)
-    log_file_path = os.path.join(log_directory, log_file_name)
+    log_dir = "data"
+    os.makedirs(log_dir, exist_ok=True)
+    log_file_path = os.path.join(log_dir, log_file_name)
 
     # Configure logging
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)  # Adjust the level as needed
+    logger_instance = logging.getLogger(__name__)
+    logger_instance.setLevel(logging.DEBUG)  # Adjust the level as needed
 
     # Create console handler and set level to debug (or info, as needed)
     console_handler = logging.StreamHandler()
@@ -284,15 +281,15 @@ def set_up_logging():
     file_handler.setFormatter(formatter)
 
     # Add the handlers to the logger
-    logger.addHandler(console_handler)
-    logger.addHandler(file_handler)
+    logger_instance.addHandler(console_handler)
+    logger_instance.addHandler(file_handler)
 
-    return logger
 
 if __name__ == '__main__':
     set_up_logging()
     logger = logging.getLogger(__name__)
-    run_configs = construct_run_configurations(5, 1, 10, 15)
+
+    run_configs = construct_run_configurations(5, 2, 10, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 
@@ -304,7 +301,7 @@ if __name__ == '__main__':
     build_image(image_tag=img_tag)
 
     # (Prep for run_config loop)
-    #encountered_error = False
+    # encountered_error = False
     i = 1
 
     config.configuration.statistics_output.report_dir = "data/"
@@ -366,6 +363,3 @@ if __name__ == '__main__':
         os.replace("data/pynguin-config.txt", os.path.join(log_directory, "pynguin-config.txt"))
         os.replace("data/cov_report.xml", os.path.join(log_directory, "cov_report.xml"))
         os.replace("data/cov_report.html", os.path.join(log_directory, "cov_report.html"))
-
-
-
