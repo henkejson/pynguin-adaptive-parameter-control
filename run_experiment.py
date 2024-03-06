@@ -117,15 +117,15 @@ def get_path_modules() -> (str, str):
         # ("projects/dataclasses-json", "dataclasses_json.undefined"),
 
 
-        # ("projects/flake8/src", "flake8.exceptions"),
+        #("projects/flake8/src", "flake8.exceptions"),
         # ("projects/flake8/src", "flake8.formatting.base"),
-        # ("projects/flake8/src", "flake8.formatting.default"),
+        #("projects/flake8/src", "flake8.formatting.default"),
         # ("projects/flake8/src", "flake8.main.debug")
 
         # ("projects/flutils", "flutils.decorators"),
         # ("projects/flutils", "flutils.namedtupleutils"),
         # ("projects/flutils", "flutils.packages"),
-        # ("projects/flutils", "flutils.pathutils"),
+        #("projects/flutils", "flutils.pathutils"),
         # ("projects/flutils", "flutils.setuputils.cmd"),
         # ("projects/flutils", "flutils.strutils"),
 
@@ -154,6 +154,10 @@ def get_path_modules() -> (str, str):
         #("projects/httpie", "httpie.ssl_"),
         #("projects/httpie", "httpie.status"),
 
+
+        ("projects/isort", "isort.comments"),
+        ("projects/isort", "isort.exceptions"),
+        ("projects/isort", "isort.utils"),
 
 
 
