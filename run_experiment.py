@@ -155,11 +155,23 @@ def get_path_modules() -> (str, str):
         #("projects/httpie", "httpie.status"),
 
 
-        ("projects/isort", "isort.comments"),
-        ("projects/isort", "isort.exceptions"),
-        ("projects/isort", "isort.utils"),
+        #("projects/isort", "isort.comments"),
+        #("projects/isort", "isort.exceptions"),
+        #("projects/isort", "isort.utils"),
 
-
+        ("projects/mimesis", "mimesis.builtins.da"),
+        ("projects/mimesis", "mimesis.builtins.it"),
+        ("projects/mimesis", "mimesis.builtins.nl"),
+        ("projects/mimesis", "mimesis.builtins.pt_br"),
+        ("projects/mimesis", "mimesis.builtins.uk"),
+        ("projects/mimesis", "mimesis.exceptions"),
+        ("projects/mimesis", "mimesis.providers.choice"),
+        ("projects/mimesis", "mimesis.providers.code"),
+        ("projects/mimesis", "mimesis.providers.development"),
+        ("projects/mimesis", "mimesis.providers.hardware"),
+        ("projects/mimesis", "mimesis.providers.science"),
+        ("projects/mimesis", "mimesis.providers.transport"),
+        ("projects/mimesis", "mimesis.shortcuts"),
 
         # ("projects/toy_example", "bmi_calculator")
     ]
@@ -280,7 +292,7 @@ def set_up_logging():
 if __name__ == '__main__':
     set_up_logging()
     logger = logging.getLogger(__name__)
-    run_configs = construct_run_configurations(60, 1, 10, 15)
+    run_configs = construct_run_configurations(5, 1, 10, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 
