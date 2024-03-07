@@ -1,0 +1,63 @@
+[project]
+name = "pdir2"
+version = "1.0.0"
+authors = [
+    {name = "laike9m", email = "laike9m@gmail.com"},
+]
+dependencies = [
+    'colorama;platform_system=="Windows"',
+    'typing-extensions==4.*',
+]
+requires-python = ">=3.8"
+license = {text = "MIT"}
+description="Pretty dir printing with joy"
+readme="README.md"
+classifiers=[
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: MacOS :: MacOS X',
+    'Operating System :: Microsoft :: Windows',
+    'Operating System :: POSIX',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Programming Language :: Python :: Implementation :: PyPy',
+    'Programming Language :: Python :: Implementation :: CPython',
+]
+
+[project.urls]
+Funding = "https://github.com/sponsors/laike9m"
+"Bug Tracker" = "https://github.com/laike9m/pdir2/issues"
+homepage = "https://github.com/laike9m/pdir2"
+repository = "https://github.com/laike9m/pdir2"
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest==7.*",
+    "tox==4.*",
+    "tox-pdm==0.5.*",
+    "ptpython==3.0.*",
+    "bpython>=0.24",
+    "ipython==7.16.*",
+    "flake8==3.9.*",
+    "pytest-mypy==0.10.*",
+    "hypothesis==6.21.*",
+    "tox-gh-actions==3.*",
+    "mypy>=1.4",
+    "twine>=4.0.2",
+]
+
+[build-system]
+requires = ["pdm-pep517"]
+build-backend = "pdm.pep517.api"
+
+[tool.black]
+skip-string-normalization = true
+
+[[tool.mypy.overrides]]
+module = ["pytest"]
+ignore_missing_imports = true

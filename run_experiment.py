@@ -116,7 +116,7 @@ def get_path_modules() -> (str, str):
         # X ("projects/dataclasses-json", "dataclasses_json.mm"),
         # ("projects/dataclasses-json", "dataclasses_json.undefined"),
 
-        # ("projects/flake8/src", "flake8.exceptions"),
+        #("projects/flake8/src", "flake8.exceptions"),
         # ("projects/flake8/src", "flake8.formatting.base"),
         # ("projects/flake8/src", "flake8.formatting.default"),
         # ("projects/flake8/src", "flake8.main.debug")
@@ -131,8 +131,8 @@ def get_path_modules() -> (str, str):
         # ("projects/docstring_parser", "docstring_parser.parser"),
         # ("projects/docstring_parser", "docstring_parser.google"),
         # ("projects/pyMonet", "pymonet.box"),
-        ("projects/pyMonet", "pymonet.immutable_list"),
-        ("projects/pyMonet", "pymonet.lazy"),
+        #("projects/pyMonet", "pymonet.immutable_list"),
+        #("projects/pyMonet", "pymonet.lazy"),
         # ("projects/pyMonet", "pymonet.maybe"),
         # ("projects/pyMonet", "pymonet.monad_try"),
         # ("projects/pyMonet", "pymonet.semigroups"),
@@ -170,6 +170,15 @@ def get_path_modules() -> (str, str):
         # ("projects/mimesis", "mimesis.providers.transport"),
         # ("projects/mimesis", "mimesis.shortcuts"),
 
+        #("projects/pdir2", "pdir._internal_utils"),
+        #("projects/pdir2", "pdir.attr_category"),
+        #("projects/pdir2", "pdir.color"),
+        #("projects/pdir2", "pdir.configuration"),
+        #("projects/pdir2", "pdir.format"),
+
+
+
+
         # ("projects/toy_example", "bmi_calculator")
     ]
     return path_modules
@@ -185,8 +194,9 @@ def get_run_config_tuning_params() -> list[list[TuningParameters]]:
     # - crossover rate
     # - elite
 
-    parameters = [[TuningParameters.NONE], [TuningParameters.StatementInsertionProbability],
-                  [TuningParameters.CrossoverRate], [TuningParameters.Elite]]
+    #parameters = [[TuningParameters.NONE], [TuningParameters.StatementInsertionProbability],
+                  #[TuningParameters.CrossoverRate], [TuningParameters.Elite]]
+    parameters = [[TuningParameters.NONE]]
     return parameters
 
 
@@ -289,7 +299,7 @@ if __name__ == '__main__':
     set_up_logging()
     logger = logging.getLogger(__name__)
 
-    run_configs = construct_run_configurations(5, 2, 10, 15)
+    run_configs = construct_run_configurations(5, 1, 10, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 
