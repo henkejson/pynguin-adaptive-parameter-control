@@ -1,0 +1,284 @@
+#############
+## PROJECT ##
+#############
+
+[project]
+
+name = "pypara"
+version = "0.1.1"
+
+description = "Currencies, Monetary Value Arithmetic/Conversion and Some Type Convenience"
+keywords = ["finance"]
+readme = "README.md"
+license = { text = "BSD License" }
+authors = [{ name = "Vehbi Sinan Tunalioglu", email = "vst@vsthost.com" }]
+
+requires-python = ">=3.9"
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+dependencies = [
+    "python-dateutil<3.0",
+    "typing_extensions; python_version<'3.10'",
+]
+
+[project.urls]
+
+Homepage = "https://github.com/vst/pypara"
+Documentation = "https://github.com/vst/pypara#readme"
+Repository = "https://github.com/vst/pypara.git"
+Changelog = "https://github.com/vst/pypara/blob/main/CHANGELOG.md"
+
+##################
+## BUILD SYSTEM ##
+##################
+
+[build-system]
+
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+######################
+## TOOL: SETUPTOOLS ##
+######################
+
+[tool.setuptools.packages.find]
+
+where = ["."]
+include = ["pypara*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+
+pypara = ["py.typed"]
+
+#################
+## TOOL: BLACK ##
+#################
+
+[tool.black]
+
+line-length = 120
+target_version = ["py39"]
+
+#################
+## TOOL: ISORT ##
+#################
+
+[tool.isort]
+
+line_length = 120
+multi_line_output = 3
+include_trailing_comma = true
+
+################
+## TOOL: mypy ##
+################
+
+[tool.mypy]
+
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_any_unimported = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+strict_equality = true
+strict_optional = true
+warn_incomplete_stub = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unused_ignores = true
+
+
+###################
+## TOOL: pyright ##
+###################
+
+[tool.pyright]
+
+## Provide platform information:
+pythonPlatform = "Linux"
+pythonVersion = "3.10"
+
+## Typecheck following directories:
+include = ["pypara", "tests"]
+
+## Exclude following directories from typechecking:
+exclude = []
+
+## Ignore some files:
+ignore = []
+
+## We want strict type-checking mode:
+typeCheckingMode = "basic"
+
+## Demote (some) report groups to "warning" because mypy is our primary source:
+# reportGeneralTypeIssues = "warning"
+# reportMissingImports = "warning"
+# reportMissingTypeStubs = "warning"
+# reportPropertyTypeMismatch = "warning"
+# reportUnusedImport = "warning"
+
+####################
+## TOOL: coverage ##
+####################
+
+[tool.coverage.run]
+
+source = ["."]
+
+##################
+## TOOL: flake8 ##
+##################
+
+## Note: When this section was added, there was no pyproject.toml
+## support of flake8 which is a very disputed issue:
+##
+## https://github.com/PyCQA/flake8/issues/234
+##
+## We are now using Flake8-pyproject flake8 plugin to use
+## `pyproject.toml`.
+
+[tool.flake8]
+
+## Define error messages to be ignored:
+ignore = [
+    "E266",  ## We want double hash to be allowed for comments.
+    "F811",  ## Still problem with @overload.
+    "T202",  ## We are not on Python 2.x.
+    "TC001", ## We will not use TYPE_CHECKING block for a while.
+    "TC002", ## We will not use TYPE_CHECKING block for a while.
+    "TC003", ## We will not use TYPE_CHECKING block for a while.
+    "TC006", ## Needs testing.
+    "D100",  ## We do not intend to add docstring to all definitions yet.
+    "D101",  ## We do not intend to add docstring to all definitions yet.
+    "D102",  ## We do not intend to add docstring to all definitions yet.
+    "D103",  ## We do not intend to add docstring to all definitions yet.
+    "D104",  ## We do not intend to add docstring to all definitions yet.
+    "D105",  ## We do not intend to add docstring to all definitions yet.
+    "D107",  ## We do not intend to add docstring to all definitions yet.
+    "D200",  ## No need to fit one-line docstrings on one line with quotes.
+    "D205",  ## We are starting with a blank line.
+    "D400",  ## Plugin is a little confused.
+    "D401",  ## We will be imperative later.
+]
+
+## Define files and directories to be excluded from checking:
+exclude = [
+    "__pycache__",
+    "__static",
+    ".cache",
+    ".eggs",
+    ".git",
+    ".mypy_cache",
+    "*.egg-info",
+    "*.py[codi]",
+    "build",
+    "dev",
+    "dist",
+]
+
+## Defines maximum MCCABE complexity allowed (TODO: Gradually reduce to 5).
+max-complexity = 7
+
+## Defines the maximum line length.
+max-line-length = 120
+
+## Indicates that doctests to be run.
+doctests = true
+
+## Indicates that we want summary statistics of error messages, if any.
+statistics = true
+
+## Set Python version (for flake8-typing-imports flake8 plugin):
+min_python_version = "3.10"
+
+##########################
+## PYLINT CONFIGURATION ##
+##########################
+
+[tool.pylint."messages control"]
+
+## Set the line length:
+max-line-length = 120
+
+# ## Allow some special names which occur often due to our domain:
+good-names = ["gt", "lt", "na", "of", "to"]
+
+# ## Allow some names defined by regular expressions:
+good-names-rgxs = [
+    "^[_abcdefghjkmnopqrstuvwxyz][_0-9]?$", ## Allow single letter or single letter followed by a single number (including underscore, excludign i,l).
+    "^[pqrx]s$",                            ## Allow plurals of some letters.
+]
+
+## Increase module line numbers:
+max-module-lines = 4096
+
+## Enable report summary:
+reports = true
+
+## Recurse into directories:
+recursive = true
+
+## Ignore some files:
+ignore = []
+
+## Enable all checks:
+enable = ["all"]
+
+## NOTE: Below list is compiled from a sample pylint run with all checks enabled.
+## We will attend this list on an ongoing basis up until we enable all but a
+## selected group of checks which we really want to ignore (REAL IGNORES). Such
+## checks are grouped on the top of the list.
+##
+## Disable checks selectively:
+disable = [
+    ##################
+    ## REAL IGNORES ##
+    ##################
+
+    ## There are some valid reasons that we duplicated code:
+    "duplicate-code",
+
+    ## Allow locally disabling some messages:
+    "locally-disabled",
+
+    ## Toggle once in a while to see what we suppressed:
+    "suppressed-message",
+
+    ####################
+    ## TO BE ATTENDED ##
+    ####################
+
+    "missing-function-docstring",             ## 46
+    "superfluous-parens",                     ## 24
+    "unused-argument",                        ## 22
+    "unnecessary-dunder-call",                ## 14
+    "fixme",                                  ## 12
+    "no-else-return",                         ## 11
+    "unidiomatic-typecheck",                  ## 8
+    "use-implicit-booleaness-not-comparison", ## 6
+    "too-many-public-methods",                ## 6
+    "unsubscriptable-object",                 ## 5
+    "unnecessary-ellipsis",                   ## 5
+    "unneeded-not",                           ## 4
+    "too-few-public-methods",                 ## 4
+    "raise-missing-from",                     ## 4
+    "no-else-raise",                          ## 4
+    "missing-module-docstring",               ## 4
+    "unused-variable",                        ## 2
+    "too-many-arguments",                     ## 2
+    "redefined-outer-name",                   ## 2
+    "missing-class-docstring",                ## 2
+    "consider-using-f-string",                ## 2
+]
