@@ -1,0 +1,17 @@
+language: python
+python:
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+services:
+  - docker
+before_install:
+  - pip install -U pip setuptools
+install:
+  - pip install -Ur requirements.txt
+  - pip install .
+  - python setup.py develop
+script:
+  - mypy --ignore-missing-imports py_backwards
+  - py.test -vvvv --capture=sys --enable-functional

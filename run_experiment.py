@@ -177,6 +177,24 @@ def get_path_modules() -> (str, str):
         #("projects/pdir2", "pdir.format"),
 
 
+        ("projects/py-backwards", "py_backwards.conf"),
+        ("projects/py-backwards", "py_backwards.files"),
+        ("projects/py-backwards", "py_backwards.transformers.base"),
+        ("projects/py-backwards", "py_backwards.transformers.class_without_bases"),
+        ("projects/py-backwards", "py_backwards.transformers.dict_unpacking"),
+        ("projects/py-backwards", "py_backwards.transformers.formatted_values"),
+        ("projects/py-backwards", "py_backwards.transformers.functions_annotations"),
+        ("projects/py-backwards", "py_backwards.transformers.import_pathlib"),
+        ("projects/py-backwards", "py_backwards.transformers.metaclass"),
+        ("projects/py-backwards", "py_backwards.transformers.python2_future"),
+        ("projects/py-backwards", "py_backwards.transformers.return_from_generator"),
+        ("projects/py-backwards", "py_backwards.transformers.starred_unpacking"),
+        ("projects/py-backwards", "py_backwards.transformers.string_types"),
+        ("projects/py-backwards", "py_backwards.transformers.variables_annotations"),
+        ("projects/py-backwards", "py_backwards.transformers.yield_from"),
+        ("projects/py-backwards", "py_backwards.types"),
+        ("projects/py-backwards", "py_backwards.utils.helpers"),
+        ("projects/py-backwards", "py_backwards.utils.snippet"),
 
 
         # ("projects/toy_example", "bmi_calculator")

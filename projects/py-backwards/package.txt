@@ -1,0 +1,2 @@
+typed-ast
+colorama
