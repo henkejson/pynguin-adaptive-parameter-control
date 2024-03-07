@@ -196,12 +196,26 @@ def get_path_modules() -> (str, str):
         # ("projects/py-backwards", "py_backwards.utils.helpers"),
         # ("projects/py-backwards", "py_backwards.utils.snippet"),
 
-        ("projects/pypara", "pypara.accounting.generic"),
-        ("projects/pypara", "pypara.accounting.journaling"),
-        ("projects/pypara", "pypara.commons.errors"),
-        ("projects/pypara", "pypara.commons.numbers"),
-        ("projects/pypara", "pypara.commons.zeitgeist"),
-        ("projects/pypara", "pypara.monetary"),
+        #("projects/pypara", "pypara.accounting.generic"),
+        #("projects/pypara", "pypara.accounting.journaling"),
+        #("projects/pypara", "pypara.commons.errors"),
+        #("projects/pypara", "pypara.commons.numbers"),
+        #("projects/pypara", "pypara.commons.zeitgeist"),
+        #("projects/pypara", "pypara.monetary"),
+
+
+        ("projects/pytutils", "pytutils.debug"),
+        ("projects/pytutils", "pytutils.excs"),
+        ("projects/pytutils", "pytutils.files"),
+        ("projects/pytutils", "pytutils.lazy.lazy_import"),
+        ("projects/pytutils", "pytutils.meth"),
+        ("projects/pytutils", "pytutils.path"),
+        ("projects/pytutils", "pytutils.pretty"),
+        ("projects/pytutils", "pytutils.props"),
+        ("projects/pytutils", "pytutils.python"),
+        ("projects/pytutils", "pytutils.pythree"),
+        ("projects/pytutils", "pytutils.rand"),
+
 
         # ("projects/toy_example", "bmi_calculator")
     ]
