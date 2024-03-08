@@ -225,7 +225,7 @@ if __name__ == '__main__':
     set_up_logging()
     logger = logging.getLogger(__name__)
 
-    run_configs = construct_run_configurations(5, 1, 10, 15)
+    run_configs = construct_run_configurations(300, 10, 10, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 
