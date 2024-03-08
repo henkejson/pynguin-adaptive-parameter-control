@@ -116,7 +116,7 @@ def get_path_modules() -> (str, str):
         # X ("projects/dataclasses-json", "dataclasses_json.mm"),
         # ("projects/dataclasses-json", "dataclasses_json.undefined"),
 
-        #("projects/flake8/src", "flake8.exceptions"),
+        # ("projects/flake8/src", "flake8.exceptions"),
         # ("projects/flake8/src", "flake8.formatting.base"),
         # ("projects/flake8/src", "flake8.formatting.default"),
         # ("projects/flake8/src", "flake8.main.debug")
@@ -131,8 +131,8 @@ def get_path_modules() -> (str, str):
         # ("projects/docstring_parser", "docstring_parser.parser"),
         # ("projects/docstring_parser", "docstring_parser.google"),
         # ("projects/pyMonet", "pymonet.box"),
-        #("projects/pyMonet", "pymonet.immutable_list"),
-        #("projects/pyMonet", "pymonet.lazy"),
+        # ("projects/pyMonet", "pymonet.immutable_list"),
+        # ("projects/pyMonet", "pymonet.lazy"),
         # ("projects/pyMonet", "pymonet.maybe"),
         # ("projects/pyMonet", "pymonet.monad_try"),
         # ("projects/pyMonet", "pymonet.semigroups"),
@@ -162,7 +162,7 @@ def get_path_modules() -> (str, str):
         # ("projects/mimesis", "mimesis.builtins.pt_br"),
         # ("projects/mimesis", "mimesis.builtins.uk"),
         # ("projects/mimesis", "mimesis.exceptions"),
-        #("projects/mimesis", "mimesis.providers.choice"),
+        # ("projects/mimesis", "mimesis.providers.choice"),
         # ("projects/mimesis", "mimesis.providers.code"),
         # ("projects/mimesis", "mimesis.providers.development"),
         # ("projects/mimesis", "mimesis.providers.hardware"),
@@ -170,12 +170,11 @@ def get_path_modules() -> (str, str):
         # ("projects/mimesis", "mimesis.providers.transport"),
         # ("projects/mimesis", "mimesis.shortcuts"),
 
-        #("projects/pdir2", "pdir._internal_utils"),
-        #("projects/pdir2", "pdir.attr_category"),
-        #("projects/pdir2", "pdir.color"),
-        #("projects/pdir2", "pdir.configuration"),
-        #("projects/pdir2", "pdir.format"),
-
+        # ("projects/pdir2", "pdir._internal_utils"),
+        # ("projects/pdir2", "pdir.attr_category"),
+        # ("projects/pdir2", "pdir.color"),
+        # ("projects/pdir2", "pdir.configuration"),
+        # ("projects/pdir2", "pdir.format"),
 
         # ("projects/py-backwards", "py_backwards.conf"),
         # ("projects/py-backwards", "py_backwards.files"),
@@ -196,25 +195,53 @@ def get_path_modules() -> (str, str):
         # ("projects/py-backwards", "py_backwards.utils.helpers"),
         # ("projects/py-backwards", "py_backwards.utils.snippet"),
 
-        #("projects/pypara", "pypara.accounting.generic"),
-        #("projects/pypara", "pypara.accounting.journaling"),
-        #("projects/pypara", "pypara.commons.errors"),
-        #("projects/pypara", "pypara.commons.numbers"),
-        #("projects/pypara", "pypara.commons.zeitgeist"),
-        #("projects/pypara", "pypara.monetary"),
+        # ("projects/pypara", "pypara.accounting.generic"),
+        # ("projects/pypara", "pypara.accounting.journaling"),
+        # ("projects/pypara", "pypara.commons.errors"),
+        # ("projects/pypara", "pypara.commons.numbers"),
+        # ("projects/pypara", "pypara.commons.zeitgeist"),
+        # ("projects/pypara", "pypara.monetary"),
 
+        # ("projects/pytutils", "pytutils.debug"),
+        # ("projects/pytutils", "pytutils.excs"),
+        # ("projects/pytutils", "pytutils.files"),
+        # ("projects/pytutils", "pytutils.lazy.lazy_import"),
+        # ("projects/pytutils", "pytutils.meth"),
+        # ("projects/pytutils", "pytutils.path"),
+        # ("projects/pytutils", "pytutils.pretty"),
+        # ("projects/pytutils", "pytutils.props"),
+        # ("projects/pytutils", "pytutils.python"),
+        # ("projects/pytutils", "pytutils.pythree"),
+        # ("projects/pytutils", "pytutils.rand"),
 
-        ("projects/pytutils", "pytutils.debug"),
-        ("projects/pytutils", "pytutils.excs"),
-        ("projects/pytutils", "pytutils.files"),
-        ("projects/pytutils", "pytutils.lazy.lazy_import"),
-        ("projects/pytutils", "pytutils.meth"),
-        ("projects/pytutils", "pytutils.path"),
-        ("projects/pytutils", "pytutils.pretty"),
-        ("projects/pytutils", "pytutils.props"),
-        ("projects/pytutils", "pytutils.python"),
-        ("projects/pytutils", "pytutils.pythree"),
-        ("projects/pytutils", "pytutils.rand"),
+        ("projects/sanic", "sanic.config"),
+        ("projects/sanic", "sanic.headers"),
+        ("projects/sanic", "sanic.helpers"),
+        ("projects/sanic", "sanic.mixins.listeners"),
+        ("projects/sanic", "sanic.mixins.middleware"),
+        ("projects/sanic", "sanic.mixins.routes"),
+        ("projects/sanic", "sanic.mixins.signals"),
+        ("projects/sanic", "sanic.models.futures"),
+        ("projects/sanic", "sanic.models.protocol_types"),
+        ("projects/sanic", "sanic.views"),
+        #
+        # ("projects/python-string-utils", "string_utils.errors"),
+        # ("projects/python-string-utils", "string_utils.manipulation"),
+        # ("projects/python-string-utils", "string_utils.validation"),
+        #
+        # ("projects/sty", "sty.lib"),
+        # ("projects/sty", "sty.register"),
+        # ("projects/sty", "sty.renderfunc"),
+        #
+        # ("projects/thonny", "thonny.languages"),
+        # ("projects/thonny", "thonny.plugins.pgzero_frontend"),
+        # ("projects/thonny", "thonny.roughparse"),
+        # ("projects/thonny", "thonny.terminal"),
+        # ("projects/thonny", "thonny.token_utils"),
+        #
+        # ("projects/typesystem", "typesystem.tokenize.positional_validation"),
+        # ("projects/typesystem", "typesystem.tokenize.tokenize_yaml"),
+        # ("projects/typesystem", "typesystem.unique"),
 
 
         # ("projects/toy_example", "bmi_calculator")
@@ -232,8 +259,8 @@ def get_run_config_tuning_params() -> list[list[TuningParameters]]:
     # - crossover rate
     # - elite
 
-    #parameters = [[TuningParameters.NONE], [TuningParameters.StatementInsertionProbability],
-                  #[TuningParameters.CrossoverRate], [TuningParameters.Elite]]
+    # parameters = [[TuningParameters.NONE], [TuningParameters.StatementInsertionProbability],
+    # [TuningParameters.CrossoverRate], [TuningParameters.Elite]]
     parameters = [[TuningParameters.NONE]]
     return parameters
 

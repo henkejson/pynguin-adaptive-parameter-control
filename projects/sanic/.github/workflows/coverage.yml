@@ -1,0 +1,34 @@
+name: Coverage check
+on:
+  push:
+    branches:
+      - main
+      - current-release
+      - "*LTS"
+    tags:
+      - "!*" # Do not execute on tags
+  pull_request:
+    branches:
+      - main
+      - current-release
+      - "*LTS"
+
+jobs:
+  coverage:
+    name: Check coverage
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Run coverage
+        uses: sanic-org/simple-tox-action@v1
+        with:
+          python-version: "3.11"
+          tox-env: coverage
+          ignore-errors: true
+      - name: Run Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false

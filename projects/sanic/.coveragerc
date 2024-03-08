@@ -1,0 +1,25 @@
+[run]
+branch = True
+source = sanic
+omit =
+    site-packages
+    sanic/__main__.py
+    sanic/server/legacy.py
+    sanic/compat.py
+    sanic/simple.py
+    sanic/utils.py
+    sanic/cli
+    sanic/pages
+
+[html]
+directory = coverage
+
+[report]
+exclude_lines =
+    no cov
+    no qa
+    noqa
+    NOQA
+    pragma: no cover
+    TYPE_CHECKING
+skip_empty = True
