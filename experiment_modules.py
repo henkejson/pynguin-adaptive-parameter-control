@@ -30,9 +30,9 @@ def get_path_modules() -> (str, str):
         # ("projects/httpie", "httpie.ssl_"),
         # ("projects/httpie", "httpie.status"),
         #
-        ("projects/isort", "isort.comments"),
-        ("projects/isort", "isort.exceptions"),
-        ("projects/isort", "isort.utils"),
+        # ("projects/isort", "isort.comments"),
+        # ("projects/isort", "isort.exceptions"),
+        # ("projects/isort", "isort.utils"),
         #
         # ("projects/mimesis", "mimesis.builtins.da"),
         # ("projects/mimesis", "mimesis.builtins.it"),
@@ -63,9 +63,9 @@ def get_path_modules() -> (str, str):
         # ("projects/pyMonet", "pymonet.task"),
         # ("projects/pyMonet", "pymonet.validation"),
         #
-        # ("projects/pypara", "pypara.accounting.journaling"),
-        # ("projects/pypara", "pypara.commons.errors"),
-        # ("projects/pypara", "pypara.monetary"),
+        ("projects/pypara", "pypara.accounting.journaling"),
+        ("projects/pypara", "pypara.commons.errors"),
+        ("projects/pypara", "pypara.monetary"),
         #
         # ("projects/pytutils", "pytutils.excs"),
         # ("projects/pytutils", "pytutils.files"),
