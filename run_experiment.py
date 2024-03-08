@@ -227,15 +227,15 @@ def get_path_modules() -> (str, str):
         # ("projects/sty", "sty.register"),
         # ("projects/sty", "sty.renderfunc"),
         #
-        ("projects/thonny", "thonny.languages"),
-        ("projects/thonny", "thonny.plugins.pgzero_frontend"),
-        ("projects/thonny", "thonny.roughparse"),
-        ("projects/thonny", "thonny.terminal"),
-        ("projects/thonny", "thonny.token_utils"),
-        #
-        # ("projects/typesystem", "typesystem.tokenize.positional_validation"),
-        # ("projects/typesystem", "typesystem.tokenize.tokenize_yaml"),
-        # ("projects/typesystem", "typesystem.unique"),
+        # ("projects/thonny", "thonny.languages"),
+        # ("projects/thonny", "thonny.plugins.pgzero_frontend"),
+        # ("projects/thonny", "thonny.roughparse"),
+        # ("projects/thonny", "thonny.terminal"),
+        # ("projects/thonny", "thonny.token_utils"),
+
+        ("projects/typesystem", "typesystem.tokenize.positional_validation"),
+        ("projects/typesystem", "typesystem.tokenize.tokenize_yaml"),
+        ("projects/typesystem", "typesystem.unique"),
 
 
         # ("projects/toy_example", "bmi_calculator")
