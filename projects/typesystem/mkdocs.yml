@@ -1,0 +1,27 @@
+site_name: TypeSystem
+site_description: Data validation, serialization, and forms.
+
+theme:
+    name: 'material'
+
+repo_name: encode/typesystem
+repo_url: https://github.com/encode/typesystem
+edit_uri: ""
+
+nav:
+    - Introduction: 'index.md'
+    - Schemas: 'schemas.md'
+    - Fields: 'fields.md'
+    - References: 'references.md'
+    - Forms: 'forms.md'
+    - JSON Schema: 'json_schema.md'
+    - Tokenized Errors: 'tokenized_errors.md'
+    - Examples: 'examples.md'
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - codehilite
+  - markdown.extensions.codehilite:
+      guess_lang: false

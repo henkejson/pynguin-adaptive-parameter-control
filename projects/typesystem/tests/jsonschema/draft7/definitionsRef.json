@@ -1,0 +1,114 @@
+[
+    {
+        "description": "nested refs",
+        "schema": {
+            "components": {
+                "schemas": {
+                    "a": {
+                        "type": "integer"
+                    },
+                    "b": {
+                        "$ref": "#/components/schemas/a"
+                    },
+                    "c": {
+                        "$ref": "#/components/schemas/b"
+                    }
+                }
+            },
+            "$ref": "#/components/schemas/c"
+        },
+        "tests": [
+            {
+                "description": "nested ref valid",
+                "data": 5,
+                "valid": true
+            },
+            {
+                "description": "nested ref invalid",
+                "data": "a",
+                "valid": false
+            }
+        ]
+    },
+    {
+        "description": "ref overrides any sibling keywords",
+        "schema": {
+            "components": {
+                "schemas": {
+                    "reffed": {
+                        "type": "array"
+                    }
+                }
+            },
+            "properties": {
+                "foo": {
+                    "$ref": "#/components/schemas/reffed",
+                    "maxItems": 2
+                }
+            }
+        },
+        "tests": [
+            {
+                "description": "ref valid",
+                "data": {
+                    "foo": []
+                },
+                "valid": true
+            },
+            {
+                "description": "ref valid, maxItems ignored",
+                "data": {
+                    "foo": [
+                        1,
+                        2,
+                        3
+                    ]
+                },
+                "valid": true
+            },
+            {
+                "description": "ref invalid",
+                "data": {
+                    "foo": "string"
+                },
+                "valid": false
+            }
+        ]
+    },
+    {
+        "description": "$ref to boolean schema true",
+        "schema": {
+            "$ref": "#/components/schemas/bool",
+            "components": {
+                "schemas": {
+                    "bool": true
+                }
+            }
+        },
+        "tests": [
+            {
+                "description": "any value is valid",
+                "data": "foo",
+                "valid": true
+            }
+        ]
+    },
+    {
+        "description": "$ref to boolean schema false",
+        "schema": {
+            "$ref": "#/components/schemas/bool",
+            "components": {
+                "schemas": {
+                    "bool": false
+                }
+            }
+        },
+        "tests": [
+            {
+                "description": "any value is invalid",
+                "data": "foo",
+                "valid": false
+            }
+        ]
+    }
+]

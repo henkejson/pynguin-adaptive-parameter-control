@@ -1,0 +1,22 @@
+# Optionals
+jinja2
+pyyaml
+
+# Packaging
+twine
+wheel
+
+# Testing
+autoflake
+black
+codecov
+flake8
+isort
+mypy
+pytest
+pytest-cov
+types-PyYAML
+
+# Documentation
+mkdocs
+mkdocs-material

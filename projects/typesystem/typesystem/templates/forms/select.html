@@ -1,0 +1,25 @@
+<tr>
+    <td>
+        <label for="{{ field_id }}">{{ label }}</label>
+    </td>
+    <td>
+        <select id="{{ field_id }}" name="{{ field_name }}">
+            <option></option>
+            {% for choice_value, choice_text in field.choices %}
+                <option value="{{ choice_value }}" {% if value == choice_value %}selected{% endif %}>{{ choice_text }}</option>
+            {% endfor %}
+        </select>
+    </td>
+</tr>
+{% if error or field.description %}
+<tr>
+    <td></td>
+    <td>
+    {% if error %}
+        <em class="error">{{ error }}</em>
+    {% elif field.description %}
+        <em>{{ field.description }}</em>
+    {% endif %}
+    </td>
+</tr>
+{% endif %}

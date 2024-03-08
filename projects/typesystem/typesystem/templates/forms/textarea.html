@@ -1,0 +1,20 @@
+<tr>
+    <td>
+        <label for="{{ field_id }}">{{ label }}</label>
+    </td>
+    <td>
+        <textarea class="form-control {% if error %}is-invalid{% endif %}" id="{{ field_id }}" name="{{ field_name }}" {% if required %}required{% endif %}>{% if value is not none %}{{ value }}{% endif %}</textarea>
+    </td>
+</tr>
+{% if error or field.description %}
+<tr>
+    <td></td>
+    <td>
+    {% if error %}
+        <em class="error">{{ error }}</em>
+    {% elif field.description %}
+        <em>{{ field.description }}</em>
+    {% endif %}
+    </td>
+</tr>
+{% endif %}
