@@ -1,0 +1,69 @@
+* running programs with non-ascii letters in identifiers using freezed thonny
+	(used to give ImportError for unicodedata)
+
+* undo / redo
+**	with indent, newline, toggle_comment etc. 
+
+* importing from modules dependent on pyd files (eg, _socket)
+
+* debugging complex language constructs
+
+* debug and run empty file
+
+* debug and run file with syntax errors
+
+* close Thonny when program is running
+
+* Heap view works
+
+* All required files end up in sdist (including those from package plugins like system_shell)
+
+
+Imports:
+from random import randint    
+from hashlib import md5       
+from urllib import request    
+from pyexpat import model     
+
+import _bz2
+import _ctypes
+import _decimal
+import _elementtree
+import _hashlib
+import _multiprocessing
+import _socket
+import _sqlite3
+import _ssl
+import _tkinter
+
+import _testcapi
+import _testbuffer
+import _testimportmultiple
+import _ctypes_test
+
+#import pygame.base
+#import pygame.vidcap
+
+
+import pyexpat
+import select
+import unicodedata
+
+from imp import load_dynamic
+
+import os
+if os.name == "nt":
+    import winsound
+    import _overlapped
+
+# import win32api
+# import win32evtlog
+# import win32file
+# import win32pipe
+# import win32ui
+# import win32wnet
+
+MicroPython
+
+* upload too big file
+* overwrite a big file (so that a copy wouldn't fit)

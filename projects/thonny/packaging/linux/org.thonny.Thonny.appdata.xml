@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2021 Aivar Annamaa <aivar.annamaa@gmail.com> -->
+<component type="desktop-application">
+  <id>org.thonny.Thonny.desktop</id>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <name>Thonny</name>
+  <summary>Python IDE for beginners</summary>
+  <developer_name>Aivar Annamaa</developer_name>
+
+  <description>
+    <p>Thonny is a simple Python IDE with features useful for learning programming.
+    It comes with a debugger which is able to visualize all the conceptual steps
+    taken to run a Python program (executing statements, evaluating expressions,
+    maintaining the call stack). There is a GUI for installing 3rd party packages
+    and special mode for learning about references.</p>
+    <p>See the homepage for more information, screenshots and a walk-through video.</p>
+  </description>
+  
+  <launchable type="desktop-id">org.thonny.Thonny.desktop</launchable>
+
+  <url type="homepage">https://thonny.org</url>
+  <url type="bugtracker">https://github.com/thonny/thonny/issues</url>
+  <url type="help">https://github.com/thonny/thonny/wiki</url>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://thonny.org/img/screenshot.png</image>
+      <caption>Thonny stepping through a recursive function</caption>
+    </screenshot>
+  </screenshots>
+
+  <provides>
+    <binary>thonny</binary>
+  </provides>
+
+  <content_rating type="oars-1.1" />
+
+  <releases>
+    <release version="4.1.4" date="2023-11-19">
+      <description>
+        <p>
+          Bug-fix release.
+        </p>
+      </description>
+    </release>
+    <release version="4.1.3" date="2023-09-28">
+      <description>
+        <p>
+          Bug-fix release.
+        </p>
+      </description>
+    </release>
+    <release version="4.1.2" date="2023-08-12">
+      <description>
+        <p>
+          Bug-fix release.
+        </p>
+      </description>
+    </release>
+    <release version="4.1.1" date="2023-06-11">
+      <description>
+        <p>
+          Bug-fix release.
+        </p>
+      </description>
+    </release>
+    <release version="4.1.0" date="2023-06-03">
+      <description>
+        <p>
+          Feature and bug-fix release.
+        </p>
+      </description>
+    </release>
+    <release version="4.1.0~b1" date="2023-04-23">
+      <description>
+        <p>
+          Feature pre-release.
+        </p>
+      </description>
+    </release>
+    <release version="4.0.1" date="2022-09-11">
+      <description>
+        <p>
+          Bug-fix release.
+        </p>
+      </description>
+    </release>
+    <release version="4.0.0" date="2022-08-22">
+      <description>
+        <p>
+          Feature release.
+        </p>
+      </description>
+    </release>
+    <release version="3.3.14" date="2021-08-01">
+      <description>
+        <p>
+          This release fixes some minor bugs.
+        </p>
+      </description>
+    </release>
+    <release version="3.3.13" date="2021-07-25">
+      <description>
+        <p>
+          This is minor technical update over 3.3.12.
+        </p>
+      </description>
+    </release>
+    <release version="3.3.12" date="2021-07-25">
+      <description>
+        <p>
+          This is a bug-fix release.
+        </p>
+      </description>
+    </release>
+    <release version="3.3.11" date="2021-06-25">
+      <description>
+        <p>
+            This is a bug-fix release.
+        </p>
+      </description>
+    </release>
+    <release version="3.3.10" date="2021-05-18">
+      <description>
+        <p>
+            This is mainly a bug-fix release with one new feature -- the ability to install pip-compatible packages for MicroPython.
+        </p>
+      </description>
+    </release>
+    <release version="3.3.7" date="2021-04-30">
+      <description>
+        <p>
+            This is mainly a bug-fix release.
+        </p>
+      </description>
+    </release>
+  </releases>
+
+</component>

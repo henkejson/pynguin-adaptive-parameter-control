@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="2">
+	<title>Thonny</title>
+    <welcome file="WELCOME.html" mime-type="text/html" />
+    <license file="LICENSE.txt" mime-type="text/plain" />
+    <allowed-os-versions>
+        <os-version min="10.9"/>
+    </allowed-os-versions>
+    <options customize="never" require-scripts="false" hostArchitectures="arm64,x86_64"/>
+    <domains enable_anywhere="true" enable_currentUserHome="true" enable_localSystem="true" /> 
+    <choices-outline>
+        <line choice="default"/>
+    </choices-outline>
+    <choice id="default" visible="false">
+	    <pkg-ref id="org.thonny.Thonny.component" onConclusion="none">ThonnyComponent.pkg</pkg-ref>
+    </choice>
+    <must-close>
+    	<app id="org.thonny.Thonny" />
+    </must-close>
+</installer-gui-script>

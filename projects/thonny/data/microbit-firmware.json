@@ -1,0 +1,40 @@
+{
+  "latest_firmwares" : {
+    "9900" : {
+      "version" : "1.0.1",
+      "date" : "2018-12-13",
+      "hex_download" : "https://github.com/bbcmicrobit/micropython/releases/download/v1.0.1/microbit-micropython-v1.0.1.hex",
+      "size" : 637120
+    },
+    "9901" : {
+      "version" : "1.0.1",
+      "date" : "2018-12-13",
+      "hex_download" : "https://github.com/bbcmicrobit/micropython/releases/download/v1.0.1/microbit-micropython-v1.0.1.hex",
+      "size" : 637120
+    },
+    "9903" : {
+      "version" : "2.0.0",
+      "date" : "2021-06-30",
+      "hex_download" : "https://github.com/microbit-foundation/micropython-microbit-v2/releases/download/v2.0.0/micropython-microbit-v2.0.0.hex",
+      "size" : 1195130
+    },
+    "9904" : {
+      "version" : "2.0.0",
+      "date" : "2021-06-30",
+      "hex_download" : "https://github.com/microbit-foundation/micropython-microbit-v2/releases/download/v2.0.0/micropython-microbit-v2.0.0.hex",
+      "size" : 1195130
+    },
+    "9905" : {
+      "version" : "2.0.0",
+      "date" : "2021-06-30",
+      "hex_download" : "https://github.com/microbit-foundation/micropython-microbit-v2/releases/download/v2.0.0/micropython-microbit-v2.0.0.hex",
+      "size" : 1195130
+    },
+    "9906" : {
+      "version" : "2.0.0",
+      "date" : "2021-06-30",
+      "hex_download" : "https://github.com/microbit-foundation/micropython-microbit-v2/releases/download/v2.0.0/micropython-microbit-v2.0.0.hex",
+      "size" : 1195130
+    }
+  }
+}
