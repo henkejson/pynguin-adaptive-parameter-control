@@ -219,19 +219,19 @@ def get_path_modules() -> (str, str):
         # ("projects/sanic", "sanic.models.protocol_types"),
         # ("projects/sanic", "sanic.views"),
 
-        ("projects/string-utils", "string_utils.errors"),
-        ("projects/string-utils", "string_utils.manipulation"),
-        ("projects/string-utils", "string_utils.validation"),
-
-        ("projects/sty", "sty.lib"),
-        ("projects/sty", "sty.register"),
-        ("projects/sty", "sty.renderfunc"),
+        # ("projects/string-utils", "string_utils.errors"),
+        # ("projects/string-utils", "string_utils.manipulation"),
+        # ("projects/string-utils", "string_utils.validation"),
         #
-        # ("projects/thonny", "thonny.languages"),
-        # ("projects/thonny", "thonny.plugins.pgzero_frontend"),
-        # ("projects/thonny", "thonny.roughparse"),
-        # ("projects/thonny", "thonny.terminal"),
-        # ("projects/thonny", "thonny.token_utils"),
+        # ("projects/sty", "sty.lib"),
+        # ("projects/sty", "sty.register"),
+        # ("projects/sty", "sty.renderfunc"),
+        #
+        ("projects/thonny", "thonny.languages"),
+        ("projects/thonny", "thonny.plugins.pgzero_frontend"),
+        ("projects/thonny", "thonny.roughparse"),
+        ("projects/thonny", "thonny.terminal"),
+        ("projects/thonny", "thonny.token_utils"),
         #
         # ("projects/typesystem", "typesystem.tokenize.positional_validation"),
         # ("projects/typesystem", "typesystem.tokenize.tokenize_yaml"),
