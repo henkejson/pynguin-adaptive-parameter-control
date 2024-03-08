@@ -225,14 +225,14 @@ def get_path_modules() -> (str, str):
         # ("projects/sanic", "sanic.models.protocol_types"),
         # ("projects/sanic", "sanic.views"),
 
-        ("projects/string-utils", "string_utils.errors"),
-        ("projects/string-utils", "string_utils.manipulation"),
-        ("projects/string-utils", "string_utils.validation"),
+        # ("projects/string-utils", "string_utils.errors"),
+        # ("projects/string-utils", "string_utils.manipulation"),
+        # ("projects/string-utils", "string_utils.validation"),
 
         # ("projects/sty", "sty.lib"),
         # ("projects/sty", "sty.register"),
         # ("projects/sty", "sty.renderfunc"),
-        #
+
         # ("projects/thonny", "thonny.languages"),
         # ("projects/thonny", "thonny.plugins.pgzero_frontend"),
         # ("projects/thonny", "thonny.roughparse"),

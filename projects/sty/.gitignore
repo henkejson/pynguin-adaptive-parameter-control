@@ -1,0 +1,29 @@
+
+# Misc
+**/tmp/*
+.cache/
+.git
+.gitsub
+.gitsub_hidden/
+sphinx/_build/
+_userfiles/
+
+
+# Python
+__pycache__/
+.env
+*.pyc
+/build/
+dist/
+.mypy_cache
+sty.egg-info/
+
+
+# Ediors
+.vscode
+.history
+*.iml
+.idea/
+.swp
+
+
