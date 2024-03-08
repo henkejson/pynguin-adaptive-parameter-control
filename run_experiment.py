@@ -8,6 +8,8 @@ import os
 import requests
 
 import docker
+
+from experiment_modules import get_path_modules
 from pynguin.reinforcement.jsonhandler import save_config_data
 from pynguin.utils.statistics.runtimevariable import RuntimeVariable
 from pynguin.utils.statistics.runtimevariable import RuntimeVariable as RVar
@@ -105,142 +107,7 @@ def run_container(command: RunCommand, image_tag: str):
     )
 
 
-def get_path_modules() -> (str, str):
-    """Paths and modules for all python files used for experimentation"""
-    # Relative address (from input/) and module names for all files
-    path_modules = [
 
-        # ("projects/codetiming", "codetiming._timer"),
-
-        # X("projects/dataclasses-json", "dataclasses_json.api"),
-        # X ("projects/dataclasses-json", "dataclasses_json.mm"),
-        # ("projects/dataclasses-json", "dataclasses_json.undefined"),
-
-        # ("projects/flake8/src", "flake8.exceptions"),
-        # ("projects/flake8/src", "flake8.formatting.base"),
-        # ("projects/flake8/src", "flake8.formatting.default"),
-        # ("projects/flake8/src", "flake8.main.debug")
-
-        # ("projects/flutils", "flutils.decorators"),
-        # ("projects/flutils", "flutils.namedtupleutils"),
-        # ("projects/flutils", "flutils.packages"),
-        # ("projects/flutils", "flutils.pathutils"),
-        # ("projects/flutils", "flutils.setuputils.cmd"),
-        # ("projects/flutils", "flutils.strutils"),
-
-        # ("projects/docstring_parser", "docstring_parser.parser"),
-        # ("projects/docstring_parser", "docstring_parser.google"),
-
-
-        # ("projects/httpie", "httpie.cli.dicts"),
-        # ("projects/httpie", "httpie.models"),
-        # ("projects/httpie", "httpie.output.formatters.colors"),
-        # ("projects/httpie", "httpie.output.formatters.headers"),
-        # ("projects/httpie", "httpie.output.formatters.json"),
-        # ("projects/httpie", "httpie.output.processing"),
-        # ("projects/httpie", "httpie.output.streams"),
-        # ("projects/httpie", "httpie.plugins.base"),
-        # ("projects/httpie", "httpie.plugins.manager"),
-        # ("projects/httpie", "httpie.sessions"),
-        # ("projects/httpie", "httpie.ssl_"),
-        # ("projects/httpie", "httpie.status"),
-
-        # ("projects/isort", "isort.comments"),
-        # ("projects/isort", "isort.exceptions"),
-        # ("projects/isort", "isort.utils"),
-
-        # ("projects/mimesis", "mimesis.builtins.da"),
-        # ("projects/mimesis", "mimesis.builtins.it"),
-        # ("projects/mimesis", "mimesis.builtins.nl"),
-        # ("projects/mimesis", "mimesis.builtins.pt_br"),
-        # ("projects/mimesis", "mimesis.builtins.uk"),
-        # ("projects/mimesis", "mimesis.exceptions"),
-        # ("projects/mimesis", "mimesis.providers.choice"),
-        # ("projects/mimesis", "mimesis.providers.code"),
-        # ("projects/mimesis", "mimesis.providers.development"),
-        # ("projects/mimesis", "mimesis.providers.hardware"),
-        # ("projects/mimesis", "mimesis.providers.science"),
-        # ("projects/mimesis", "mimesis.providers.transport"),
-        # ("projects/mimesis", "mimesis.shortcuts"),
-
-        # ("projects/py-backwards", "py_backwards.conf"),
-        # ("projects/py-backwards", "py_backwards.files"),
-        # ("projects/py-backwards", "py_backwards.transformers.base"),
-        # ("projects/py-backwards", "py_backwards.transformers.class_without_bases"),
-        # ("projects/py-backwards", "py_backwards.transformers.dict_unpacking"),
-        # ("projects/py-backwards", "py_backwards.transformers.formatted_values"),
-        # ("projects/py-backwards", "py_backwards.transformers.functions_annotations"),
-        # ("projects/py-backwards", "py_backwards.transformers.import_pathlib"),
-        # ("projects/py-backwards", "py_backwards.transformers.metaclass"),
-        # ("projects/py-backwards", "py_backwards.transformers.python2_future"),
-        # ("projects/py-backwards", "py_backwards.transformers.return_from_generator"),
-        # ("projects/py-backwards", "py_backwards.transformers.starred_unpacking"),
-        # ("projects/py-backwards", "py_backwards.transformers.string_types"),
-        # ("projects/py-backwards", "py_backwards.transformers.variables_annotations"),
-        # ("projects/py-backwards", "py_backwards.transformers.yield_from"),
-        # ("projects/py-backwards", "py_backwards.types"),
-        # ("projects/py-backwards", "py_backwards.utils.helpers"),
-        # ("projects/py-backwards", "py_backwards.utils.snippet"),
-        #
-        # ("projects/pyMonet", "pymonet.box"),
-        # ("projects/pyMonet", "pymonet.immutable_list"),
-        # ("projects/pyMonet", "pymonet.lazy"),
-        # ("projects/pyMonet", "pymonet.maybe"),
-        # ("projects/pyMonet", "pymonet.monad_try"),
-        # ("projects/pyMonet", "pymonet.semigroups"),
-        # ("projects/pyMonet", "pymonet.task"),
-        # ("projects/pyMonet", "pymonet.validation"),
-        #
-        # ("projects/pypara", "pypara.accounting.generic"),
-        # ("projects/pypara", "pypara.accounting.journaling"),
-        # ("projects/pypara", "pypara.commons.errors"),
-        # ("projects/pypara", "pypara.monetary"),
-        #
-        # ("projects/pytutils", "pytutils.debug"),
-        # ("projects/pytutils", "pytutils.excs"),
-        # ("projects/pytutils", "pytutils.files"),
-        # ("projects/pytutils", "pytutils.lazy.lazy_import"),
-        # ("projects/pytutils", "pytutils.meth"),
-        # ("projects/pytutils", "pytutils.path"),
-        # ("projects/pytutils", "pytutils.pretty"),
-        # ("projects/pytutils", "pytutils.props"),
-        # ("projects/pytutils", "pytutils.python"),
-        # ("projects/pytutils", "pytutils.pythree"),
-        # ("projects/pytutils", "pytutils.rand"),
-
-        # ("projects/sanic", "sanic.config"),
-        # ("projects/sanic", "sanic.headers"),
-        # ("projects/sanic", "sanic.helpers"),
-        # ("projects/sanic", "sanic.mixins.listeners"),
-        # ("projects/sanic", "sanic.mixins.middleware"),
-        # ("projects/sanic", "sanic.mixins.routes"),
-        # ("projects/sanic", "sanic.mixins.signals"),
-        # ("projects/sanic", "sanic.models.futures"),
-        # ("projects/sanic", "sanic.models.protocol_types"),
-        # ("projects/sanic", "sanic.views"),
-
-        # ("projects/string-utils", "string_utils.errors"),
-        # ("projects/string-utils", "string_utils.manipulation"),
-        # ("projects/string-utils", "string_utils.validation"),
-        #
-        # ("projects/sty", "sty.lib"),
-        # ("projects/sty", "sty.register"),
-        # ("projects/sty", "sty.renderfunc"),
-        #
-        # ("projects/thonny", "thonny.languages"),
-        # ("projects/thonny", "thonny.plugins.pgzero_frontend"),
-        # ("projects/thonny", "thonny.roughparse"),
-        # ("projects/thonny", "thonny.terminal"),
-        # ("projects/thonny", "thonny.token_utils"),
-
-        ("projects/typesystem", "typesystem.tokenize.positional_validation"),
-        ("projects/typesystem", "typesystem.tokenize.tokenize_yaml"),
-        ("projects/typesystem", "typesystem.unique"),
-
-
-        # ("projects/toy_example", "bmi_calculator")
-    ]
-    return path_modules
 
 
 def get_run_config_tuning_params() -> list[list[TuningParameters]]:
@@ -358,7 +225,7 @@ if __name__ == '__main__':
     set_up_logging()
     logger = logging.getLogger(__name__)
 
-    run_configs = construct_run_configurations(5, 1, 10, 15)
+    run_configs = construct_run_configurations(30, 1, 10, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 
