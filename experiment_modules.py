@@ -14,8 +14,6 @@ def get_path_modules() -> (str, str):
         ("projects/flutils", "flutils.packages"),
         ("projects/flutils", "flutils.pathutils"),
         ("projects/flutils", "flutils.setuputils.cmd"),
-        ("projects/flutils", "flutils.strutils"),
-
 
         ("projects/httpie", "httpie.cli.dicts"),
         ("projects/httpie", "httpie.output.formatters.colors"),
