@@ -139,12 +139,12 @@ class ReinforcementHandler:
             else:
                 self.conn.send((None, 0, False, False))
 
-
     def get_and_apply_action(self):
         if self.conn.poll(timeout=self.timeout):
             actions = self.conn.recv()
+            self.log_parameters(actions)
             self.config_handler.apply_actions(actions)
-            #self.log_parameters(actions)
+
         else:
             self._logger.info("No action received... ")
             raise ValueError("No action received from RL.")
@@ -162,7 +162,7 @@ class ReinforcementHandler:
         reward = best_coverage - self.previous_coverage
         self.previous_coverage = best_coverage
         print(f" REWARD ".center(35, "-"))
-        print(f"| Reward: {reward} (best coverage diff)" ,)
+        print(f"| Reward: {reward} (best coverage diff)", )
         #
         return reward
 
@@ -175,6 +175,7 @@ class ReinforcementHandler:
     def log_parameters(self, actions):
         for i, n in enumerate(self.config_handler.iterate_transformation_handlers()):
             if n.get_name() not in self.parameter_timeline:
-                self.parameter_timeline[n.get_name()] = [n.get_value(), n.denormalize_action(actions[i]) ]
-            else:
-                self.parameter_timeline[n.get_name()].append([n.get_value(), ])
+                self.parameter_timeline[n.get_name()] = {}
+
+            self.parameter_timeline[n.get_name()][self.iteration] = {"observation": n.get_value(),
+                                                                     "action": n.denormalize_action(actions[i])}
