@@ -5,8 +5,6 @@ def get_path_modules() -> (str, str):
 
         ("projects/codetiming", "codetiming._timer"),
 
-        ("projects/dataclasses-json", "dataclasses_json.undefined"),
-
         ("projects/flake8/src", "flake8.formatting.base"),
         ("projects/flake8/src", "flake8.formatting.default"),
         ("projects/flake8/src", "flake8.main.debug"),
@@ -22,7 +20,6 @@ def get_path_modules() -> (str, str):
         ("projects/httpie", "httpie.cli.dicts"),
         ("projects/httpie", "httpie.output.formatters.colors"),
         ("projects/httpie", "httpie.output.formatters.headers"),
-        ("projects/httpie", "httpie.output.formatters.json"),
         ("projects/httpie", "httpie.output.processing"),
         ("projects/httpie", "httpie.output.streams"),
         ("projects/httpie", "httpie.plugins.base"),
@@ -65,9 +62,7 @@ def get_path_modules() -> (str, str):
         ("projects/pypara", "pypara.monetary"),
 
         ("projects/pytutils", "pytutils.excs"),
-        ("projects/pytutils", "pytutils.files"),
         ("projects/pytutils", "pytutils.lazy.lazy_import"),
-        ("projects/pytutils", "pytutils.pretty"),
         ("projects/pytutils", "pytutils.props"),
         ("projects/pytutils", "pytutils.python"),
 
@@ -89,7 +84,5 @@ def get_path_modules() -> (str, str):
         ("projects/thonny", "thonny.terminal"),
 
         ("projects/typesystem", "typesystem.tokenize.positional_validation"),
-        ("projects/typesystem", "typesystem.tokenize.tokenize_yaml"),
-
     ]
     return path_modules
