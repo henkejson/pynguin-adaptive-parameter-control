@@ -50,6 +50,7 @@ class ReinforcementHandler:
         self.conn_2 = conn_2
 
         self.iteration = 0
+        self.total_iterations = 0
 
     def set_up_process(self, conn):
         # Create a new process, passing the child connection
@@ -104,22 +105,24 @@ class ReinforcementHandler:
         if best_coverage > self.plateau[1]:
             self.plateau[0] = 0
             self.plateau[1] = best_coverage
-            print("NEW COVERAGE ACHIEVED")
+            print("New coverage achieved...")
             return False
         elif self.plateau[0] >= config.configuration.rl.plateau_length:
+            print(f"Coverage plateau threshold ({config.configuration.rl.plateau_length}) achieved... "
+                  f"activating RL.")
             self.rl_activated = True
             self.set_up_process(self.conn_2)
             self.previous_coverage = best_coverage
             self.get_and_apply_action()  # Get the initial action from the RL
-            print("😨😨😨 RL ACTIVATED 😨😨😨")
             return False
         else:
-            print("Plateau not ACHIEVED... waiting 😴 ")
+            print("Coverage has plateaued, but plateau threshold not achieved... waiting... ")
             return False
 
     def update(self):
         self.plateau[0] += 1
-        if self.iteration >= config.configuration.rl.update_frequency:
+        self.iteration += 1
+        if self.iteration % config.configuration.rl.update_frequency == 0:
 
             if self.rl_activated or self.activate_reinforcement():
 
@@ -135,14 +138,13 @@ class ReinforcementHandler:
 
             else:
                 self.conn.send((None, 0, False, False))
-            self.iteration = 0
-        self.iteration += 1
+
 
     def get_and_apply_action(self):
         if self.conn.poll(timeout=self.timeout):
             actions = self.conn.recv()
             self.config_handler.apply_actions(actions)
-            self.log_parameters()
+            #self.log_parameters(actions)
         else:
             self._logger.info("No action received... ")
             raise ValueError("No action received from RL.")
@@ -159,7 +161,9 @@ class ReinforcementHandler:
 
         reward = best_coverage - self.previous_coverage
         self.previous_coverage = best_coverage
-        print(f"REWARD | (Best): {reward}")
+        print(f" REWARD ".center(35, "-"))
+        print(f"| Reward: {reward} (best coverage diff)" ,)
+        #
         return reward
 
     def stop(self):
@@ -168,9 +172,9 @@ class ReinforcementHandler:
                             config.configuration.statistics_output.run_id,
                             self.parameter_timeline)
 
-    def log_parameters(self):
-        for n in self.config_handler.iterate_transformation_handlers():
+    def log_parameters(self, actions):
+        for i, n in enumerate(self.config_handler.iterate_transformation_handlers()):
             if n.get_name() not in self.parameter_timeline:
-                self.parameter_timeline[n.get_name()] = [n.get_value()]
+                self.parameter_timeline[n.get_name()] = [n.get_value(), n.denormalize_action(actions[i]) ]
             else:
-                self.parameter_timeline[n.get_name()].append(n.get_value())
+                self.parameter_timeline[n.get_name()].append([n.get_value(), ])

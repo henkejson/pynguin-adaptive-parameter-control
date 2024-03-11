@@ -12,16 +12,16 @@ class ConfigurationHandler:
 
     def apply_actions(self, actions):
         """Apply all actions retrieved to their respective configuration variable, after denormalizing them"""
-        print("ACTIONS |", )
+        print(" ACTIONS ".center(35, "-"))
         for i, action in enumerate(actions):
             normalizer = self.transformation_handlers[i]
 
             normalizer.apply_action(action)
 
-            print(f"        | {normalizer.get_name()}: (DN) {round(normalizer.denormalize_action(action), 4)} "
+            print(f"| {normalizer.get_name()}: (DN) {round(normalizer.denormalize_action(action), 4)} "
                   f"(N) {round(float(action), 4)}, ", )
         # print("")
-
+        print("-"*35)
     def get_normalized_observations(self, handlers: list[AbstractTransformationHandler] = None):
         """Return a numpy array of all normalized observations"""
         observations = []
@@ -29,11 +29,11 @@ class ConfigurationHandler:
         if handlers is None:
             handlers = []
 
-        print("OBSERVATIONS |", )
+        print(" OBSERVATIONS ".center(35, "-") )
         for normalizer in handlers + self.transformation_handlers:
             observations.append(normalizer.normalize_observation(normalizer.get_value()))
 
-            print(f"             | {normalizer.get_name()}: (DN) {round(normalizer.get_value(), 4)}, "
+            print(f"| {normalizer.get_name()}: (DN) {round(normalizer.get_value(), 4)}, "
                   f"(N) {round(normalizer.normalize_observation(normalizer.get_value()), 4)}", )
         # print("")
 
