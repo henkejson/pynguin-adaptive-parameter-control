@@ -3,7 +3,7 @@ from multiprocessing import connection
 
 import gymnasium as gym
 import numpy as np
-from stable_baselines3 import PPO
+from stable_baselines3 import SAC
 
 from pynguin.reinforcement.mutablebool import MutableBool
 from pynguin.reinforcement.stoppingcallback import StoppingCallback
@@ -16,7 +16,7 @@ def start_learning_loop(n_action: int, n_observations: int, conn: connection.Con
     callback = StoppingCallback(stop_training)
 
     environment = APOEnvironment(n_action, n_observations, conn, stop_training)
-    model = PPO("MlpPolicy", environment, verbose=1)
+    model = SAC("MlpPolicy", environment, verbose=1)
     model.learn(total_timesteps=10_000, callback=callback)
     # print("Saving model...")
 
