@@ -106,10 +106,6 @@ def run_container(command: RunCommand, image_tag: str):
         auto_remove=False
     )
 
-
-
-
-
 def get_run_config_tuning_params() -> list[list[TuningParameters]]:
     """Parameters to tune for experimentation (only used with RL-enabled algorithms)"""
     # parameters = [[param.value] for param in configuration.TuningParameters]
@@ -120,9 +116,9 @@ def get_run_config_tuning_params() -> list[list[TuningParameters]]:
     # - crossover rate
     # - elite
 
-    # parameters = [[TuningParameters.NONE], [TuningParameters.StatementInsertionProbability],
-    # [TuningParameters.CrossoverRate], [TuningParameters.Elite]]
-    parameters = [[TuningParameters.NONE]]
+    parameters = [[TuningParameters.NONE], [TuningParameters.StatementInsertionProbability],
+    [TuningParameters.CrossoverRate], [TuningParameters.Elite]]
+    #parameters = [[TuningParameters.NONE]]
     return parameters
 
 
@@ -225,7 +221,7 @@ if __name__ == '__main__':
     set_up_logging()
     logger = logging.getLogger(__name__)
 
-    run_configs = construct_run_configurations(300, 10, 10, 15)
+    run_configs = construct_run_configurations(60, 1, 10, 15)
     random.seed(41753)
     random.shuffle(run_configs)
 

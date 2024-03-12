@@ -10,7 +10,7 @@ class TournamentSizeTransformationHandler(AbstractTransformationHandler):
         self.max_value = float(max_value)
 
         self.config_lower_bound = 2.0
-        self.config_upper_bound = 20.0
+        self.config_upper_bound = 10.0
 
         self.transformation_handler = BasicTransformationHandler(self.config_lower_bound, self.config_upper_bound,
                                                                  self.min_value, self.max_value)

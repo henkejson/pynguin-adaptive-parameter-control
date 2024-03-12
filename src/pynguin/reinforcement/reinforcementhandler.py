@@ -5,7 +5,6 @@ import multiprocessing
 from pynguin.reinforcement.apoenvironment import start_learning_loop
 from pynguin.reinforcement.configurationhandler import ConfigurationHandler
 from pynguin.reinforcement.jsonhandler import save_parameter_data
-from pynguin.reinforcement.transformationhandlers.basictransformationhandler import BasicTransformationHandler
 
 from pynguin.reinforcement.transformationhandlers.changeparametertransformationhandler import \
     ChangeParameterTransformationHandler
@@ -29,11 +28,11 @@ from pynguin.reinforcement.transformationhandlers.tournamentsizetransformationha
 
 
 class ReinforcementHandler:
-
+    """Responsible for communicating with the Reinforcement learning environment"""
     def __init__(self, best_coverage: Callable[[], float], _logger):
         # current_coverage: Callable[[], float],
         self.config_handler = self.set_up_tuning_parameters()
-        self.timeout = 20
+        self.timeout = 300
         self._logger = _logger
 
         # Variables associated with coverage
@@ -68,27 +67,27 @@ class ReinforcementHandler:
 
             match parameter:
                 case config.TuningParameters.ChangeParameterProbability:
-                    tuning_parameters.append(ChangeParameterTransformationHandler(-0.05, 0.05))
+                    tuning_parameters.append(ChangeParameterTransformationHandler(-0.1, 0.1))
                 case config.TuningParameters.ChromosomeLength:
-                    tuning_parameters.append(ChromosomeLengthTransformationHandler(-5, 5))
+                    tuning_parameters.append(ChromosomeLengthTransformationHandler(-6, 6))
                 case config.TuningParameters.CrossoverRate:
-                    tuning_parameters.append(CrossoverTransformationHandler(-0.05, 0.05))
+                    tuning_parameters.append(CrossoverTransformationHandler(-0.1, 0.1))
                 case config.TuningParameters.Elite:
                     tuning_parameters.append(EliteTransformationHandler(-1, 1))
                 case config.TuningParameters.Population:
-                    tuning_parameters.append(PopulationTransformationHandler(-5, 5))
+                    tuning_parameters.append(PopulationTransformationHandler(-8, 8))
                 case config.TuningParameters.RandomPerturbation:
-                    tuning_parameters.append(PerturbationTransformationHandler(-0.05, 0.05))
+                    tuning_parameters.append(PerturbationTransformationHandler(-0.1, 0.1))
                 case config.TuningParameters.StatementInsertionProbability:
-                    tuning_parameters.append(StatementInsertionTransformationHandler(-0.05, 0.05))
+                    tuning_parameters.append(StatementInsertionTransformationHandler(-0.1, 0.1))
                 case config.TuningParameters.TestChangeProbability:
-                    tuning_parameters.append(TestChangeTransformationHandler(-0.05, 0.05))
+                    tuning_parameters.append(TestChangeTransformationHandler(-0.1, 0.1))
                 case config.TuningParameters.TestDeleteProbability:
-                    tuning_parameters.append(TestDeleteTransformationHandler(-0.05, 0.05))
+                    tuning_parameters.append(TestDeleteTransformationHandler(-0.1, 0.1))
                 case config.TuningParameters.TestInsertProbability:
-                    tuning_parameters.append(TestInsertTransformationHandler(-0.05, 0.05))
+                    tuning_parameters.append(TestInsertTransformationHandler(-0.1, 0.1))
                 case config.TuningParameters.TestInsertionProbability:
-                    tuning_parameters.append(TestInsertionTransformationHandler(-0.05, 0.05))
+                    tuning_parameters.append(TestInsertionTransformationHandler(-0.1, 0.1))
                 case config.TuningParameters.TournamentSize:
                     tuning_parameters.append(TournamentSizeTransformationHandler(-1, 1))
 
@@ -132,7 +131,7 @@ class ReinforcementHandler:
                 # Send observations, rewards and if we are done
                 self.conn.send((self.config_handler.get_normalized_observations([self.coverage_transformation_handler]),
                                 reward, True, False))
-                # print(f"Best Coverage: {self.get_best_coverage()}")
+
                 # Wait for new actions and apply them
                 self.get_and_apply_action()
 
@@ -150,20 +149,15 @@ class ReinforcementHandler:
             raise ValueError("No action received from RL.")
 
     def calc_reward(self):
-        # Add the latest coverage value to the history
-        # self.current_coverage_history.append(self.get_current_coverage())
-        # self.best_coverage_history.append(self.get_best_coverage())
-
+        # Add the latest coverage value
         best_coverage = self.get_best_coverage()
 
         # Calculate reward from the coverage
-        # Scale reward to give more as it approaches 1?
-
         reward = best_coverage - self.previous_coverage
         self.previous_coverage = best_coverage
+
         print(f" REWARD ".center(35, "-"))
         print(f"| Reward: {reward} (best coverage diff)", )
-        #
         return reward
 
     def stop(self):

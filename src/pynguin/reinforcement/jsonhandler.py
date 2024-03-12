@@ -2,6 +2,8 @@ import json
 import pynguin.configuration as config
 from pathlib import Path
 
+"""Handle loading and saving JSON information"""
+
 
 def read_json_file(file_path):
     try:
@@ -43,4 +45,3 @@ def save_config_data(filename: str, modulename: str, run_id: str, config_data: d
 
     with open(output_file, 'w') as json_file:
         json.dump(data, json_file, indent=4, sort_keys=True)
-

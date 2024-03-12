@@ -1,4 +1,5 @@
 class MutableBool:
+    """Encapsulate bool to allow for shared access"""
     def __init__(self, value: bool):
         self.value = value
 

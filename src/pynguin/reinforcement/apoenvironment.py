@@ -28,7 +28,7 @@ def close_and_clean_up(conn: connection.Connection):
 
 
 class APOEnvironment(gym.Env):
-
+    """Gym environment for Automated Parameter Optimization"""
     def __init__(self, n_action: int, n_observations: int, conn: connection.Connection, stop_training: MutableBool):
         self.action_space = gym.spaces.Box(low=-1, high=1, shape=(n_action,), dtype=np.float32)  # Crossover rate
         self.observation_space = gym.spaces.Box(low=-1, high=1, shape=(n_observations,), dtype=np.float32)  # Crossover rate

@@ -4,7 +4,7 @@ from pynguin.reinforcement.mutablebool import MutableBool
 
 
 class StoppingCallback(BaseCallback):
-
+    """Callback to manually end training"""
     def __init__(self, stop_training: MutableBool, verbose: int = 0):
         super().__init__(verbose)
         self.stop_training = stop_training

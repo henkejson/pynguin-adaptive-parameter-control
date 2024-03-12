@@ -36,7 +36,7 @@ class Algorithm(str, enum.Enum):
     test case generation as a many-objective optimisation problem with dynamic selection
     of the targets.  TSE vol. 44 issue 2)."""
 
-    DYNAMOSA_RL = "DYNAMOSA_RL"  # TODO add more info
+    DYNAMOSA_RL = "DYNAMOSA_RL"
     "RL version of the dynamic many-objective sorting algorithm"
 
     MIO = "MIO"
@@ -592,58 +592,66 @@ class StoppingConfiguration:
 
 @enum.unique
 class TuningParameters(str, enum.Enum):
+    """Pynguin parameters enabled for reinforcement learning optimization"""
 
     ChangeParameterProbability = "ChangeParameterProbability"
-    """Probability of replacing parameters when mutating a method or constructor statement in a test case (0.1)"""
+    """Probability of replacing parameters when mutating a method or constructor statement in a
+    test case (default: 0.1)"""
 
     ChromosomeLength = "ChromosomeLength"
-    """Maximum length of chromosomes during the search (40)"""
+    """Maximum length of chromosomes during the search (default: 40)"""
 
     CrossoverRate = "CrossoverRate"
-    """probability of two parent chromosomes exchanging genetic information to create offspring (0.75)"""
+    """probability of two parent chromosomes exchanging genetic information to create offspring (default: 0.75)"""
 
     Elite = "Elite"
-    """Number of 'top-performing' chromosomes that are carried over to the next generation (1)"""
+    """Number of 'top-performing' chromosomes that are carried over to the next generation (default: 1)"""
 
     NONE = "NONE"
     """Standard value for no parameter tuning"""
 
     Population = "Population"
-    """Population size for the genetic algorithm (50)"""
+    """Population size for the genetic algorithm (default: 50)"""
 
     RandomPerturbation = "RandomPerturbation"
-    """Probability to replace a primitive with a random new value rather than adding a delta"""
+    """Probability to replace a primitive with a random new value rather than adding a delta (default: 0.2)"""
 
     StatementInsertionProbability = "StatementInsertionProbability"
-    """Initial probability of inserting a new statement in a test case (0.5)"""
+    """Initial probability of inserting a new statement in a test case (default: 0.5)"""
 
     TestChangeProbability = "TestChangeProbability"
-    """Probability of changing statements during mutation (0.3333333333333333)"""
+    """Probability of changing statements during mutation (default: 0.3333333333333333)"""
 
     TestDeleteProbability = "TestDeleteProbability"
-    """Probability of deleting statements during mutation (0.3333333333333333)"""
+    """Probability of deleting statements during mutation (default: 0.3333333333333333)"""
 
     TestInsertProbability = "TestInsertProbability"
-    """Probability of inserting new statements during mutation (0.3333333333333333)"""
+    """Probability of inserting new statements during mutation (default: 0.3333333333333333)"""
 
     TestInsertionProbability = "TestInsertionProbability"
-    """Initial probability of inserting a new test in a test suite (0.1)"""
+    """Initial probability of inserting a new test in a test suite (default: 0.1)"""
 
     TournamentSize = "TournamentSize"
-    """Number of chromosomes for tournament selection (5)"""
+    """Number of chromosomes for tournament selection (default: 5)"""
 
 
 @dataclasses.dataclass
 class ReinforcementLearningConfiguration:
+    """General parameters for the reinforcement learning enabled algorithms"""
+
     tuning_parameters: list[TuningParameters] = dataclasses.field(
         default_factory=lambda: [
             TuningParameters.NONE,
         ]
     )
+    """The parameters that should be tuned during test generation"""
 
     update_frequency: int = 5
+    """How many test generation iterations before updating the parameter values"""
 
     plateau_length: int = 20
+    """How many consecutive test generation iterations without coverage improvement
+    before activating the reinforcement learning"""
 
 
 @dataclasses.dataclass

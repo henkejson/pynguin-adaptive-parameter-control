@@ -9,7 +9,7 @@ class PopulationTransformationHandler(AbstractTransformationHandler):
         self.min_value = float(min_value)
         self.max_value = float(max_value)
 
-        self.config_lower_bound = 20.0
+        self.config_lower_bound = 25.0
         self.config_upper_bound = 100.0
 
         self.transformation_handler = BasicTransformationHandler(self.config_lower_bound, self.config_upper_bound,

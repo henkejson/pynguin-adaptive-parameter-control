@@ -1,12 +1,10 @@
 import numpy as np
 
 from pynguin.reinforcement.transformationhandlers.abstracttransformationhandler import AbstractTransformationHandler
-import pynguin.configuration as config
-from pynguin.reinforcement.transformationhandlers.crossovertransformationhandler import CrossoverTransformationHandler
 
 
 class ConfigurationHandler:
-
+    """Class for applying actions and getting observations for a set of transformation handlers"""
     def __init__(self, transformation_handlers: list[AbstractTransformationHandler]):
         self.transformation_handlers = transformation_handlers
 
@@ -20,8 +18,8 @@ class ConfigurationHandler:
 
             print(f"| {normalizer.get_name()}: (DN) {round(normalizer.denormalize_action(action), 4)} "
                   f"(N) {round(float(action), 4)}, ", )
-        # print("")
-        print("-"*35)
+        print("-" * 35)
+
     def get_normalized_observations(self, handlers: list[AbstractTransformationHandler] = None):
         """Return a numpy array of all normalized observations"""
         observations = []
@@ -29,13 +27,12 @@ class ConfigurationHandler:
         if handlers is None:
             handlers = []
 
-        print(" OBSERVATIONS ".center(35, "-") )
+        print(" OBSERVATIONS ".center(35, "-"))
         for normalizer in handlers + self.transformation_handlers:
             observations.append(normalizer.normalize_observation(normalizer.get_value()))
 
             print(f"| {normalizer.get_name()}: (DN) {round(normalizer.get_value(), 4)}, "
                   f"(N) {round(normalizer.normalize_observation(normalizer.get_value()), 4)}", )
-        # print("")
 
         return np.array(observations, dtype=np.float32)
 
