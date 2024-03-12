@@ -110,18 +110,18 @@ def run_container(command: RunCommand, image_tag: str):
 def get_run_config_tuning_params() -> list[list[TuningParameters]]:
     """Parameters to tune for experimentation (only used with RL-enabled algorithms)"""
 
-    parameters = [[TuningParameters.ChangeParameterProbability],
-                  [TuningParameters.ChromosomeLength],
+    parameters = [#[TuningParameters.ChangeParameterProbability],
+                  #[TuningParameters.ChromosomeLength],
                   [TuningParameters.CrossoverRate],
-                  [TuningParameters.Elite],
-                  [TuningParameters.NONE],
-                  [TuningParameters.Population],
-                  [TuningParameters.RandomPerturbation],
+                  #[TuningParameters.Elite],
+                  #[TuningParameters.NONE],
+                  #[TuningParameters.Population],
+                  #[TuningParameters.RandomPerturbation],
                   [TuningParameters.StatementInsertionProbability],
-                  [TuningParameters.TestChangeProbability],
-                  [TuningParameters.TestDeleteProbability],
-                  [TuningParameters.TestInsertProbability],
-                  [TuningParameters.TestInsertionProbability],
+                  #[TuningParameters.TestChangeProbability],
+                  #[TuningParameters.TestDeleteProbability],
+                  #[TuningParameters.TestInsertProbability],
+                  #[TuningParameters.TestInsertionProbability],
                   [TuningParameters.TournamentSize]]
     return parameters
 
@@ -225,7 +225,7 @@ if __name__ == '__main__':
     set_up_logging()
     logger = logging.getLogger(__name__)
 
-    run_configs = construct_run_configurations(300, 30, 5, 10)
+    run_configs = construct_run_configurations(300, 1, 5, 10)
     random.seed(b'^\xba\xce\x95\x14\xb8^\xd5\x14\xa9\x91m\x18\x00V\x01\xfc\x8d\xa0\xee')  # os.urandom(20)
     random.shuffle(run_configs)
 
