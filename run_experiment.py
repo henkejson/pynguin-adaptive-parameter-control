@@ -106,19 +106,23 @@ def run_container(command: RunCommand, image_tag: str):
         auto_remove=False
     )
 
+
 def get_run_config_tuning_params() -> list[list[TuningParameters]]:
     """Parameters to tune for experimentation (only used with RL-enabled algorithms)"""
-    # parameters = [[param.value] for param in configuration.TuningParameters]
 
-    # Tuned for now:
-    # - none
-    # - statement insertion probability
-    # - crossover rate
-    # - elite
-
-    parameters = [[TuningParameters.NONE], [TuningParameters.StatementInsertionProbability],
-    [TuningParameters.CrossoverRate], [TuningParameters.Elite]]
-    #parameters = [[TuningParameters.NONE]]
+    parameters = [[TuningParameters.ChangeParameterProbability],
+                  [TuningParameters.ChromosomeLength],
+                  [TuningParameters.CrossoverRate],
+                  [TuningParameters.Elite],
+                  [TuningParameters.NONE],
+                  [TuningParameters.Population],
+                  [TuningParameters.RandomPerturbation],
+                  [TuningParameters.StatementInsertionProbability],
+                  [TuningParameters.TestChangeProbability],
+                  [TuningParameters.TestDeleteProbability],
+                  [TuningParameters.TestInsertProbability],
+                  [TuningParameters.TestInsertionProbability],
+                  [TuningParameters.TournamentSize]]
     return parameters
 
 
@@ -221,8 +225,8 @@ if __name__ == '__main__':
     set_up_logging()
     logger = logging.getLogger(__name__)
 
-    run_configs = construct_run_configurations(60, 1, 10, 15)
-    random.seed(41753)
+    run_configs = construct_run_configurations(300, 30, 5, 10)
+    random.seed(b'^\xba\xce\x95\x14\xb8^\xd5\x14\xa9\x91m\x18\x00V\x01\xfc\x8d\xa0\xee')  # os.urandom(20)
     random.shuffle(run_configs)
 
     # Establish communication with the docker daemon
@@ -233,7 +237,6 @@ if __name__ == '__main__':
     build_image(image_tag=img_tag)
 
     # (Prep for run_config loop)
-    # encountered_error = False
     i = 1
 
     config.configuration.statistics_output.report_dir = "data/"
