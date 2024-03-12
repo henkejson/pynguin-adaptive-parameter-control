@@ -48,22 +48,22 @@ def get_path_modules() -> (str, str):
 
         # ("projects/py-backwards", "py_backwards.conf"),  # 24
         # ("projects/py-backwards", "py_backwards.files"),  # 25
-        ("projects/py-backwards", "py_backwards.transformers.base"),  # 26
-        ("projects/py-backwards", "py_backwards.transformers.dict_unpacking"),  # 27
+        # ("projects/py-backwards", "py_backwards.transformers.base"),  # 26
+        # ("projects/py-backwards", "py_backwards.transformers.dict_unpacking"),  # 27
         # ("projects/py-backwards", "py_backwards.transformers.formatted_values"),  # 28
-        ("projects/py-backwards", "py_backwards.transformers.metaclass"),  # 29
+        # ("projects/py-backwards", "py_backwards.transformers.metaclass"),  # 29
         # ("projects/py-backwards", "py_backwards.transformers.python2_future"),  # 30
         # ("projects/py-backwards", "py_backwards.transformers.return_from_generator"),  # 31
-        ("projects/py-backwards", "py_backwards.transformers.starred_unpacking"),  # 32
-        ("projects/py-backwards", "py_backwards.transformers.string_types"),  # 33
-        ("projects/py-backwards", "py_backwards.transformers.variables_annotations"),  # 34
+        # ("projects/py-backwards", "py_backwards.transformers.starred_unpacking"),  # 32
+        # ("projects/py-backwards", "py_backwards.transformers.string_types"),  # 33
+        # ("projects/py-backwards", "py_backwards.transformers.variables_annotations"),  # 34
         # ("projects/py-backwards", "py_backwards.transformers.yield_from"),  # 35
         # ("projects/py-backwards", "py_backwards.utils.helpers"),  # 36
-        ("projects/py-backwards", "py_backwards.utils.snippet"),  # 37
+        # ("projects/py-backwards", "py_backwards.utils.snippet"),  # 37
 
         # ("projects/pyMonet", "pymonet.immutable_list"),  # 38
         # ("projects/pyMonet", "pymonet.lazy"),  # 39
-        ("projects/pyMonet", "pymonet.maybe"),  # 40
+        # ("projects/pyMonet", "pymonet.maybe"),  # 40
         # ("projects/pyMonet", "pymonet.monad_try"),  # 41
         # ("projects/pyMonet", "pymonet.semigroups"),  # 42
         # ("projects/pyMonet", "pymonet.task"),  # 43
@@ -71,28 +71,28 @@ def get_path_modules() -> (str, str):
 
         # ("projects/pypara", "pypara.accounting.journaling"),  # 45
         # ("projects/pypara", "pypara.commons.errors"),  # 46
-        ("projects/pypara", "pypara.monetary"),  # 47
+        # ("projects/pypara", "pypara.monetary"),  # 47
 
         # ("projects/pytutils", "pytutils.excs"),  # 48
         # ("projects/pytutils", "pytutils.lazy.lazy_import"),  # 49
-        ("projects/pytutils", "pytutils.props"),  # 50
-        ("projects/pytutils", "pytutils.python"),  # 51
+        # ("projects/pytutils", "pytutils.props"),  # 50
+        # ("projects/pytutils", "pytutils.python"),  # 51
 
         # ("projects/sanic", "sanic.config"),  # 52
         # ("projects/sanic", "sanic.headers"),  # 53
         # ("projects/sanic", "sanic.helpers"),  # 54
-        ("projects/sanic", "sanic.mixins.listeners"),  # 55
+        # ("projects/sanic", "sanic.mixins.listeners"),  # 55
         # ("projects/sanic", "sanic.mixins.middleware"),  # 56
-        ("projects/sanic", "sanic.mixins.routes"),  # 57
-        ("projects/sanic", "sanic.mixins.signals"),  # 58
-        ("projects/sanic", "sanic.models.protocol_types"),  # 59
+        # ("projects/sanic", "sanic.mixins.routes"),  # 57
+        # ("projects/sanic", "sanic.mixins.signals"),  # 58
+        # ("projects/sanic", "sanic.models.protocol_types"),  # 59
         # ("projects/sanic", "sanic.views"),  # 60
 
-        ("projects/string-utils", "string_utils.manipulation"),  # 61
+        # ("projects/string-utils", "string_utils.manipulation"),  # 61
 
         # ("projects/thonny", "thonny.languages"),  # 62
-        ("projects/thonny", "thonny.plugins.pgzero_frontend"),  # 63
-        ("projects/thonny", "thonny.roughparse"),  # 64
+        # ("projects/thonny", "thonny.plugins.pgzero_frontend"),  # 63
+        # ("projects/thonny", "thonny.roughparse"),  # 64
         # ("projects/thonny", "thonny.terminal"),  # 65
 
         # ("projects/typesystem", "typesystem.tokenize.positional_validation"),  # 66
