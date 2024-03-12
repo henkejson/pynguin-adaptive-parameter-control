@@ -167,9 +167,7 @@ class ReinforcementHandler:
                             self.parameter_timeline)
 
     def log_parameters(self, actions):
+        self.parameter_timeline[self.iteration] = {"BestCoverage": self.get_best_coverage()}
         for i, n in enumerate(self.config_handler.iterate_transformation_handlers()):
-            if n.get_name() not in self.parameter_timeline:
-                self.parameter_timeline[n.get_name()] = {}
-
-            self.parameter_timeline[n.get_name()][self.iteration] = {"observation": n.get_value(),
+            self.parameter_timeline[self.iteration][n.get_name()] = {"observation": n.get_value(),
                                                                      "action": n.denormalize_action(actions[i])}
