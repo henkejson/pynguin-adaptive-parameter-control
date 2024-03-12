@@ -32,7 +32,7 @@ class ReinforcementHandler:
     def __init__(self, best_coverage: Callable[[], float], _logger):
         # current_coverage: Callable[[], float],
         self.config_handler = self.set_up_tuning_parameters()
-        self.timeout = 300
+        self.timeout = 20
         self._logger = _logger
 
         # Variables associated with coverage
