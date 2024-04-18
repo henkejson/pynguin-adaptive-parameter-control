@@ -17,7 +17,7 @@ def save_parameter_data(modulename: str, run_id: str, run_data: dict):
     output_dir = Path(
         config.configuration.statistics_output.report_dir
     ).resolve()
-    output_file = output_dir / "parameters_timeline.json"
+    output_file = output_dir / f"{modulename}/{run_id}/parameters_timeline.json"
 
     # Read json file and return a dictionary
     data = read_json_file(output_file)
