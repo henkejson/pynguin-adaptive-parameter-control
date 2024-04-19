@@ -138,6 +138,9 @@ def construct_run_configurations(max_search_time: int,
 
     # Get the components for the run-configurations
     path_modules = get_path_modules()
+    logger.info(f"Number of modules: {len(path_modules)}")
+    for m in path_modules:
+        logger.debug(m)
     parameters_list = get_run_config_tuning_params()
 
     commands = []
