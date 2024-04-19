@@ -124,7 +124,9 @@ def get_run_config_tuning_params() -> list[list[TuningParameters]]:
 
     pairs = [list(x) for x in list(itertools.combinations(parameters, 2))]
     pairs.append([TuningParameters.NONE])
-
+    logger.info(f"Number of parameter combinations: {len(pairs)}" )
+    for p in pairs:
+        logger.debug(p)
     return pairs
 
 

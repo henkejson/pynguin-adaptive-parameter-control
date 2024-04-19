@@ -17,10 +17,10 @@ def get_path_modules() -> (str, str):
     # Relative address (from input/) and module names for all files
     path_modules = [
 
-        # ("projects/codetiming", "codetiming._timer"),  # 1.
+        ("projects/codetiming", "codetiming._timer"),  # 1.
 
-        # ("projects/flake8/src", "flake8.formatting.base"),  # 2
-        # ("projects/flake8/src", "flake8.formatting.default"),  # 3
+        ("projects/flake8/src", "flake8.formatting.base"),  # 2
+        ("projects/flake8/src", "flake8.formatting.default"),  # 3
         # ("projects/flake8/src", "flake8.main.debug"),  # 4
 
         # ("projects/flutils", "flutils.decorators"),  # 5
