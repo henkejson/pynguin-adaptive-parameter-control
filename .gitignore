@@ -112,10 +112,4 @@ cov_html/
 .dmypy.json
 pynguin-report/
 docs/_build
-.output/
-
-# Pynguin output (for CLI)
-/projects_test_output/
-
-# Pynguin output (for experiment)
-/data/
+.run/
