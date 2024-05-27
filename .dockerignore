@@ -37,9 +37,3 @@ venv
 .AppleDouble
 .LSOverride
 ._*
-
-run_experiment.py
-experiment_modules.py
-projects/
-pynguin-report/
-data/
