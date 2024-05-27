@@ -75,3 +75,4 @@ RUN pip install /pynguin/pynguin-${PYNGUIN_VERSION}-py3-none-any.whl \
 
 ENTRYPOINT ["/pynguin/pynguin-docker.sh"]
 CMD []
+ 
