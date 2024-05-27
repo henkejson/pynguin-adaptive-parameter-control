@@ -36,6 +36,9 @@ class Algorithm(str, enum.Enum):
     test case generation as a many-objective optimisation problem with dynamic selection
     of the targets.  TSE vol. 44 issue 2)."""
 
+    DYNAMOSA_RL = "DYNAMOSA_RL"
+    "RL version of the dynamic many-objective sorting algorithm"
+
     MIO = "MIO"
     """The MIO test suite generation algorithm (cf. Andrea Arcuri. Many Independent
     Objective (MIO) Algorithm for Test Suite Generation.  Proc. SBSE 2017)."""
@@ -587,6 +590,70 @@ class StoppingConfiguration:
     (up to maximum_test_execution_timeout)."""
 
 
+@enum.unique
+class TuningParameters(str, enum.Enum):
+    """Pynguin parameters enabled for reinforcement learning optimization"""
+
+    ChangeParameterProbability = "ChangeParameterProbability"
+    """Probability of replacing parameters when mutating a method or constructor statement in a
+    test case (default: 0.1)"""
+
+    ChromosomeLength = "ChromosomeLength"
+    """Maximum length of chromosomes during the search (default: 40)"""
+
+    CrossoverRate = "CrossoverRate"
+    """probability of two parent chromosomes exchanging genetic information to create offspring (default: 0.75)"""
+
+    Elite = "Elite"
+    """Number of 'top-performing' chromosomes that are carried over to the next generation (default: 1)"""
+
+    NONE = "NONE"
+    """Standard value for no parameter tuning"""
+
+    Population = "Population"
+    """Population size for the genetic algorithm (default: 50)"""
+
+    RandomPerturbation = "RandomPerturbation"
+    """Probability to replace a primitive with a random new value rather than adding a delta (default: 0.2)"""
+
+    StatementInsertionProbability = "StatementInsertionProbability"
+    """Initial probability of inserting a new statement in a test case (default: 0.5)"""
+
+    TestChangeProbability = "TestChangeProbability"
+    """Probability of changing statements during mutation (default: 0.3333333333333333)"""
+
+    TestDeleteProbability = "TestDeleteProbability"
+    """Probability of deleting statements during mutation (default: 0.3333333333333333)"""
+
+    TestInsertProbability = "TestInsertProbability"
+    """Probability of inserting new statements during mutation (default: 0.3333333333333333)"""
+
+    TestInsertionProbability = "TestInsertionProbability"
+    """Initial probability of inserting a new test in a test suite (default: 0.1)"""
+
+    TournamentSize = "TournamentSize"
+    """Number of chromosomes for tournament selection (default: 5)"""
+
+
+@dataclasses.dataclass
+class ReinforcementLearningConfiguration:
+    """General parameters for the reinforcement learning enabled algorithms"""
+
+    tuning_parameters: list[TuningParameters] = dataclasses.field(
+        default_factory=lambda: [
+            TuningParameters.NONE,
+        ]
+    )
+    """The parameters that should be tuned during test generation"""
+
+    update_frequency: int = 5
+    """How many test generation iterations before updating the parameter values"""
+
+    plateau_length: int = 20
+    """How many consecutive test generation iterations without coverage improvement
+    before activating the reinforcement learning"""
+
+
 @dataclasses.dataclass
 class Configuration:
     """General configuration for the test generator."""
@@ -638,6 +705,8 @@ class Configuration:
 
     random: RandomConfiguration = dataclasses.field(default_factory=RandomConfiguration)
     """Configuration used for the RANDOM algorithm."""
+
+    rl: ReinforcementLearningConfiguration = dataclasses.field(default_factory=ReinforcementLearningConfiguration)
 
 
 # Singleton instance of the configuration.

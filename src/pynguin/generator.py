@@ -674,6 +674,17 @@ def _collect_miscellaneous_statistics(test_cluster: ModuleTestCluster) -> None:
         RuntimeVariable.RunId, config.configuration.statistics_output.run_id
     )
     stat.track_output_variable(
+        RuntimeVariable.Algorithm, config.configuration.algorithm.value
+    )
+
+    tuning_parameters = sorted(config.configuration.rl.tuning_parameters.copy(), key=lambda x: x.value)
+    tuning_parameters_string = '|'.join(param.value for param in tuning_parameters)
+
+    stat.track_output_variable(
+        RuntimeVariable.TuningParameters, tuning_parameters_string
+    )
+
+    stat.track_output_variable(
         RuntimeVariable.ProjectName, config.configuration.statistics_output.project_name
     )
     for runtime_variable, value in stat.variables_generator:

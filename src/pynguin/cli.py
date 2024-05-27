@@ -89,6 +89,8 @@ def _expand_arguments_if_necessary(arguments: list[str]) -> list[str]:
         and "--output-variables" not in arguments
         and "--coverage_metrics" not in arguments
         and "--coverage-metrics" not in arguments
+        and "--tuning_parameters" not in arguments
+        and "--tuning-parameters" not in arguments
     ):
         return arguments
     if "--output_variables" in arguments:
@@ -100,6 +102,12 @@ def _expand_arguments_if_necessary(arguments: list[str]) -> list[str]:
         arguments = _parse_comma_separated_option(arguments, "--coverage_metrics")
     elif "--coverage-metrics" in arguments:
         arguments = _parse_comma_separated_option(arguments, "--coverage-metrics")
+
+    if "--tuning_parameters" in arguments:
+        arguments = _parse_comma_separated_option(arguments, "--tuning_parameters")
+    elif "--tuning-parameters" in arguments:
+        arguments = _parse_comma_separated_option(arguments, "--tuning-parameters")
+
     return arguments
 
 
