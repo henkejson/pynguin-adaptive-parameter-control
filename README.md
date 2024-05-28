@@ -109,6 +109,42 @@ pynguin \
 Please find a more detailed example in the [quick start guide](https://pynguin.readthedocs.io/en/latest/user/quickstart.html).
 
 
+## Using Parameter Control
+
+To run parameter control we can extend the example command above as the following:
+
+```bash
+pynguin \
+  --project-path /tmp/foo \
+  --output-path /tmp/testgen \
+  --module-name foo.bar \
+  --algorithm DYNAMOSA_RL \
+  --tuning_parameters Population,CrossoverRate,TournamentSize
+  --update_frequency 10 \
+  --plateau_length 5 \
+```
+
+- `--algorithm` sets the test generation algorithm (GA) to be used. `DYNAMOSA_RL` is the only algorithm that currently supports parameter control.
+- `--tuning_parameters` defines which parameter(s) should be controlled. Formatted as a comma-separated list.
+- `--update_frequency` controls how many test generation iterations should surpass between each subsequent parameter value update.
+- `--plateau_length` controls how many test generation iterations must surpass before the parameter control is enabled, set to 0 for instant start.
+
+The parameters available for control are the following: 
+`ChangeParameterProbability`,
+`ChromosomeLength`,
+`CrossoverRate`,
+`Elite`,
+`NONE`,
+`Population`,
+`RandomPerturbation`,
+`StatementInsertionProbability`,
+`TestChangeProbability`,
+`TestDeleteProbability`,
+`TestInsertProbability`,
+`TestInsertionProbability`,
+`TournamentSize`
+
+
 ## Contributing to Pynguin
 
 For the development of Pynguin you will need the [`poetry`](https://python-poetry.org)
